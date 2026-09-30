@@ -5,8 +5,9 @@ Discovering AI agent behaviours from their footsteps, early enough to flag faili
 An experiment that groups the footsteps of LLM agents into named behaviours, checks the names against behaviours planted with prompts, and tests whether those behaviours flag failing runs early.
 A footstep is one action an agent takes in a run, such as running a command, and a run is one attempt at a task.
 
-Status: repository skeleton only.
-No stage is implemented and no results exist yet, so `make reproduce` and the model targets fail with a "not implemented yet" message until later phases of the plan land.
+Status: early.
+`make reproduce` downloads the public data and writes `results/site.json` and `results/dataset_summary.json`, with no outcomes and no text.
+The other stages and the site are not built yet, and the model targets fail with a "not implemented yet" message until later phases of the plan land.
 
 ## Quickstart
 

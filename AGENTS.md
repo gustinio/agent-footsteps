@@ -25,7 +25,7 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, but every stage subcommand still reports "not implemented yet", and `make start` and `make build` arrive in phase 1.
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest` and `export` are implemented, but the other stage subcommands still report "not implemented yet", and `make start` and `make build` arrive in phase 1.
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run ruff check .`: lint
