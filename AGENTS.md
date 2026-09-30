@@ -25,7 +25,7 @@ Keep the system runnable after every change.
 
 ## Commands
 
-These commands are planned and are created in phase 0 of the plan, so verify each one exists before relying on it.
+The Makefile targets and `footsteps` CLI exist from phase 0, but every stage subcommand still reports "not implemented yet", and `make start` and `make build` arrive in phase 1.
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run ruff check .`: lint
