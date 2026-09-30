@@ -38,6 +38,10 @@ The optional planted-demo and labeling stages also need Claude Code logged in to
 
 `make lint` and `make test`.
 
+## Process
+
+Scoped and built with [sidekitten](https://github.com/gustinio/sidekitten), my workflow for turning a plan into small, reviewed issues shipped with coding agents.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
