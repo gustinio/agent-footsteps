@@ -202,3 +202,89 @@ def test_site_json_has_step_facts_and_no_outcome_or_text(normalized):
     assert "outcome" not in rendered
     for text in (COMMAND_TEXT, OUTPUT_TEXT, MESSAGE_TEXT, "command_hash"):
         assert text not in rendered
+
+
+def test_verify_files_names_changed_and_missing_files():
+    recorded = {"a": {"sha256": "1"}, "b": {"sha256": "2"}, "c": {"sha256": "3"}}
+    files = {"a": {"sha256": "1"}, "b": {"sha256": "x"}}
+    assert ingest.verify_files(files, recorded) == ["b", "c"]
+    assert ingest.verify_files(files, {}) == []
+
+
+@pytest.fixture
+def pipeline(tmp_path, monkeypatch):
+    """Point ingest at a small local dataset instead of the network."""
+    rows = [
+        raw_row(f"run-{n}", "task-0", n % 2, [step(tools=[tool("Bash", "ls")])])
+        for n in range(4)
+    ]
+    write_raw(tmp_path / "raw", rows)
+    monkeypatch.setattr(ingest, "download", lambda: tmp_path / "raw")
+    monkeypatch.setattr(ingest, "RUNS_PATH", tmp_path / "runs.parquet")
+    monkeypatch.setattr(ingest, "STEPS_PATH", tmp_path / "steps.parquet")
+    monkeypatch.setattr(ingest, "SUMMARY_PATH", tmp_path / "summary.json")
+    return tmp_path
+
+
+def test_run_is_silent_when_the_files_match_the_record(pipeline, capsys):
+    ingest.run()
+    capsys.readouterr()
+    ingest.run()
+    assert capsys.readouterr().err == ""
+
+
+def test_run_warns_about_a_corrupted_file_and_still_finishes(pipeline, capsys):
+    ingest.run()
+    recorded = json.loads((pipeline / "summary.json").read_text())["files"]
+    capsys.readouterr()
+    data_file = pipeline / "raw" / "data" / "train-00000.parquet"
+    rows = pq.read_table(data_file).to_pylist()
+    rows[0]["reward"] = 1 - rows[0]["reward"]
+    pq.write_table(pa.Table.from_pylist(rows), data_file)
+
+    ingest.run()
+
+    assert "train-00000.parquet does not match the recorded checksum" in (
+        capsys.readouterr().err
+    )
+    summary = json.loads((pipeline / "summary.json").read_text())
+    assert summary["files"] == recorded
+    assert summary["trials_with_steps"] == 4
+
+
+def test_normalize_counts_tasks_with_both_outcomes(tmp_path):
+    body = [step(tools=[tool("Bash", "ls")])]
+    rows = [
+        raw_row("a1", "t1", 1, body),
+        raw_row("a2", "t1", 0, body),
+        raw_row("a3", "t2", 1, body),
+        raw_row("a4", "t2", 1, body),
+        # A trial without steps never reaches the natural arm, so it cannot make a task mixed.
+        raw_row("a5", "t3", 1, body),
+        raw_row("a6", "t3", 0, None),
+    ]
+    write_raw(tmp_path / "raw", rows)
+    counts = ingest.normalize(
+        tmp_path / "raw", tmp_path / "runs.parquet", tmp_path / "steps.parquet"
+    )
+    assert counts["combinations"][0]["mixed_tasks"] == 1
+
+
+def combo(agent, mixed, trials):
+    return {
+        "agent": agent,
+        "model": "m",
+        "mixed_tasks": mixed,
+        "trials_with_steps": trials,
+    }
+
+
+def test_selection_takes_the_most_mixed_tasks_and_breaks_ties_by_trials():
+    combos = [
+        combo("a", 5, 10),
+        combo("b", 9, 10),
+        combo("c", 5, 30),
+        combo("d", 1, 99),
+    ]
+    assert [c["agent"] for c in ingest.select_combinations(combos)] == ["b", "c"]
+    assert [c["agent"] for c in ingest.select_combinations(combos, 1)] == ["b"]

@@ -26,655 +26,780 @@
       "agent": "Factory Droid",
       "model": "claude-opus-4-5-20251101@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "Factory Droid",
       "model": "claude-opus-4-6@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "Factory Droid",
       "model": "gemini-3-pro-preview@google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "Factory Droid",
       "model": "gpt-5.2@openai",
       "trials": 444,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "Factory Droid",
       "model": "gpt-5.3-codex@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "Junie",
       "model": "gemini-3-flash-preview@gemini",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "TerminalBenchAgent",
       "model": "claude-sonnet-4-5@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "ante",
       "model": "gemini-3-pro-preview@Google",
       "trials": 444,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "aone-agent",
       "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@modelscope",
       "trials": 442,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "claude-code",
       "model": "GLM-4.7@z-ai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "claude-code",
       "model": "claude-haiku-4-5-20251001@anthropic",
       "trials": 438,
-      "trials_with_steps": 403
+      "trials_with_steps": 403,
+      "mixed_tasks": 29
     },
     {
       "agent": "claude-code",
       "model": "claude-opus-4-1-20250805@anthropic",
       "trials": 437,
-      "trials_with_steps": 404
+      "trials_with_steps": 404,
+      "mixed_tasks": 30
     },
     {
       "agent": "claude-code",
       "model": "claude-opus-4-5-20251101@anthropic",
       "trials": 445,
-      "trials_with_steps": 436
+      "trials_with_steps": 436,
+      "mixed_tasks": 28
     },
     {
       "agent": "claude-code",
       "model": "claude-opus-4-6@anthropic",
       "trials": 445,
-      "trials_with_steps": 435
+      "trials_with_steps": 435,
+      "mixed_tasks": 35
     },
     {
       "agent": "claude-code",
       "model": "claude-sonnet-4-5-20250929@anthropic",
       "trials": 437,
-      "trials_with_steps": 404
+      "trials_with_steps": 404,
+      "mixed_tasks": 33
     },
     {
       "agent": "claude-code",
       "model": "minimax-m2.1@minimax",
       "trials": 445,
-      "trials_with_steps": 440
+      "trials_with_steps": 440,
+      "mixed_tasks": 34
     },
     {
       "agent": "claude-code-enhanced",
       "model": "claude-opus-4-6@anthropic",
       "trials": 398,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "codex",
       "model": "gpt-5-codex@openai",
       "trials": 436,
-      "trials_with_steps": 168
+      "trials_with_steps": 168,
+      "mixed_tasks": 4
     },
     {
       "agent": "codex",
       "model": "gpt-5-mini@openai",
       "trials": 437,
-      "trials_with_steps": 410
+      "trials_with_steps": 410,
+      "mixed_tasks": 32
     },
     {
       "agent": "codex",
       "model": "gpt-5-nano@openai",
       "trials": 440,
-      "trials_with_steps": 421
+      "trials_with_steps": 421,
+      "mixed_tasks": 21
     },
     {
       "agent": "codex",
       "model": "gpt-5.1-codex-max@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "codex",
       "model": "gpt-5.1-codex-mini@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "codex",
       "model": "gpt-5.1-codex@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "codex",
       "model": "gpt-5.2@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "codex",
       "model": "gpt-5@openai",
       "trials": 439,
-      "trials_with_steps": 409
+      "trials_with_steps": 409,
+      "mixed_tasks": 31
     },
     {
       "agent": "deepagent-harbor",
       "model": "gpt-5.2-codex@openai",
       "trials": 433,
-      "trials_with_steps": 417
+      "trials_with_steps": 417,
+      "mixed_tasks": 35
     },
     {
       "agent": "final",
       "model": "claude-4.5-sonnet@anthropic",
       "trials": 322,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "forge",
       "model": "gemini-3.1-pro-preview@Google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "gemini-cli",
       "model": "gemini-2.5-flash@gemini",
       "trials": 439,
-      "trials_with_steps": 405
+      "trials_with_steps": 405,
+      "mixed_tasks": 21
     },
     {
       "agent": "gemini-cli",
       "model": "gemini-2.5-pro@gemini",
       "trials": 437,
-      "trials_with_steps": 381
+      "trials_with_steps": 381,
+      "mixed_tasks": 33
     },
     {
       "agent": "gemini-cli",
       "model": "gemini-3-flash-preview@Google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "gemini-cli",
       "model": "gemini-3-flash-preview@google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "goose",
       "model": "claude-haiku-4-5@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "goose",
       "model": "claude-opus-4-5@anthropic",
       "trials": 442,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "goose",
       "model": "claude-sonnet-4-5@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "ii-agent-simple",
       "model": "gemini-3-pro-preview@gemini",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "judy",
       "model": "claude-opus-4.6@anthropic",
       "trials": 445,
-      "trials_with_steps": 157
+      "trials_with_steps": 157,
+      "mixed_tasks": 10
     },
     {
       "agent": "letta-code",
       "model": "claude-opus-4-5@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "letta-code",
       "model": "gemini-3-pro-preview@google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "letta-code",
       "model": "gpt-5.1-codex@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "mini-swe-agent",
       "model": "claude-haiku-4-5-20251001@anthropic",
       "trials": 444,
-      "trials_with_steps": 428
+      "trials_with_steps": 428,
+      "mixed_tasks": 25
     },
     {
       "agent": "mini-swe-agent",
       "model": "claude-opus-4-1-20250805@anthropic",
       "trials": 444,
-      "trials_with_steps": 429
+      "trials_with_steps": 429,
+      "mixed_tasks": 26
     },
     {
       "agent": "mini-swe-agent",
       "model": "claude-sonnet-4-5-20250929@anthropic",
       "trials": 442,
-      "trials_with_steps": 419
+      "trials_with_steps": 419,
+      "mixed_tasks": 29
     },
     {
       "agent": "mini-swe-agent",
       "model": "gemini-2.5-flash@gemini",
       "trials": 445,
-      "trials_with_steps": 432
+      "trials_with_steps": 432,
+      "mixed_tasks": 27
     },
     {
       "agent": "mini-swe-agent",
       "model": "gemini-2.5-pro@gemini",
       "trials": 444,
-      "trials_with_steps": 435
+      "trials_with_steps": 435,
+      "mixed_tasks": 28
     },
     {
       "agent": "mini-swe-agent",
       "model": "gpt-5-codex@openai",
       "trials": 444,
-      "trials_with_steps": 426
+      "trials_with_steps": 426,
+      "mixed_tasks": 31
     },
     {
       "agent": "mini-swe-agent",
       "model": "gpt-5-mini@openai",
       "trials": 445,
-      "trials_with_steps": 434
+      "trials_with_steps": 434,
+      "mixed_tasks": 29
     },
     {
       "agent": "mini-swe-agent",
       "model": "gpt-5-nano@openai",
       "trials": 445,
-      "trials_with_steps": 441
+      "trials_with_steps": 441,
+      "mixed_tasks": 16
     },
     {
       "agent": "mini-swe-agent",
       "model": "gpt-5@openai",
       "trials": 445,
-      "trials_with_steps": 432
+      "trials_with_steps": 432,
+      "mixed_tasks": 32
     },
     {
       "agent": "mini-swe-agent",
       "model": "grok-4-0709@xai",
       "trials": 445,
-      "trials_with_steps": 410
+      "trials_with_steps": 410,
+      "mixed_tasks": 34
     },
     {
       "agent": "mini-swe-agent",
       "model": "grok-code-fast-1@xai",
       "trials": 445,
-      "trials_with_steps": 436
+      "trials_with_steps": 436,
+      "mixed_tasks": 30
     },
     {
       "agent": "mini-swe-agent",
       "model": "openai/gpt-oss-120b@together_ai",
       "trials": 887,
-      "trials_with_steps": 884
+      "trials_with_steps": 884,
+      "mixed_tasks": 21
     },
     {
       "agent": "mini-swe-agent",
       "model": "openai/gpt-oss-20b@together_ai",
       "trials": 888,
-      "trials_with_steps": 886
+      "trials_with_steps": 886,
+      "mixed_tasks": 8
     },
     {
       "agent": "mux",
       "model": "claude-opus-4-5@anthropic",
       "trials": 89,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "mux",
       "model": "claude-opus-4-6@anthropic",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "mux",
       "model": "gpt-5.2@openai",
       "trials": 89,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "mux",
       "model": "gpt-5.3-codex@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "opencode",
       "model": "claude-opus-4-5@anthropic",
       "trials": 89,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "openhands",
       "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
       "trials": 878,
-      "trials_with_steps": 870
+      "trials_with_steps": 870,
+      "mixed_tasks": 28
     },
     {
       "agent": "openhands",
       "model": "claude-haiku-4-5-20251001@anthropic",
       "trials": 444,
-      "trials_with_steps": 418
+      "trials_with_steps": 418,
+      "mixed_tasks": 32
     },
     {
       "agent": "openhands",
       "model": "claude-opus-4-1-20250805@anthropic",
       "trials": 445,
-      "trials_with_steps": 440
+      "trials_with_steps": 440,
+      "mixed_tasks": 29
     },
     {
       "agent": "openhands",
       "model": "claude-opus-4-5-20251101@anthropic",
       "trials": 445,
-      "trials_with_steps": 438
+      "trials_with_steps": 438,
+      "mixed_tasks": 34
     },
     {
       "agent": "openhands",
       "model": "claude-sonnet-4-5-20250929@anthropic",
       "trials": 443,
-      "trials_with_steps": 438
+      "trials_with_steps": 438,
+      "mixed_tasks": 31
     },
     {
       "agent": "openhands",
       "model": "gemini-2.5-flash@gemini",
       "trials": 445,
-      "trials_with_steps": 436
+      "trials_with_steps": 436,
+      "mixed_tasks": 24
     },
     {
       "agent": "openhands",
       "model": "gemini-2.5-pro@gemini",
       "trials": 445,
-      "trials_with_steps": 436
+      "trials_with_steps": 436,
+      "mixed_tasks": 32
     },
     {
       "agent": "openhands",
       "model": "gpt-5-mini@openai",
       "trials": 445,
-      "trials_with_steps": 429
+      "trials_with_steps": 429,
+      "mixed_tasks": 30
     },
     {
       "agent": "openhands",
       "model": "gpt-5-nano@openai",
       "trials": 444,
-      "trials_with_steps": 427
+      "trials_with_steps": 427,
+      "mixed_tasks": 18
     },
     {
       "agent": "openhands",
       "model": "gpt-5@openai",
       "trials": 445,
-      "trials_with_steps": 435
+      "trials_with_steps": 435,
+      "mixed_tasks": 35
     },
     {
       "agent": "openhands",
       "model": "grok-4-0709@xai",
       "trials": 444,
-      "trials_with_steps": 421
+      "trials_with_steps": 421,
+      "mixed_tasks": 36
     },
     {
       "agent": "openhands",
       "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
       "trials": 875,
-      "trials_with_steps": 860
+      "trials_with_steps": 860,
+      "mixed_tasks": 28
     },
     {
       "agent": "ruley",
       "model": "gemini-3-pro-preview@Google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "ruley",
       "model": "gpt-5.3-codex@OpenAI",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "sage",
       "model": "gemini-3-pro-preview@Google",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "simple_codex",
       "model": "gpt-5.3-codex@openai",
       "trials": 443,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "spoox-m",
       "model": "gpt-5-mini@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "terminus-2",
       "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
       "trials": 929,
-      "trials_with_steps": 928
+      "trials_with_steps": 928,
+      "mixed_tasks": 34
     },
     {
       "agent": "terminus-2",
       "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
       "trials": 904,
-      "trials_with_steps": 904
+      "trials_with_steps": 904,
+      "mixed_tasks": 27
     },
     {
       "agent": "terminus-2",
       "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
       "trials": 902,
-      "trials_with_steps": 888
+      "trials_with_steps": 888,
+      "mixed_tasks": 30
     },
     {
       "agent": "terminus-2",
       "model": "claude-haiku-4-5-20251001@anthropic",
       "trials": 439,
-      "trials_with_steps": 438
+      "trials_with_steps": 438,
+      "mixed_tasks": 32
     },
     {
       "agent": "terminus-2",
       "model": "claude-opus-4-1-20250805@anthropic",
       "trials": 443,
-      "trials_with_steps": 441
+      "trials_with_steps": 441,
+      "mixed_tasks": 29
     },
     {
       "agent": "terminus-2",
       "model": "claude-opus-4-5-20251101@anthropic",
       "trials": 445,
-      "trials_with_steps": 444
+      "trials_with_steps": 444,
+      "mixed_tasks": 28
     },
     {
       "agent": "terminus-2",
       "model": "claude-opus-4-6@anthropic",
       "trials": 445,
-      "trials_with_steps": 445
+      "trials_with_steps": 445,
+      "mixed_tasks": 30
     },
     {
       "agent": "terminus-2",
       "model": "claude-sonnet-4-5-20250929@anthropic",
       "trials": 440,
-      "trials_with_steps": 440
+      "trials_with_steps": 440,
+      "mixed_tasks": 33
     },
     {
       "agent": "terminus-2",
       "model": "deepseek-v3.2@deepseek",
       "trials": 445,
-      "trials_with_steps": 373
+      "trials_with_steps": 373,
+      "mixed_tasks": 30
     },
     {
       "agent": "terminus-2",
       "model": "gemini-2.5-flash@gemini",
       "trials": 439,
-      "trials_with_steps": 438
+      "trials_with_steps": 438,
+      "mixed_tasks": 23
     },
     {
       "agent": "terminus-2",
       "model": "gemini-2.5-pro@gemini",
       "trials": 442,
-      "trials_with_steps": 441
+      "trials_with_steps": 441,
+      "mixed_tasks": 38
     },
     {
       "agent": "terminus-2",
       "model": "gemini-3-flash-preview@gemini",
       "trials": 445,
-      "trials_with_steps": 444
+      "trials_with_steps": 444,
+      "mixed_tasks": 39
     },
     {
       "agent": "terminus-2",
       "model": "gemini-3-pro-preview@gemini",
       "trials": 445,
-      "trials_with_steps": 445
+      "trials_with_steps": 445,
+      "mixed_tasks": 25
     },
     {
       "agent": "terminus-2",
       "model": "glm-4.7@z-ai",
       "trials": 427,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "terminus-2",
       "model": "glm-5@z-ai",
       "trials": 442,
-      "trials_with_steps": 376
+      "trials_with_steps": 376,
+      "mixed_tasks": 27
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5-codex@openai",
       "trials": 437,
-      "trials_with_steps": 435
+      "trials_with_steps": 435,
+      "mixed_tasks": 37
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5-mini@openai",
       "trials": 438,
-      "trials_with_steps": 436
+      "trials_with_steps": 436,
+      "mixed_tasks": 27
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5-nano@openai",
       "trials": 436,
-      "trials_with_steps": 434
+      "trials_with_steps": 434,
+      "mixed_tasks": 15
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5.1-codex@openai",
       "trials": 445,
-      "trials_with_steps": 432
+      "trials_with_steps": 432,
+      "mixed_tasks": 44
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5.1@openai",
       "trials": 445,
-      "trials_with_steps": 443
+      "trials_with_steps": 443,
+      "mixed_tasks": 33
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5.2@openai",
       "trials": 444,
-      "trials_with_steps": 441
+      "trials_with_steps": 441,
+      "mixed_tasks": 35
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5.3-codex@openai",
       "trials": 445,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "terminus-2",
       "model": "gpt-5@openai",
       "trials": 438,
-      "trials_with_steps": 435
+      "trials_with_steps": 435,
+      "mixed_tasks": 36
     },
     {
       "agent": "terminus-2",
       "model": "grok-4-0709@xai",
       "trials": 436,
-      "trials_with_steps": 428
+      "trials_with_steps": 428,
+      "mixed_tasks": 34
     },
     {
       "agent": "terminus-2",
       "model": "grok-code-fast-1@xai",
       "trials": 445,
-      "trials_with_steps": 443
+      "trials_with_steps": 443,
+      "mixed_tasks": 27
     },
     {
       "agent": "terminus-2",
       "model": "kimi-k2.5@kimi",
       "trials": 435,
-      "trials_with_steps": 0
+      "trials_with_steps": 0,
+      "mixed_tasks": 0
     },
     {
       "agent": "terminus-2",
       "model": "minimax-m2.1@openai",
       "trials": 438,
-      "trials_with_steps": 438
+      "trials_with_steps": 438,
+      "mixed_tasks": 35
     },
     {
       "agent": "terminus-2",
       "model": "minimax-m2.5@Minimax",
       "trials": 445,
-      "trials_with_steps": 410
+      "trials_with_steps": 410,
+      "mixed_tasks": 28
     },
     {
       "agent": "terminus-2",
       "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
       "trials": 923,
-      "trials_with_steps": 923
+      "trials_with_steps": 923,
+      "mixed_tasks": 27
     },
     {
       "agent": "terminus-2",
       "model": "moonshotai/Kimi-K2-Thinking@together_ai",
       "trials": 892,
-      "trials_with_steps": 892
+      "trials_with_steps": 892,
+      "mixed_tasks": 36
     },
     {
       "agent": "terminus-2",
       "model": "openai/gpt-oss-120b@together_ai",
       "trials": 925,
-      "trials_with_steps": 924
+      "trials_with_steps": 924,
+      "mixed_tasks": 33
     },
     {
       "agent": "terminus-2",
       "model": "openai/gpt-oss-20b@together_ai",
       "trials": 932,
-      "trials_with_steps": 930
+      "trials_with_steps": 930,
+      "mixed_tasks": 11
     },
     {
       "agent": "terminus-3-3",
       "model": "claude-opus-4-6@anthropic",
       "trials": 442,
-      "trials_with_steps": 247
+      "trials_with_steps": 247,
+      "mixed_tasks": 13
     },
     {
       "agent": "terminus-3-3",
       "model": "gemini-3.1-pro-preview@Google",
       "trials": 445,
-      "trials_with_steps": 431
+      "trials_with_steps": 431,
+      "mixed_tasks": 28
+    }
+  ],
+  "selected": [
+    {
+      "agent": "terminus-2",
+      "model": "gpt-5.1-codex@openai",
+      "trials": 445,
+      "trials_with_steps": 432,
+      "mixed_tasks": 44
+    },
+    {
+      "agent": "terminus-2",
+      "model": "gemini-3-flash-preview@gemini",
+      "trials": 445,
+      "trials_with_steps": 444,
+      "mixed_tasks": 39
     }
   ]
 }
