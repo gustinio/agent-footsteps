@@ -5,12 +5,12 @@ Discovering AI agent behaviours from their footsteps, early enough to flag faili
 An experiment that groups the footsteps of LLM agents into named behaviours, checks the names against behaviours planted with prompts, and tests whether those behaviours flag failing runs early.
 A footstep is one action an agent takes in a run, such as running a command, and a run is one attempt at a task.
 
-Status: scoped and documented, not built yet.
-No results exist yet, and the commands below are planned until phase 0 of the plan lands.
+Status: repository skeleton only.
+No stage is implemented and no results exist yet, so `make reproduce` and the model targets fail with a "not implemented yet" message until later phases of the plan land.
 
 ## Quickstart
 
-Planned, and unverified until the code exists.
+`make start` arrives with the site in phase 1.
 
 ```text
 make setup
@@ -36,9 +36,9 @@ The optional planted-demo and labeling stages also need Claude Code logged in to
 
 ## Testing
 
-Planned: `make lint` and `make test`.
+`make lint` and `make test`.
 
 ## License
 
-MIT, planned as a `LICENSE` file in phase 0 of the plan.
+MIT, see [LICENSE](LICENSE).
 The public benchmark data is downloaded at run time, is never committed, and keeps its own license.

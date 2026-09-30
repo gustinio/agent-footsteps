@@ -1,0 +1,25 @@
+[project]
+name = "footsteps"
+version = "0.1.0"
+description = "Discovering named behaviours in LLM agent trajectories and testing if they flag failing runs early."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+footsteps = "footsteps.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest", "ruff"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+src = ["src", "tests"]

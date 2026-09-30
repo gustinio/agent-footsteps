@@ -1,0 +1,13 @@
+.sidekitten/
+
+# Downloaded public data and raw transcripts are never committed.
+data/
+
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+dist/
+
+web/node_modules/
+web/dist/
