@@ -71,15 +71,23 @@ Prediction belongs to a Run, and for early checks to a prefix length k
 ```
 
 - `Task`: `task_id`, benchmark. One task has many runs.
-- `Run`: `run_id`, `task_id`, `source` (public or planted), `agent_or_model`, `seed`, `condition` (none, gentle or strong; empty for public runs), `outcome` (pass or fail from the verifier), `n_steps`.
-- `Step`: `run_id`, `step_idx`, `tool_category`, `result_status` (ok, error or empty), `command_hash`, `verification_flag`. These step facts hold no raw text.
+- `Run`: `run_id`, `task_id`, `source` (public or planted), `agent` (scaffold), `model`, `seed`, `condition` (none, gentle or strong; empty for public runs), `outcome` (pass or fail from the verifier), `n_steps`.
+- `Step`: `run_id`, `step_idx`, `tool_category` (shell, read, search, edit, plan, web, finish, other, or none when the step calls no tool), `result_status` (ok, error or empty), `command_hash`, `verification_flag`. These step facts hold no raw text.
+  A step is one agent-sourced step of the public trace, and user and system text are not steps.
+  When a step makes several tool calls, the facts come from the first call.
+  `result_status` is inferred from the output text by phrase rules, and is `empty` when there is no output or when the dataset replaced the output with a `$<number>` placeholder.
+  `command_hash` is empty when the step has no tool call, no command text, or a placeholder in place of the command.
+  `verification_flag` is added in the feasibility spike.
 - `StepFeatures`: `run_id`, `step_idx`, plus behavioural features derived from the step facts only. Never contains raw text, the system prompt or the steering text.
 - `Segmentation`: `run_id`, `step_idx`, `method` (HMM or GMM), `state_id`.
 - `Label`: `run_id`, `step_idx`, `label`, `labeler` (rule, LLM or human).
 - `StateName`: `method`, `state_id`, `name`, `evidence`.
 - `Prediction`: `run_id`, `k` (empty for whole-run predictions), `model` (baseline, behaviour view or supervised predictor), `score`, `fold`.
 
-The public trace format is not verified yet, so `Step` fields are provisional until the ribbon viewer in phase 1 of the plan reads the real data.
+The public trace format was verified on the pinned revision: 52,104 trials, of which 34,462 have steps and 34,397 have at least one agent step, and the rest are dropped from the run and step tables but counted in `results/dataset_summary.json`.
+A tool's command is a string, a list or a placeholder, and ingest normalizes all three.
+Ingest writes `data/runs.parquet` and `data/steps.parquet` (gitignored), where the run table keeps the outcome for the feasibility counts, and the exporter never writes it before the freeze.
+The exporter writes `results/site.json` from a fixed sample of 60 runs chosen by the hash of the run id, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts and the model and scaffold combinations.
 
 ## AI/Agent Boundary
 
@@ -122,6 +130,7 @@ In production the site is a static build published on GitHub Pages, and there is
 
 - Python 3.12 with `uv`
 - `pandas` and `numpy`
+- `huggingface_hub` for the pinned download and `pyarrow` for the parquet files
 - `scikit-learn`
 - `hmmlearn` for the HMM, to be verified against its documentation before use
 - `pytest` and `ruff`

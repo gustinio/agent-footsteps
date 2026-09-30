@@ -13,5 +13,5 @@ def test_help_lists_every_stage(capsys):
 
 
 def test_unbuilt_stage_fails_loudly(capsys):
-    assert main(["ingest"]) == 1
+    assert main(["features"]) == 1
     assert "not implemented" in capsys.readouterr().err

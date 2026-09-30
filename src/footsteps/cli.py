@@ -3,6 +3,8 @@
 import argparse
 import sys
 
+from footsteps import export, ingest
+
 # Stage order follows the pipeline in docs/ARCHITECTURE.md.
 STAGES = {
     "ingest": "normalize runs and compute step facts",
@@ -13,6 +15,10 @@ STAGES = {
     "evaluate": "compute the pre-registered tests",
     "export": "write results/site.json",
 }
+
+
+# Stages that are built; the rest report that they are not implemented yet.
+IMPLEMENTED = {"ingest": ingest.run, "export": export.run}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -27,5 +33,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.stage in IMPLEMENTED:
+        IMPLEMENTED[args.stage]()
+        return 0
     print(f"footsteps {args.stage}: not implemented yet", file=sys.stderr)
     return 1
