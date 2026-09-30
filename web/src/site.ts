@@ -1,0 +1,41 @@
+// The contract written by the exporter. The page reads this file and computes nothing from it.
+export type ToolCategory =
+  | 'shell'
+  | 'read'
+  | 'search'
+  | 'edit'
+  | 'plan'
+  | 'web'
+  | 'finish'
+  | 'other'
+  | 'none'
+
+export type ResultStatus = 'ok' | 'error' | 'empty'
+
+export interface Step {
+  tool_category: ToolCategory
+  result_status: ResultStatus
+}
+
+export interface Run {
+  run_id: string
+  task_id: string
+  source: string
+  agent: string
+  model: string
+  n_steps: number
+  steps: Step[]
+}
+
+export interface Site {
+  meta: { dataset: string; revision: string; runs_in_dataset: number }
+  runs: Run[]
+}
+
+export async function loadSite(url: string): Promise<Site> {
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`could not load the site data (${response.status})`)
+  }
+  return response.json()
+}

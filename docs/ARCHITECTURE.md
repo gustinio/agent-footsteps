@@ -107,7 +107,8 @@ These stay deterministic application logic, testable without the model.
 ## Frontend / UI Style
 
 The site uses Tailwind CSS with shadcn/ui, chosen for accessible pre-styled controls with little custom CSS.
-The drawing library for the point cloud and timeline is chosen in phase 1 of the plan by comparing candidates against their documentation, and is recorded in a new ADR at that point.
+The point cloud and timeline are drawn as React-rendered SVG with individual D3 modules added as needed, as recorded in [ADR-0008](adr/0008-draw-the-site-with-react-svg-and-d3-modules.md).
+The page fetches the exporter's JSON from `results/site.json` at runtime, and Vite bundles that file as an asset on build.
 
 The layout is a three-region dashboard.
 A left panel holds the controls: data source, condition, and a run picker.

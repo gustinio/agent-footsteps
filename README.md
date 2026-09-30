@@ -7,11 +7,10 @@ A footstep is one action an agent takes in a run, such as running a command, and
 
 Status: early.
 `make reproduce` downloads the public data and writes `results/site.json` and `results/dataset_summary.json`, with no outcomes and no text.
-The other stages and the site are not built yet, and the model targets fail with a "not implemented yet" message until later phases of the plan land.
+`make start` shows one ribbon per sampled run, colored by tool category and result status.
+The other stages are not built yet, and the model targets fail with a "not implemented yet" message until later phases of the plan land.
 
 ## Quickstart
-
-`make start` arrives with the site in phase 1.
 
 ```text
 make setup
