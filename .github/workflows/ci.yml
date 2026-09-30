@@ -2,7 +2,6 @@ name: CI
 
 # Every action is pinned to a commit SHA resolved from its latest release on 2026-09-30.
 # The jobs call the make targets lint and test.
-# Phase 1 of docs/PLAN.md adds the Node setup and the site build job.
 
 on:
   push:
