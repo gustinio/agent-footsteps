@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import statistics
+import sys
 from pathlib import Path
 
 import pyarrow as pa
@@ -19,6 +20,8 @@ STEPS_PATH = Path("data/steps.parquet")
 SUMMARY_PATH = Path("results/dataset_summary.json")
 
 STEP_KEYS = {"src", "msg", "tools", "obs"}
+# The PRD allows one or two, and two keeps more public runs for the natural arm.
+SELECTED = 2
 SOURCES = {"user", "agent", "system"}
 OBS_LIMIT = 5000
 
@@ -159,6 +162,29 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def verify_files(files: dict, recorded: dict) -> list[str]:
+    """Names of recorded files whose checksum differs from the downloaded one, or that are missing."""
+    return [
+        name
+        for name, entry in recorded.items()
+        if files.get(name, {}).get("sha256") != entry["sha256"]
+    ]
+
+
+def select_combinations(combinations: list[dict], count: int = SELECTED) -> list[dict]:
+    """Rank by tasks with mixed outcomes, then by trials, without reading any behaviour."""
+    ranked = sorted(
+        combinations,
+        key=lambda c: (
+            -c["mixed_tasks"],
+            -c["trials_with_steps"],
+            c["agent"],
+            c["model"],
+        ),
+    )
+    return ranked[:count]
+
+
 def _spread(counts: list[int]) -> dict:
     return {
         "min": min(counts),
@@ -173,6 +199,7 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
     trials_per_cell = collections.Counter()
     combo_trials = collections.Counter()
     combo_with_steps = collections.Counter()
+    outcomes_per_cell = collections.defaultdict(set)
     for path in sorted(raw_dir.glob("data/*.parquet")):
         for batch in pq.ParquetFile(path).iter_batches(batch_size=500):
             for row in batch.to_pylist():
@@ -183,6 +210,7 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
                 if not facts:
                     continue
                 combo_with_steps[combo] += 1
+                outcomes_per_cell[(row["task_name"], *combo)].add(row["reward"] == 1)
                 run_rows.append(
                     {
                         "run_id": row["trial_id"],
@@ -203,6 +231,11 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
     runs_path.parent.mkdir(parents=True, exist_ok=True)
     pq.write_table(pa.Table.from_pylist(run_rows), runs_path)
     pq.write_table(pa.Table.from_pylist(step_rows), steps_path)
+    mixed_tasks = collections.Counter(
+        (agent, model)
+        for (_, agent, model), seen in outcomes_per_cell.items()
+        if len(seen) == 2
+    )
     return {
         "trials": sum(combo_trials.values()),
         "trials_with_steps": len(run_rows),
@@ -220,6 +253,7 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
                 "model": model,
                 "trials": combo_trials[(agent, model)],
                 "trials_with_steps": combo_with_steps[(agent, model)],
+                "mixed_tasks": mixed_tasks[(agent, model)],
             }
             for agent, model in sorted(combo_trials)
         ],
@@ -227,16 +261,34 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
 
 
 def run() -> None:
+    # Read the pin before the summary is rewritten below.
+    recorded = (
+        json.loads(SUMMARY_PATH.read_text()).get("files", {})
+        if SUMMARY_PATH.exists()
+        else {}
+    )
     raw_dir = download()
-    counts = normalize(raw_dir, RUNS_PATH, STEPS_PATH)
     files = {
         path.name: {"sha256": file_sha256(path), "bytes": path.stat().st_size}
         for path in sorted(raw_dir.glob("data/*.parquet"))
     }
+    for name in verify_files(files, recorded):
+        print(
+            f"warning: {name} does not match the recorded checksum, continuing anyway",
+            file=sys.stderr,
+        )
+    counts = normalize(raw_dir, RUNS_PATH, STEPS_PATH)
     SUMMARY_PATH.parent.mkdir(parents=True, exist_ok=True)
     SUMMARY_PATH.write_text(
         json.dumps(
-            {"dataset": DATASET, "revision": REVISION, "files": files, **counts},
+            {
+                "dataset": DATASET,
+                "revision": REVISION,
+                # The recorded checksum stays the reference, so a corrupted download cannot rewrite it.
+                "files": {**files, **recorded},
+                **counts,
+                "selected": select_combinations(counts["combinations"]),
+            },
             indent=2,
         )
         + "\n"
