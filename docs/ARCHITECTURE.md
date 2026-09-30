@@ -87,7 +87,7 @@ Prediction belongs to a Run, and for early checks to a prefix length k
 The public trace format was verified on the pinned revision: 52,104 trials, of which 34,462 have steps and 34,397 have at least one agent step, and the rest are dropped from the run and step tables but counted in `results/dataset_summary.json`.
 A tool's command is a string, a list or a placeholder, and ingest normalizes all three.
 Ingest writes `data/runs.parquet` and `data/steps.parquet` (gitignored), where the run table keeps the outcome for the feasibility counts, and the exporter never writes it before the freeze.
-The exporter writes `results/site.json` from a fixed sample of 60 runs chosen by the hash of the run id, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts and the model and scaffold combinations.
+The exporter writes `results/site.json` from a fixed sample of 60 runs chosen by the hash of the run id, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts, and the model and scaffold combinations with their counts of tasks with mixed outcomes and the combinations the PRD selection rule chooses.
 
 ## AI/Agent Boundary
 
