@@ -25,18 +25,18 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest` and `export` are implemented, but the other stage subcommands still report "not implemented yet", and `make start` and `make build` arrive in phase 1.
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest` and `export` are implemented, but the other stage subcommands still report "not implemented yet".
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
 - `uv run ruff format --check .`: check formatting
 - `make`: print the list of targets
-- `make lint`: lint Python, and the site once phase 1 adds it
+- `make lint`: lint Python and the site
 - `make test`: run the Python tests
 - `make reproduce`: download the public data at its pinned revision, then regenerate results with no model calls
-- `make start`: run the site's dev server in the foreground, stopped with Ctrl-C (added in phase 1)
-- `make build`: build the site for production into `web/dist/` (added in phase 1)
+- `make start`: run the site's dev server in the foreground, stopped with Ctrl-C
+- `make build`: build the site for production into `web/dist/`
 - `make clean`: remove build output and caches, but never downloaded data, raw transcripts or results
 - `make run-demo` and `make label`: use model credit, so run them only when intended
 - `npm ci`, `npm run lint`, `npm run build` inside `web/`: site install, lint and build
