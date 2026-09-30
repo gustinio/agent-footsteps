@@ -1,15 +1,14 @@
 name: CI
 
 # Every action is pinned to a commit SHA resolved from its latest release on 2026-09-30.
-# The jobs call make targets that are created in phase 0 of docs/PLAN.md.
-# Until that phase lands, the push and pull_request triggers are commented out so CI does not fail, and the workflow only runs when started by hand.
-# Phase 0 re-enables those triggers, and phase 1 adds the Node setup and the site build job.
+# The jobs call the make targets lint and test.
+# Phase 1 of docs/PLAN.md adds the Node setup and the site build job.
 
 on:
-  # push:
-  #   branches: [main]
-  # pull_request:
-  #   branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
