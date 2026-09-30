@@ -10,7 +10,7 @@ export const CATEGORY_FILL: Record<ToolCategory, string> = {
   web: 'fill-pink-500',
   finish: 'fill-slate-900 dark:fill-slate-100',
   other: 'fill-orange-500',
-  none: 'fill-slate-300 dark:fill-slate-600',
+  none: 'fill-transparent stroke-slate-400',
 }
 
 export const STATUS_LABEL: Record<ResultStatus, string> = {
