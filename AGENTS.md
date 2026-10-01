@@ -28,6 +28,7 @@ Keep the system runnable after every change.
 The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest` and `export` are implemented, but the other stage subcommands still report "not implemented yet".
 
 - `uv run footsteps <stage>`: run one pipeline stage
+- `uv run footsteps ingest --pilot <transcript>...`: reduce Claude Code transcripts to step facts and print the step table, without downloading
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
 - `uv run ruff format --check .`: check formatting

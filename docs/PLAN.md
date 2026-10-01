@@ -48,6 +48,10 @@ Guardrails for the site:
 
 **Done:** `docs/spike.md` is committed with the counts, the chosen combinations, the recorded cap, the labeler route, the measured cost per run, the tool mapping, the pilot manipulation result, and a go or fallback decision for the planted demo.
 
+## Spike Outcome
+
+2026-10-01: the spike recorded in [spike.md](spike.md) found that a planted verification instruction did not raise the verification flag in four pilots, but a planted repeating instruction did, in two pilots (29% and 31% of steps against 0%). The planted demo continues with repeating as its behaviour, and the freeze rewrites the Q2 wording in the PRD and settles the doses and the ten tasks.
+
 ## 2A. Custom Task Set (Only if the Spike Fails)
 
 - Write 10 shell tasks that an agent needs at least about 10 steps to finish, each with a scripted checker.

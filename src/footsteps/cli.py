@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from pathlib import Path
 
 from footsteps import export, ingest
 
@@ -27,12 +28,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="stage", metavar="<stage>", required=True)
     for name, summary in STAGES.items():
-        subparsers.add_parser(name, help=summary, description=summary)
+        stage_parser = subparsers.add_parser(name, help=summary, description=summary)
+        if name == "ingest":
+            stage_parser.add_argument(
+                "--pilot",
+                nargs="+",
+                type=Path,
+                metavar="TRANSCRIPT",
+                help="reduce Claude Code stream-json transcripts instead of downloading the public data",
+            )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.stage == "ingest" and args.pilot:
+        ingest.run_pilot(args.pilot)
+        return 0
     if args.stage in IMPLEMENTED:
         IMPLEMENTED[args.stage]()
         return 0

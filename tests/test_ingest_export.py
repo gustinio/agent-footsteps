@@ -73,9 +73,42 @@ def test_command_hash_is_empty_without_a_readable_command(cmd):
     assert ingest.command_hash(cmd) is None
 
 
+@pytest.mark.parametrize(
+    ("fn", "cmd", "expected"),
+    [
+        ("Bash", "python -m pytest tests/ -q", True),
+        ("Bash", "diff out.txt expected.txt", True),
+        ("Bash", "test -f /app/report.txt && echo ok", True),
+        ("bash_command", ["bash", "-lc", "make check"], True),
+        (
+            "Bash",
+            "python3 -c \"import json; print(len(json.load(open('o.json'))))\"",
+            True,
+        ),
+        ("Bash", "node -e 'console.log(1)'", True),
+        ("Bash", "cd repo && python3 - <<'PY'\nprint(1)\nPY", True),
+        ("Bash", "python3 script.py", False),
+        ("Bash", "cat report.txt", False),
+        ("Bash", "git checkout -b fix", False),
+        ("Bash", "echo contest", False),
+        ("Bash", "$38", False),
+        ("Read", "/app/tests/test_outputs.py", False),
+        ("Write", "pytest", False),
+    ],
+)
+def test_verification_flag_marks_shell_commands_that_check_work(fn, cmd, expected):
+    facts = ingest.step_facts(step(tools=[tool(fn, cmd)]))
+    assert facts["verification_flag"] is expected
+
+
 def test_step_facts_keep_no_text():
     facts = ingest.step_facts(step(tools=[tool("Bash", COMMAND_TEXT)], obs=OUTPUT_TEXT))
-    assert set(facts) == {"tool_category", "result_status", "command_hash"}
+    assert set(facts) == {
+        "tool_category",
+        "result_status",
+        "command_hash",
+        "verification_flag",
+    }
     assert COMMAND_TEXT not in json.dumps(facts)
     assert facts["tool_category"] == "shell"
     assert facts["result_status"] == "ok"
@@ -87,6 +120,7 @@ def test_step_without_tools_has_category_none_and_no_hash():
         "tool_category": "none",
         "result_status": "empty",
         "command_hash": None,
+        "verification_flag": False,
     }
 
 
@@ -288,3 +322,89 @@ def test_selection_takes_the_most_mixed_tasks_and_breaks_ties_by_trials():
     ]
     assert [c["agent"] for c in ingest.select_combinations(combos)] == ["b", "c"]
     assert [c["agent"] for c in ingest.select_combinations(combos, 1)] == ["b"]
+
+
+def stream_event(kind, message):
+    return json.dumps({"type": kind, "message": message})
+
+
+def assistant(message_id, *blocks):
+    return stream_event(
+        "assistant", {"id": message_id, "content": list(blocks), "usage": {}}
+    )
+
+
+def tool_use(tool_id, name, tool_input):
+    return {"type": "tool_use", "id": tool_id, "name": name, "input": tool_input}
+
+
+def tool_result(tool_id, content):
+    return stream_event(
+        "user",
+        {
+            "content": [
+                {"type": "tool_result", "tool_use_id": tool_id, "content": content}
+            ]
+        },
+    )
+
+
+PILOT_STREAM = "\n".join(
+    [
+        json.dumps({"type": "system", "subtype": "init"}),
+        assistant("m1", {"type": "thinking", "thinking": ""}),
+        assistant("m1", tool_use("t1", "Bash", {"command": COMMAND_TEXT})),
+        tool_result("t1", OUTPUT_TEXT),
+        assistant("m2", tool_use("t2", "Bash", {"command": "pytest -q"})),
+        tool_result("t2", [{"type": "text", "text": "1 passed"}]),
+        assistant("m3", {"type": "text", "text": MESSAGE_TEXT}),
+        json.dumps({"type": "result", "subtype": "success"}),
+    ]
+)
+
+
+def test_pilot_steps_join_a_message_split_across_lines_and_its_tool_result():
+    steps = ingest.pilot_steps(PILOT_STREAM, "pilot")
+    assert [s["tools"] and s["tools"][0]["cmd"] for s in steps] == [
+        COMMAND_TEXT,
+        "pytest -q",
+        None,
+    ]
+    assert [s["obs"] for s in steps] == [OUTPUT_TEXT, "1 passed", None]
+
+
+def test_pilot_steps_reduce_to_the_same_facts_as_public_steps(
+    tmp_path, monkeypatch, capsys
+):
+    monkeypatch.chdir(tmp_path)
+    transcript = tmp_path / "pilot-1.jsonl"
+    transcript.write_text(PILOT_STREAM)
+    ingest.run_pilot([transcript])
+    table = pq.read_table(ingest.PILOT_STEPS_PATH).to_pylist()
+    assert [(r["tool_category"], r["verification_flag"]) for r in table] == [
+        ("shell", False),
+        ("shell", True),
+        ("none", False),
+    ]
+    assert set(table[0]) == {"run_id", "step_idx", *ingest.step_facts(step())}
+    shown = capsys.readouterr().out
+    assert "pilot-1 1 shell ok True" in shown
+    assert COMMAND_TEXT not in shown and MESSAGE_TEXT not in shown
+
+
+def test_pilot_steps_split_parallel_calls_so_a_repeated_command_stays_visible():
+    stream = "\n".join(
+        [
+            assistant(
+                "m1",
+                tool_use("t1", "Bash", {"command": "ls"}),
+                tool_use("t2", "Bash", {"command": "ls"}),
+            ),
+            tool_result("t1", "a"),
+            tool_result("t2", "a"),
+        ]
+    )
+    steps = ingest.pilot_steps(stream, "pilot")
+    assert [s["obs"] for s in steps] == ["a", "a"]
+    hashes = [ingest.step_facts(s)["command_hash"] for s in steps]
+    assert hashes[0] == hashes[1] is not None
