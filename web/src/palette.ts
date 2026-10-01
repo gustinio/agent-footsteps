@@ -18,3 +18,15 @@ export const STATUS_LABEL: Record<ResultStatus, string> = {
   error: 'result error',
   empty: 'no result',
 }
+
+// Behaviour states are numbered by size, so the largest comes first. Eight is the most the size rule allows.
+export const STATE_FILL = [
+  'fill-blue-600',
+  'fill-orange-500',
+  'fill-emerald-600',
+  'fill-fuchsia-500',
+  'fill-amber-400',
+  'fill-cyan-500',
+  'fill-rose-700',
+  'fill-slate-500',
+]

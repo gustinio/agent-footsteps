@@ -25,12 +25,13 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner` and `evaluate` are implemented, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds only the Q2 manipulation check and the interim stop rule.
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner` and `evaluate` are implemented, `segment` is implemented too, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds only the Q2 manipulation check and the interim stop rule.
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run footsteps ingest --pilot <transcript>...`: reduce Claude Code transcripts to step facts and print the step table, without downloading
 - `uv run footsteps tasks`: self-test the custom demo tasks, where each reference solution must pass its checker and an empty attempt must fail it
 - `uv run footsteps runner [--tasks N]`: make the planned planted runs that are not yet recorded (uses model credit), or only those of the first N tasks
+- `uv run footsteps segment`: fit the HMM and GMM on the natural runs and write the state of every step to `results/segmentation.parquet`, with no model calls
 - `uv run footsteps evaluate`: print the repeat share per task and condition, the interim stop rule and the manipulation check
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
@@ -38,7 +39,7 @@ The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `expo
 - `make`: print the list of targets
 - `make lint`: lint Python and the site
 - `make test`: run the Python tests
-- `make reproduce`: download the public data at its pinned revision, then regenerate results with no model calls
+- `make reproduce`: download the public data at its pinned revision, then ingest, segment and export with no model calls
 - `make start`: run the site's dev server in the foreground, stopped with Ctrl-C
 - `make build`: build the site for production into `web/dist/`
 - `make clean`: remove build output and caches, but never downloaded data, raw transcripts or results

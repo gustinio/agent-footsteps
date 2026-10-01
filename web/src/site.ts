@@ -12,9 +12,16 @@ export type ToolCategory =
 
 export type ResultStatus = 'ok' | 'error' | 'empty'
 
+export type Method = 'hmm' | 'gmm'
+
 export interface Step {
   tool_category: ToolCategory
   result_status: ResultStatus
+  hmm_state: number
+  gmm_state: number
+  // Display position of the step in the point cloud, from 0 to 1. Never used to group steps.
+  x: number
+  y: number
 }
 
 export interface Run {
@@ -32,7 +39,18 @@ export interface Run {
 }
 
 export interface Site {
-  meta: { dataset: string; revision: string; runs_in_dataset: number; planted_runs: number }
+  meta: {
+    dataset: string
+    revision: string
+    runs_in_dataset: number
+    planted_runs: number
+    segmentation: {
+      n_states: number
+      natural_runs: number
+      // Share of the natural steps in each state, in state order.
+      state_shares: Record<Method, number[]>
+    }
+  }
   runs: Run[]
 }
 

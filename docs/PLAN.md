@@ -93,6 +93,8 @@ Guardrails for the site:
 - Verify the `hmmlearn` API against its documentation, and record the chosen approach in an ADR if stickiness needs a custom transition prior.
 - Export the display projection and the state of each step, and show the linked point cloud and state-colored ribbons in the site.
 
+**Status:** built on 2026-10-02. The features are 16 flags and shares in `FEATURE_NAMES`, with only earlier steps as neighbours so that a prefix of a run has the same features inside the whole run. The natural arm is the selected combinations on tasks where that combination has both outcomes, which is 411 runs on 57 tasks. The HMM size rule picked 8 states, the top of the range, because held-out likelihood rose with every added state, which is a limit to report and not a reason to widen the range after the freeze. The GMM uses the same state count. Planted runs are placed on the natural model and are never used to fit it. The fixed seed is 0, with 5 task folds from the hash of the task id, and a separate run-level split for the seen-task condition. Stickiness needed no custom prior, because `hmmlearn` takes a full matrix as the transition prior. It did need a small subclass, because the library applies its minimum variance only when it initializes, so a state could otherwise collapse onto a flag. Ingest also had to change: the dataset leaves the trial id empty on most rows, including every natural-arm row, so ingest now derives a run id from agent, model, trial name and start time.
+
 **Done:** `make reproduce` regenerates `results/site.json` with states, the site shows the linked point cloud and state-colored ribbons, and the tests pass on synthetic fixtures generated in code.
 
 ## 6. Labeling and Behaviour Names
