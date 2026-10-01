@@ -17,6 +17,7 @@ REVISION = "04e8940f5b6736a7ce8d22224fe2f2af74163ed2"
 RAW_DIR = Path("data/terminalbench")
 RUNS_PATH = Path("data/runs.parquet")
 STEPS_PATH = Path("data/steps.parquet")
+PILOT_STEPS_PATH = Path("data/pilot_steps.parquet")
 SUMMARY_PATH = Path("results/dataset_summary.json")
 
 STEP_KEYS = {"src", "msg", "tools", "obs"}
@@ -39,7 +40,7 @@ _CATEGORIES = {
     ),
     "read": "read read_file read_many_files view_image open_image image_read read_media",
     "search": "grep glob ls list_directory search_file_content",
-    "edit": "edit write write_file replace replace_file edit_file str_replace_editor",
+    "edit": "edit write write_file replace replace_file edit_file str_replace_editor notebookedit",
     "plan": "todowrite update_plan task_tracker write_todos save_plan think enterplanmode exitplanmode",
     "web": "webfetch websearch google_web_search web_fetch fetch_url web_search http_request",
     "finish": "mark_task_complete finish end_execution",
@@ -59,6 +60,18 @@ _ERROR = re.compile(
     r"|[Ee]xit (?:code|status)[: ]+[1-9]"
     r"|(?im:^\w*error\b)"
     r"|\bfatal:"
+)
+
+# A shell command verifies when it runs a test or checker, compares or checks
+# something already made, or runs an inline script (a -c or -e flag, or a
+# heredoc on stdin), which is how agents read a result back. It is a match on
+# the command text, so a command that only mentions one of these words (for
+# example in a file name) also counts.
+_VERIFY = re.compile(
+    r"\b(?:tests?|pytest|unittest|tox|diff|cmp|assert|verify|validate|check"
+    r"|checksum|sha256sum|md5sum|lint|mypy|ruff)\b"
+    r"|\b(?:python3?|node)\s+(?:-[ce]\b|-\s*<<)",
+    re.IGNORECASE,
 )
 
 
@@ -94,14 +107,27 @@ def result_status(obs: str | None) -> str:
     return "error" if _ERROR.search(obs) else "ok"
 
 
-def command_hash(cmd) -> str | None:
+def _normalized_command(cmd) -> str | None:
     if _is_placeholder(cmd):
         return None
     text = " ".join(str(part) for part in cmd) if isinstance(cmd, list) else str(cmd)
-    normalized = " ".join(text.split())
-    if not normalized:
+    return " ".join(text.split()) or None
+
+
+def command_hash(cmd) -> str | None:
+    normalized = _normalized_command(cmd)
+    if normalized is None:
         return None
     return hashlib.sha256(normalized.encode()).hexdigest()[:16]
+
+
+def verification_flag(category: str, cmd) -> bool:
+    normalized = _normalized_command(cmd)
+    return (
+        category == "shell"
+        and normalized is not None
+        and _VERIFY.search(normalized) is not None
+    )
 
 
 def check_step_format(step, where: str) -> None:
@@ -135,12 +161,14 @@ def step_facts(step: dict) -> dict:
         first = tools[0]
         category = tool_category(first["fn"], first["cmd"])
         digest = command_hash(first["cmd"])
+        verifies = verification_flag(category, first["cmd"])
     else:
-        category, digest = "none", None
+        category, digest, verifies = "none", None, False
     return {
         "tool_category": category,
         "result_status": result_status(step["obs"]),
         "command_hash": digest,
+        "verification_flag": verifies,
     }
 
 
@@ -152,6 +180,72 @@ def run_steps(steps_json: str | None, where: str) -> list[dict]:
         if step["src"] == "agent":
             facts.append(step_facts(step))
     return facts
+
+
+def _pilot_command(tool_input: dict) -> str:
+    """The text a Claude Code tool call acts on, as the public data's command field."""
+    for key in ("command", "file_path", "pattern", "url", "query"):
+        if isinstance(tool_input.get(key), str):
+            return tool_input[key]
+    return json.dumps(tool_input, sort_keys=True)
+
+
+def _pilot_result_text(content) -> str:
+    if isinstance(content, list):
+        content = "".join(
+            block.get("text", "") for block in content if isinstance(block, dict)
+        )
+    return content if isinstance(content, str) else ""
+
+
+def pilot_steps(transcript: str, where: str) -> list[dict]:
+    """Claude Code stream-json lines as agent steps in the public step format.
+
+    The stream splits a message into a line per content block that all share
+    the message id. Each tool call is its own step, because Claude Code issues
+    parallel calls in one message and each is a separate action, so a repeated
+    command stays visible. A message without a tool call is one step.
+    """
+    messages: dict[str, dict] = {}
+    results: dict[str, str] = {}
+    for line in transcript.splitlines():
+        event = json.loads(line)
+        if event.get("type") == "assistant":
+            message = event["message"]
+            entry = messages.setdefault(message["id"], {"text": "", "tools": []})
+            for block in message["content"]:
+                if block["type"] == "text":
+                    entry["text"] += block["text"]
+                elif block["type"] == "tool_use":
+                    entry["tools"].append(block)
+        elif event.get("type") == "user":
+            content = event["message"]["content"]
+            for block in content if isinstance(content, list) else []:
+                if block.get("type") == "tool_result":
+                    results[block["tool_use_id"]] = _pilot_result_text(
+                        block.get("content")
+                    )
+    steps = []
+    for entry in messages.values():
+        calls = entry["tools"] or [None]
+        for position, block in enumerate(calls):
+            obs = results.get(block["id"]) if block else None
+            steps.append(
+                {
+                    "src": "agent",
+                    "msg": entry["text"] if position == 0 else "",
+                    "tools": (
+                        [{"fn": block["name"], "cmd": _pilot_command(block["input"])}]
+                        if block
+                        else None
+                    ),
+                    # Cut to the public data's limit so both sources see the same output head.
+                    "obs": obs[:OBS_LIMIT] if obs else obs,
+                }
+            )
+    for step in steps:
+        check_step_format(step, where)
+    return steps
 
 
 def file_sha256(path: Path) -> str:
@@ -258,6 +352,26 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
             for agent, model in sorted(combo_trials)
         ],
     }
+
+
+def run_pilot(paths: list[Path]) -> None:
+    """Reduce Claude Code transcripts to step facts and print the step table.
+
+    Pilot runs only test the pipeline, so they go to their own table and never
+    into the public tables or the summary.
+    """
+    rows = []
+    for path in paths:
+        for idx, step in enumerate(pilot_steps(path.read_text(), path.name)):
+            rows.append({"run_id": path.stem, "step_idx": idx, **step_facts(step)})
+    PILOT_STEPS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    pq.write_table(pa.Table.from_pylist(rows), PILOT_STEPS_PATH)
+    print("run_id step tool_category result_status verification_flag")
+    for row in rows:
+        print(
+            f"{row['run_id']} {row['step_idx']} {row['tool_category']} "
+            f"{row['result_status']} {row['verification_flag']}"
+        )
 
 
 def run() -> None:

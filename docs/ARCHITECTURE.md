@@ -25,6 +25,7 @@ rules + LLM labeler + human sample ───────────────
 **Ingest** (`src/footsteps/ingest.py`) downloads the public trajectories and normalizes them into the step table.
 It computes the step facts from each step's text and then discards the text: the tool category, the result status, a hash of the normalized command, and the rule-based verification flag.
 It owns the mapping from the source format to the step schema and the record of trials per task.
+It also reduces Claude Code stream-json transcripts to the same step facts for the pilot, one tool call per step, into `data/pilot_steps.parquet`, which no analysis reads.
 It also compares the downloaded files with the recorded checksum and, on a mismatch, prints a warning and continues.
 It must not compute sequence-level features or labels, and it must not write raw text to anything that is committed.
 
@@ -74,10 +75,10 @@ Prediction belongs to a Run, and for early checks to a prefix length k
 - `Run`: `run_id`, `task_id`, `source` (public or planted), `agent` (scaffold), `model`, `seed`, `condition` (none, gentle or strong; empty for public runs), `outcome` (pass or fail from the verifier), `n_steps`.
 - `Step`: `run_id`, `step_idx`, `tool_category` (shell, read, search, edit, plan, web, finish, other, or none when the step calls no tool), `result_status` (ok, error or empty), `command_hash`, `verification_flag`. These step facts hold no raw text.
   A step is one agent-sourced step of the public trace, and user and system text are not steps.
-  When a step makes several tool calls, the facts come from the first call.
+  When a public step makes several tool calls, the facts come from the first call, and a Claude Code transcript is split so that each tool call is a step.
   `result_status` is inferred from the output text by phrase rules, and is `empty` when there is no output or when the dataset replaced the output with a `$<number>` placeholder.
   `command_hash` is empty when the step has no tool call, no command text, or a placeholder in place of the command.
-  `verification_flag` is added in the feasibility spike.
+  `verification_flag` is true when the first tool call is a shell command that contains a test or check word (test, pytest, diff, cmp, assert, verify, validate, check, lint and similar) or runs an inline `python -c`, `node -e` or `python -` heredoc script, and false for every other step. It is a match on the command text, so a command that only mentions such a word also counts.
 - `StepFeatures`: `run_id`, `step_idx`, plus behavioural features derived from the step facts only. Never contains raw text, the system prompt or the steering text.
 - `Segmentation`: `run_id`, `step_idx`, `method` (HMM or GMM), `state_id`.
 - `Label`: `run_id`, `step_idx`, `label`, `labeler` (rule, LLM or human).
