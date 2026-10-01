@@ -7,8 +7,11 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
+    "hmmlearn>=0.3.3",
     "huggingface-hub>=2.0.0",
+    "numpy>=2.5.3",
     "pyarrow>=25.0.1",
+    "scikit-learn>=1.9.1",
 ]
 
 [project.scripts]
@@ -23,6 +26,8 @@ dev = ["pytest", "ruff"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# hmmlearn reshapes arrays in a way NumPy 2.5 flags, and the result is unaffected.
+filterwarnings = ["ignore:Setting the shape on a NumPy array:DeprecationWarning"]
 
 [tool.ruff]
 src = ["src", "tests"]

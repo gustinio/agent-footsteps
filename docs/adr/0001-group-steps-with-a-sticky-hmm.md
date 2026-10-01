@@ -21,7 +21,7 @@ The `hmmlearn` API and how to express stickiness must be verified against its do
 ## Consequences
 
 - The comparison shows whether step order adds anything, and either answer is publishable.
-- A custom transition prior may be needed if the library has no sticky option, which adds code to test.
+- Verified against `hmmlearn` 0.3.3: `transmat_prior` takes a full matrix of Dirichlet weights, so stickiness is a larger weight on the diagonal and needs no custom prior. The library applies its minimum variance only at initialization, so a four-line subclass floors the variances after every update to stop a state collapsing onto a 0 or 1 flag.
 - Behaviours are limited to what the features can express.
 
 ## Alternatives
