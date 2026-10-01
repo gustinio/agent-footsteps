@@ -1,4 +1,5 @@
 import json
+import subprocess
 
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -236,6 +237,31 @@ def test_site_json_has_step_facts_and_no_outcome_or_text(normalized):
     assert "outcome" not in rendered
     for text in (COMMAND_TEXT, OUTPUT_TEXT, MESSAGE_TEXT, "command_hash"):
         assert text not in rendered
+
+
+def test_site_json_carries_the_outcome_when_asked(normalized):
+    tmp_path, _ = normalized
+    summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
+    site = export.build_site(
+        tmp_path / "runs.parquet", tmp_path / "steps.parquet", summary, True
+    )
+    assert {run["outcome"] for run in site["runs"]} == {"pass", "fail"}
+
+
+def test_prereg_tag_gates_the_outcome(tmp_path):
+    def git(*args):
+        subprocess.run(
+            ["git", "-c", "user.name=t", "-c", "user.email=t@t", *args],
+            cwd=tmp_path,
+            check=True,
+            capture_output=True,
+        )
+
+    git("init", "-q")
+    git("commit", "-q", "--allow-empty", "-m", "start")
+    assert not export.prereg_tag_exists(tmp_path)
+    git("tag", "prereg")
+    assert export.prereg_tag_exists(tmp_path)
 
 
 def test_verify_files_names_changed_and_missing_files():

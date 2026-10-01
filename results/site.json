@@ -9,6 +9,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 13,
+   "outcome": "fail",
    "run_id": "00668053-86a2-47ac-a293-c20a3cc6263f",
    "source": "public",
    "steps": [
@@ -71,6 +72,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 83,
+   "outcome": "fail",
    "run_id": "070af991-2868-4d1a-8e77-4c12c7d75a2a",
    "source": "public",
    "steps": [
@@ -413,6 +415,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "12952add-b2ac-4885-b130-ce0c59fbcf4f",
    "source": "public",
    "steps": [
@@ -435,6 +438,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 51,
+   "outcome": "fail",
    "run_id": "15008bbb-6833-4b48-879d-70b3e9e73d6e",
    "source": "public",
    "steps": [
@@ -649,6 +653,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 95,
+   "outcome": "fail",
    "run_id": "17734bc9-86f9-4949-97ad-6737fc8c62f1",
    "source": "public",
    "steps": [
@@ -1039,6 +1044,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 12,
+   "outcome": "fail",
    "run_id": "185e715d-25d8-42a8-b8ee-d4498476c312",
    "source": "public",
    "steps": [
@@ -1097,6 +1103,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Thinking@together_ai",
    "n_steps": 7,
+   "outcome": "pass",
    "run_id": "1c1ed5aa-d87d-4abb-986b-ab75dd09ae12",
    "source": "public",
    "steps": [
@@ -1135,6 +1142,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 5,
+   "outcome": "fail",
    "run_id": "1fa1bdfe-1ce3-446e-9fd5-c4070e634247",
    "source": "public",
    "steps": [
@@ -1165,6 +1173,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 43,
+   "outcome": "pass",
    "run_id": "222ba531-0e24-4fe5-95ce-0fc5dbae53ba",
    "source": "public",
    "steps": [
@@ -1347,6 +1356,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 97,
+   "outcome": "fail",
    "run_id": "2a2ff30d-bec6-4236-8815-94664bffd925",
    "source": "public",
    "steps": [
@@ -1745,6 +1755,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 4,
+   "outcome": "fail",
    "run_id": "2c323155-3c61-4157-9282-b72ee46f0e0c",
    "source": "public",
    "steps": [
@@ -1771,6 +1782,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "3653172f-ff7d-4f64-b3c0-3a2df9fcfe26",
    "source": "public",
    "steps": [
@@ -1793,6 +1805,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 14,
+   "outcome": "fail",
    "run_id": "391e9351-7f7a-47fa-9ce3-6c708d1721c1",
    "source": "public",
    "steps": [
@@ -1859,6 +1872,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 61,
+   "outcome": "fail",
    "run_id": "3d37d710-641a-4920-bdf3-bd43d48f73e0",
    "source": "public",
    "steps": [
@@ -2113,6 +2127,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 44,
+   "outcome": "fail",
    "run_id": "3e39ea8b-e91a-4ea2-a72f-b7c4a30afaf2",
    "source": "public",
    "steps": [
@@ -2299,6 +2314,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 23,
+   "outcome": "pass",
    "run_id": "3e918dd1-815f-4b36-bea4-a840d9ffd0f5",
    "source": "public",
    "steps": [
@@ -2401,6 +2417,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 29,
+   "outcome": "fail",
    "run_id": "3eb613c4-e652-4dc4-bed7-ecffc8d01649",
    "source": "public",
    "steps": [
@@ -2527,6 +2544,7 @@
    "agent": "openhands",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 51,
+   "outcome": "pass",
    "run_id": "48e9bda0-536d-4592-ae1c-f47a84564f43",
    "source": "public",
    "steps": [
@@ -2741,6 +2759,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "576defe7-3b5b-4001-9a7c-ee090ab655f4",
    "source": "public",
    "steps": [
@@ -2763,6 +2782,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 146,
+   "outcome": "fail",
    "run_id": "5a43f60c-9429-4198-935a-8a6da02039e5",
    "source": "public",
    "steps": [
@@ -3357,6 +3377,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 22,
+   "outcome": "fail",
    "run_id": "5d069ed3-0ef3-47f2-9c8d-cdf8eaf63213",
    "source": "public",
    "steps": [
@@ -3455,6 +3476,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 14,
+   "outcome": "fail",
    "run_id": "66e61c4b-0726-4856-83d4-f20ae1b1c10c",
    "source": "public",
    "steps": [
@@ -3521,6 +3543,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 2,
+   "outcome": "fail",
    "run_id": "6716329b-7ffa-41d2-b71d-aa7a7a1ddbe6",
    "source": "public",
    "steps": [
@@ -3539,6 +3562,7 @@
    "agent": "openhands",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 41,
+   "outcome": "fail",
    "run_id": "6fdeb476-ab76-4b61-a492-0f872ef7b7cf",
    "source": "public",
    "steps": [
@@ -3713,6 +3737,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 13,
+   "outcome": "fail",
    "run_id": "75b3a579-0589-468c-a1e3-86b3fc6aaf71",
    "source": "public",
    "steps": [
@@ -3775,6 +3800,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 96,
+   "outcome": "fail",
    "run_id": "7966bfa2-5ea3-4a58-8225-c902b8b556e5",
    "source": "public",
    "steps": [
@@ -4169,6 +4195,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 36,
+   "outcome": "fail",
    "run_id": "79f0c6de-8222-4002-9262-495ee76451dc",
    "source": "public",
    "steps": [
@@ -4323,6 +4350,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 160,
+   "outcome": "fail",
    "run_id": "80d6f482-4f62-47ec-96a7-1e5b922fbbe4",
    "source": "public",
    "steps": [
@@ -4973,6 +5001,7 @@
    "agent": "openhands",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 113,
+   "outcome": "fail",
    "run_id": "8691cc7f-b9a1-49bc-81b5-d859f7cf2541",
    "source": "public",
    "steps": [
@@ -5435,6 +5464,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 21,
+   "outcome": "pass",
    "run_id": "8732c474-cd3e-4bb2-b066-cf928e35d71a",
    "source": "public",
    "steps": [
@@ -5529,6 +5559,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 28,
+   "outcome": "fail",
    "run_id": "8ffd63c8-a378-411b-8678-124faa243da6",
    "source": "public",
    "steps": [
@@ -5651,6 +5682,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 24,
+   "outcome": "fail",
    "run_id": "905a37da-9714-4655-959d-b4c7ae89bb71",
    "source": "public",
    "steps": [
@@ -5757,6 +5789,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 36,
+   "outcome": "fail",
    "run_id": "91300662-90d5-4007-82b5-c87871daa801",
    "source": "public",
    "steps": [
@@ -5911,6 +5944,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 78,
+   "outcome": "fail",
    "run_id": "95e25e74-d280-41ac-93c0-4cc20548db56",
    "source": "public",
    "steps": [
@@ -6233,6 +6267,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 5,
+   "outcome": "fail",
    "run_id": "973985f9-e5d8-4afb-b599-5523030af5ea",
    "source": "public",
    "steps": [
@@ -6263,6 +6298,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "9cc07054-c916-4bd3-9086-ecffe4db19ab",
    "source": "public",
    "steps": [
@@ -6285,6 +6321,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 6,
+   "outcome": "fail",
    "run_id": "a52c0636-3f72-4363-9552-bb42582b7256",
    "source": "public",
    "steps": [
@@ -6319,6 +6356,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 4,
+   "outcome": "fail",
    "run_id": "a6432413-5f62-49c8-aca4-59718b0cbfcd",
    "source": "public",
    "steps": [
@@ -6345,6 +6383,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "a88a95ee-6700-4e25-86db-57c0fc041329",
    "source": "public",
    "steps": [
@@ -6367,6 +6406,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 9,
+   "outcome": "pass",
    "run_id": "aec02baf-be1b-40ac-8418-8f8968b0243c",
    "source": "public",
    "steps": [
@@ -6413,6 +6453,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 43,
+   "outcome": "fail",
    "run_id": "b6607909-d800-47bc-8016-740e591b1bb0",
    "source": "public",
    "steps": [
@@ -6595,6 +6636,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 12,
+   "outcome": "pass",
    "run_id": "ba76a63b-0f62-4644-98c0-e6e8221175c1",
    "source": "public",
    "steps": [
@@ -6653,6 +6695,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 17,
+   "outcome": "pass",
    "run_id": "bb236f23-0b39-4968-a995-8fad31f8d290",
    "source": "public",
    "steps": [
@@ -6731,6 +6774,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 86,
+   "outcome": "fail",
    "run_id": "bbc5654a-46e4-4102-aa8b-c4e2ce230291",
    "source": "public",
    "steps": [
@@ -7085,6 +7129,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 5,
+   "outcome": "fail",
    "run_id": "ca86b787-5868-4904-b5ba-66081e35d6cc",
    "source": "public",
    "steps": [
@@ -7115,6 +7160,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 12,
+   "outcome": "pass",
    "run_id": "d1e2fb86-2c65-4f3b-a663-c35ccbed2915",
    "source": "public",
    "steps": [
@@ -7173,6 +7219,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 38,
+   "outcome": "fail",
    "run_id": "d21bb463-cf96-4aff-a661-308b369aa87d",
    "source": "public",
    "steps": [
@@ -7335,6 +7382,7 @@
    "agent": "openhands",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 512,
+   "outcome": "fail",
    "run_id": "d2e68af8-75d7-48ac-9f78-0d7cf4ba23b9",
    "source": "public",
    "steps": [
@@ -9393,6 +9441,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "d381e3f2-5849-469f-a706-b7395f2dc549",
    "source": "public",
    "steps": [
@@ -9415,6 +9464,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 5,
+   "outcome": "fail",
    "run_id": "dd03eaa1-6208-4c63-b6c6-98829b365577",
    "source": "public",
    "steps": [
@@ -9445,6 +9495,7 @@
    "agent": "openhands",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 69,
+   "outcome": "fail",
    "run_id": "dd24eeb4-54db-48ae-8e19-85ee4c86a60c",
    "source": "public",
    "steps": [
@@ -9731,6 +9782,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Thinking@together_ai",
    "n_steps": 15,
+   "outcome": "fail",
    "run_id": "e10c74b7-26ed-4ee8-8ae4-2bd729000a20",
    "source": "public",
    "steps": [
@@ -9801,6 +9853,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 38,
+   "outcome": "pass",
    "run_id": "e58eb6dd-0f68-4ed4-8541-6afc09379db1",
    "source": "public",
    "steps": [
@@ -9963,6 +10016,7 @@
    "agent": "openhands",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 47,
+   "outcome": "pass",
    "run_id": "ebb08c33-7577-473c-b8f3-a6d34a6973b6",
    "source": "public",
    "steps": [
@@ -10161,6 +10215,7 @@
    "agent": "terminus-2",
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 117,
+   "outcome": "fail",
    "run_id": "ee66505a-bd74-4c48-8088-c1de1f90a141",
    "source": "public",
    "steps": [
@@ -10639,6 +10694,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 2,
+   "outcome": "fail",
    "run_id": "f015bde3-ac57-45ba-85f3-6fa03fae3a76",
    "source": "public",
    "steps": [
@@ -10657,6 +10713,7 @@
    "agent": "terminus-2",
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 30,
+   "outcome": "pass",
    "run_id": "f5ba5fa4-664a-4d83-8f02-bf0aee3fc510",
    "source": "public",
    "steps": [
@@ -10787,6 +10844,7 @@
    "agent": "mini-swe-agent",
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 5,
+   "outcome": "fail",
    "run_id": "fc641256-e926-495f-a162-ff0fd13f3824",
    "source": "public",
    "steps": [
@@ -10817,6 +10875,7 @@
    "agent": "terminus-2",
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
+   "outcome": "fail",
    "run_id": "fd01a891-500d-48e8-b29d-342530088d1a",
    "source": "public",
    "steps": [
@@ -10839,6 +10898,7 @@
    "agent": "terminus-2",
    "model": "moonshotai/Kimi-K2-Thinking@together_ai",
    "n_steps": 48,
+   "outcome": "pass",
    "run_id": "ff49fdb8-f311-4dcf-912f-ccaa5c0a60ad",
    "source": "public",
    "steps": [

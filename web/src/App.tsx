@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import siteUrl from '../../results/site.json?url'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CATEGORY_FILL } from '@/palette'
 import { Ribbon } from '@/Ribbon'
@@ -39,6 +40,7 @@ function Legend() {
 export default function App() {
   const [site, setSite] = useState<Site | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [showOutcome, setShowOutcome] = useState(false)
 
   useEffect(() => {
     loadSite(siteUrl)
@@ -53,6 +55,8 @@ export default function App() {
     return <p className="p-6 text-muted-foreground">Loading</p>
   }
 
+  const hasOutcome = site.runs.some((run) => run.outcome !== undefined)
+
   return (
     <main className="mx-auto max-w-[1400px] space-y-4 p-6">
       <header className="space-y-1">
@@ -63,6 +67,16 @@ export default function App() {
         </p>
       </header>
       <Legend />
+      {hasOutcome && (
+        <Button
+          variant={showOutcome ? 'default' : 'outline'}
+          size="sm"
+          aria-pressed={showOutcome}
+          onClick={() => setShowOutcome(!showOutcome)}
+        >
+          Show pass or fail
+        </Button>
+      )}
       <Card>
         <CardHeader>
           <CardTitle>Run ribbons</CardTitle>
@@ -73,6 +87,11 @@ export default function App() {
               <div className="sticky left-0 z-10 flex w-56 shrink-0 items-center gap-2 bg-card text-xs">
                 <span className="font-mono">{run.run_id.slice(0, 8)}</span>
                 <Badge variant="secondary">{run.n_steps} steps</Badge>
+                {showOutcome && run.outcome && (
+                  <Badge variant={run.outcome === 'pass' ? 'default' : 'destructive'}>
+                    {run.outcome}
+                  </Badge>
+                )}
                 <span className="truncate text-muted-foreground" title={run.model}>
                   {run.agent}
                 </span>
