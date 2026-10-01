@@ -21,6 +21,8 @@ A first spike verifies that Claude Code can drive the benchmark tasks, and other
 
 Update 2026-10-01: the spike showed that Claude Code drives the longer benchmark tasks, but scoring them with their own tests needs a real `/app` that the host does not provide, and only three of them were shown to run. The demo therefore uses 10 custom tasks, and the public benchmark tasks stay in the natural arm only.
 
+Update 2026-10-01 (freeze): verification could not be planted in the pilots, so the planted behaviour is repeating a shell command, with the rule "run every shell command twice in a row, with the identical command both times". The gentle dose had no effect and is cut, so the demo has two conditions, none and strong, and 40 runs. The instruction is given in a replaced system prompt and not through `--append-system-prompt`. The exact prompts and the Q2 wording are in the PRD freeze note.
+
 ## Consequences
 
 - Planting a known behaviour is the only way to test whether a behaviour name is correct, and it is the part not found in prior work.

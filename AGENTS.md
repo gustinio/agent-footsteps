@@ -84,7 +84,7 @@ Structure starts flat, with one module per stage, and becomes subfolders only wh
 - The segmenter clusters in the original feature space and never in the 2D projection.
 - The LLM never sees the steering prompt or the condition, and labels never flow back into features or the segmenter.
 - The evaluator owns every threshold and reads it from one place, and it must not use a model.
-- The exporter never writes raw command text, output text or steering text into the JSON.
+- The exporter never writes raw command text, output text or steering text into the JSON, and it writes the outcome only when the `prereg` tag exists (option B in the PRD: a default, not a hard block).
 - The site computes nothing and every number it shows comes from the JSON.
 - Only the LLM wrapper calls a model for labeling.
 
