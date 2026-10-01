@@ -8,7 +8,7 @@ From phase 1 on, each phase is a vertical slice: it extends the pipeline, the JS
 
 Guardrails for the site:
 
-- The exported JSON and the page contain no pass or fail outcome until the `prereg` tag exists.
+- By default the exported JSON and the page contain no pass or fail outcome until the `prereg` tag exists. This is an exporter default under option B in the PRD, not a hard block.
 - The exported JSON and the page contain derived fields only, never raw command text, output text, reasoning text or steering text.
 - The site runs locally until phase 9, and only derived data is ever published, as recorded in the license finding in [PRIOR_WORK.md](PRIOR_WORK.md).
 - The first site slice (phase 1) is time-boxed, and if it overruns, cut it down to the ribbons alone.
@@ -50,7 +50,7 @@ Guardrails for the site:
 
 ## Spike Outcome
 
-2026-10-01: the spike recorded in [spike.md](spike.md) found that a planted verification instruction did not raise the verification flag in four pilots, but a planted repeating instruction did, in two pilots (29% and 31% of steps against 0%). The planted demo continues with repeating as its behaviour, and the freeze rewrites the Q2 wording in the PRD and settles the doses and the ten tasks.
+2026-10-01: the spike recorded in [spike.md](spike.md) found that a planted verification instruction did not raise the verification flag in four pilots, but a planted repeating instruction did, in two pilots (29% and 31% of steps against 0%). The planted demo continues with repeating as its behaviour, and the freeze rewrote the Q2 wording in the PRD and cut the gentle dose, leaving two conditions.
 
 ## 2A. Custom Task Set
 
@@ -63,14 +63,17 @@ Guardrails for the site:
 
 ## 3. Freeze the Pre-Registration
 
-- Update the PRD with the chosen model and scaffold combinations, the minimum numbers of tasks and runs the natural arm needs, the list of 10 demo tasks in run order, the exact steering prompts for each condition, the verification flag rule, confirmation of the comparison models in the PRD, and the final run count (60, 48 or 32).
+- Update the PRD with the chosen model and scaffold combinations, the minimum numbers of tasks and runs the natural arm needs, the list of 10 demo tasks in run order, the exact steering prompts for each condition, the verification flag rule, confirmation of the comparison models in the PRD, and the final run count (40, with the gentle dose cut).
 - Fix the budget split in the PRD: the planted runs first, then a labeler reserve chosen from the measured cost per run, with the labeler sample sized to that reserve.
+- Record option B as a dated PRD note: thresholds and the tag are binding, and hiding outcomes before the tag and the never-cut list are defaults and recommendations.
 - Apply the viability gate: if the counts fall below the minimums, record which questions are reduced or dropped before freezing.
 - Commit the update and tag it `prereg`.
 - After the tag exists, add the outcome to the export and enable the site's pass or fail toggle.
 - Record a later prompt redesign as a dated note in the PRD with the new prompt and a new tag `prereg-2`, and report the runs made with the earlier prompt.
 
 **Done:** the tag `prereg` exists, no analysis code that produces results predates it, and the site shows outcomes only from this point.
+
+**Status:** frozen on 2026-10-01 with the demo tasks run in the order of the `tasks/` folder, because their step counts were not measured in a pilot.
 
 ## 4. Planted Runs
 
@@ -135,14 +138,14 @@ Guardrails for the site:
 If time runs short, cut in this order:
 
 1. Text-embedding ablation (an extra that starts out of scope).
-2. The gentle dose in the planted demo, which leaves the 32-run floor.
+2. The gentle dose in the planted demo, which the freeze has already cut.
 3. HDBSCAN and any extra comparison methods (an extra that starts out of scope).
 4. Site polish such as search and extra views, keeping the ribbons, the linked point cloud, and the filters.
 5. The planted demo, as a last resort, which drops Q2 and leaves Q1, Q3 and Q4 on public data.
 
 The site itself from phase 1 is not cut, because every later phase is checked through it.
 
-Never cut:
+Never cut (a recommendation under option B in the PRD, with the tag and the thresholds the only binding items):
 
 - The pre-registration tag and the frozen criteria.
 - Keeping outcomes out of the site and the export until the tag exists.

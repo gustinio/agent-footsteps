@@ -56,7 +56,7 @@ It owns every threshold in the PRD and reads them from one place.
 It must not change a threshold, and it must not use the LLM.
 
 **Exporter** (`src/footsteps/export.py`) samples steps, computes the display projection, and writes the JSON contract.
-It must never write raw command or output text or any steering text into the JSON.
+It must never write raw command or output text or any steering text into the JSON, and it includes the outcome only when the `prereg` tag exists.
 
 **Site** (`web/`) reads the JSON and draws the linked views.
 It must not compute statistics or call a model, and every number it shows comes from the JSON.
@@ -78,7 +78,7 @@ Prediction belongs to a Run, and for early checks to a prefix length k
 ```
 
 - `Task`: `task_id`, benchmark. One task has many runs.
-- `Run`: `run_id`, `task_id`, `source` (public or planted), `agent` (scaffold), `model`, `seed`, `condition` (none, gentle or strong; empty for public runs), `outcome` (pass or fail from the verifier), `n_steps`.
+- `Run`: `run_id`, `task_id`, `source` (public or planted), `agent` (scaffold), `model`, `seed`, `condition` (none or strong; empty for public runs), `outcome` (pass or fail from the verifier), `n_steps`.
 - `Step`: `run_id`, `step_idx`, `tool_category` (shell, read, search, edit, plan, web, finish, other, or none when the step calls no tool), `result_status` (ok, error or empty), `command_hash`, `verification_flag`. These step facts hold no raw text.
   A step is one agent-sourced step of the public trace, and user and system text are not steps.
   When a public step makes several tool calls, the facts come from the first call, and a Claude Code transcript is split so that each tool call is a step.
@@ -93,7 +93,7 @@ Prediction belongs to a Run, and for early checks to a prefix length k
 
 The public trace format was verified on the pinned revision: 52,104 trials, of which 34,462 have steps and 34,397 have at least one agent step, and the rest are dropped from the run and step tables but counted in `results/dataset_summary.json`.
 A tool's command is a string, a list or a placeholder, and ingest normalizes all three.
-Ingest writes `data/runs.parquet` and `data/steps.parquet` (gitignored), where the run table keeps the outcome for the feasibility counts, and the exporter never writes it before the freeze.
+Ingest writes `data/runs.parquet` and `data/steps.parquet` (gitignored), where the run table keeps the outcome for the feasibility counts, and the exporter writes it only when the `prereg` tag exists, because hiding outcomes before the tag is its default.
 The exporter writes `results/site.json` from a fixed sample of 60 runs chosen by the hash of the run id, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts, and the model and scaffold combinations with their counts of tasks with mixed outcomes and the combinations the PRD selection rule chooses.
 
 ## AI/Agent Boundary

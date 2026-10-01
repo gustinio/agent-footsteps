@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import pyarrow.parquet as pq
@@ -16,6 +17,20 @@ SAMPLE_RUNS = 60
 RUN_FIELDS = ("run_id", "task_id", "source", "agent", "model", "n_steps")
 STEP_FIELDS = ("tool_category", "result_status")
 
+# Outcomes stay out of the file until the pre-registration is tagged, so that looking at
+# the data cannot steer the criteria. The tag is a default gate, not a hard block.
+PREREG_TAG = "prereg"
+
+
+def prereg_tag_exists(repo: Path = Path(".")) -> bool:
+    result = subprocess.run(
+        ["git", "rev-parse", "--quiet", "--verify", f"refs/tags/{PREREG_TAG}"],
+        cwd=repo,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
 
 def sample_run_ids(run_ids: list[str], size: int = SAMPLE_RUNS) -> list[str]:
     """Pick runs by the hash of their id, so the sample never depends on row order or outcome."""
@@ -24,19 +39,22 @@ def sample_run_ids(run_ids: list[str], size: int = SAMPLE_RUNS) -> list[str]:
     )[:size]
 
 
-def build_site(runs_path: Path, steps_path: Path, summary: dict) -> dict:
+def build_site(
+    runs_path: Path, steps_path: Path, summary: dict, include_outcome: bool = False
+) -> dict:
     runs = {row["run_id"]: row for row in pq.read_table(runs_path).to_pylist()}
     chosen = set(sample_run_ids(list(runs)))
     steps_by_run: dict[str, list[dict]] = {run_id: [] for run_id in chosen}
     for row in pq.read_table(steps_path).to_pylist():
         if row["run_id"] in chosen:
             steps_by_run[row["run_id"]].append(row)
+    run_fields = RUN_FIELDS + (("outcome",) if include_outcome else ())
     exported = []
     for run_id in sorted(chosen):
         ordered = sorted(steps_by_run[run_id], key=lambda step: step["step_idx"])
         exported.append(
             {
-                **{field: runs[run_id][field] for field in RUN_FIELDS},
+                **{field: runs[run_id][field] for field in run_fields},
                 "steps": [
                     {field: step[field] for field in STEP_FIELDS} for step in ordered
                 ],
@@ -54,6 +72,6 @@ def build_site(runs_path: Path, steps_path: Path, summary: dict) -> dict:
 
 def run() -> None:
     summary = json.loads(SUMMARY_PATH.read_text())
-    site = build_site(RUNS_PATH, STEPS_PATH, summary)
+    site = build_site(RUNS_PATH, STEPS_PATH, summary, prereg_tag_exists())
     SITE_PATH.parent.mkdir(parents=True, exist_ok=True)
     SITE_PATH.write_text(json.dumps(site, indent=1, sort_keys=True) + "\n")

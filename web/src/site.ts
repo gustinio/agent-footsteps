@@ -24,6 +24,8 @@ export interface Run {
   agent: string
   model: string
   n_steps: number
+  // Present only once the pre-registration tag exists.
+  outcome?: 'pass' | 'fail'
   steps: Step[]
 }
 

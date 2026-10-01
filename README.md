@@ -6,8 +6,9 @@ An experiment that groups the footsteps of LLM agents into named behaviours, che
 A footstep is one action an agent takes in a run, such as running a command, and a run is one attempt at a task.
 
 Status: early.
-`make reproduce` downloads the public data and writes `results/site.json` and `results/dataset_summary.json`, with no outcomes and no text.
+`make reproduce` downloads the public data and writes `results/site.json` and `results/dataset_summary.json`, with no text, and with each run's pass or fail outcome only while the git tag `prereg` exists.
 `make start` shows one ribbon per sampled run, colored by tool category and result status.
+A button shows the pass or fail outcome next to each run once the export carries it.
 The other stages are not built yet, and the model targets fail with a "not implemented yet" message until later phases of the plan land.
 
 ## Quickstart
