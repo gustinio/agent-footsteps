@@ -36,10 +36,12 @@ A task is plain shell, needs no container and no network, and the checker lives 
 Tasks contain no model call, and the runner reads them without changing them.
 
 **Runner** (`src/footsteps/runner.py`) executes the planted demo through the Claude Code command line, one task and condition at a time, and writes each transcript as the same step facts as ingest, keeping the raw transcript only in the gitignored `data/` folder.
-It owns the steering prompts, the run order, and the token log that enforces the cost cap.
-It must not read results or decide when to stop based on them, and it runs in a throwaway working directory on the personal login only.
+It owns the steering prompts, the run order, and the token log that enforces the cost cap: before each run it passes Claude Code the budget still left, and it stops when none is left.
+It skips runs already in the planted tables, so an interrupted or staged invocation resumes where it stopped, and it records a run only when Claude Code finished it.
+It must not read results or decide when to stop based on them, and it runs in a throwaway working directory on the personal login only, which it checks before the first run.
+The interim stop rule is therefore applied between invocations: `footsteps runner --tasks 3` stops after the first three tasks, and a person reads the evaluator's table before running the rest.
 
-**Features** (`src/footsteps/features.py`) turns the step facts into behavioural features, such as a repeat flag from command hashes seen earlier in the run, the recent error history, and the tool category and verification flag of a step and its neighbours.
+**Features** (`src/footsteps/features.py`) turns the step facts into behavioural features, such as a repeat flag from command hashes seen earlier in the run (the only one built so far), the recent error history, and the tool category and verification flag of a step and its neighbours.
 It reads the step facts only.
 It must never read raw text, the system prompt, the steering text, or a label, and it must produce the same schema for public and planted runs.
 
@@ -52,10 +54,10 @@ It owns the agreement check against the human sample.
 The LLM never sees the steering prompt or the condition, and labels never flow back into features or the segmenter.
 
 **Evaluator** (`src/footsteps/evaluate.py`) computes agreement, the manipulation check, and the whole-run and prefix prediction comparisons with task-grouped folds and bootstrap ranges.
-It owns every threshold in the PRD and reads them from one place.
+It owns every threshold in the PRD and reads them from one place. So far it holds the manipulation check and the interim stop rule, which `footsteps evaluate` prints.
 It must not change a threshold, and it must not use the LLM.
 
-**Exporter** (`src/footsteps/export.py`) samples steps, computes the display projection, and writes the JSON contract.
+**Exporter** (`src/footsteps/export.py`) samples public runs, adds every planted run from the committed planted tables, computes the display projection, and writes the JSON contract.
 It must never write raw command or output text or any steering text into the JSON, and it includes the outcome only when the `prereg` tag exists.
 
 **Site** (`web/`) reads the JSON and draws the linked views.
@@ -94,7 +96,10 @@ Prediction belongs to a Run, and for early checks to a prefix length k
 The public trace format was verified on the pinned revision: 52,104 trials, of which 34,462 have steps and 34,397 have at least one agent step, and the rest are dropped from the run and step tables but counted in `results/dataset_summary.json`.
 A tool's command is a string, a list or a placeholder, and ingest normalizes all three.
 Ingest writes `data/runs.parquet` and `data/steps.parquet` (gitignored), where the run table keeps the outcome for the feasibility counts, and the exporter writes it only when the `prereg` tag exists, because hiding outcomes before the tag is its default.
-The exporter writes `results/site.json` from a fixed sample of 60 runs chosen by the hash of the run id, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts, and the model and scaffold combinations with their counts of tasks with mixed outcomes and the combinations the PRD selection rule chooses.
+The runner appends each finished planted run to `results/planted_runs.parquet` (the run fields above, with `seed`) and `results/planted_steps.parquet` (the step facts), which are committed because they hold no text, and keeps the raw transcripts in `data/planted/`.
+`results/cost_log.jsonl` has one line per call with its token counts, `cost_usd` as Claude Code reports it, the stage, and `spent_usd` for that stage against `budget_usd` and `cap_usd`.
+The planted budget is $12 of the $40 cap, and the runner passes the smaller of what is left of the budget and of the cap to each call, so a run stops at the cap.
+The exporter writes `results/site.json` from a fixed sample of 60 public runs chosen by the hash of the run id plus every planted run, listed first and carrying its `condition`, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts, and the model and scaffold combinations with their counts of tasks with mixed outcomes and the combinations the PRD selection rule chooses.
 
 ## AI/Agent Boundary
 

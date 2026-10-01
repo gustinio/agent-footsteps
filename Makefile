@@ -26,9 +26,9 @@ start: ## Run the site's dev server in the foreground (Ctrl-C to stop)
 build: ## Build the site into web/dist
 	npm run build --prefix web
 
-run-demo: ## Run planted behaviours (USES MODEL CREDIT)
+run-demo: ## Run planted behaviours, optionally the first TASKS tasks (USES MODEL CREDIT)
 	@echo "warning: run-demo uses model credit" >&2
-	uv run footsteps runner
+	uv run footsteps runner $(if $(TASKS),--tasks $(TASKS))
 
 label: ## Name behaviours with the LLM (USES MODEL CREDIT)
 	@echo "warning: label uses model credit" >&2

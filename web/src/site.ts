@@ -23,6 +23,8 @@ export interface Run {
   source: string
   agent: string
   model: string
+  // Set for planted runs only.
+  condition: 'none' | 'strong' | null
   n_steps: number
   // Present only once the pre-registration tag exists.
   outcome?: 'pass' | 'fail'
@@ -30,7 +32,7 @@ export interface Run {
 }
 
 export interface Site {
-  meta: { dataset: string; revision: string; runs_in_dataset: number }
+  meta: { dataset: string; revision: string; runs_in_dataset: number; planted_runs: number }
   runs: Run[]
 }
 
