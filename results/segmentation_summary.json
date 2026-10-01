@@ -6,31 +6,31 @@
   "held_out": [
     {
       "n_states": 2,
-      "mean_loglik": 3.116959463915109
+      "mean_loglik": 3.116959
     },
     {
       "n_states": 3,
-      "mean_loglik": 3.942720799569382
+      "mean_loglik": 3.942721
     },
     {
       "n_states": 4,
-      "mean_loglik": 4.516020970214471
+      "mean_loglik": 4.516021
     },
     {
       "n_states": 5,
-      "mean_loglik": 4.931330661517263
+      "mean_loglik": 4.931331
     },
     {
       "n_states": 6,
-      "mean_loglik": 5.129999874212004
+      "mean_loglik": 5.13
     },
     {
       "n_states": 7,
-      "mean_loglik": 5.491196020901745
+      "mean_loglik": 5.491196
     },
     {
       "n_states": 8,
-      "mean_loglik": 5.555805418770004
+      "mean_loglik": 5.555805
     }
   ],
   "natural_runs": 411,

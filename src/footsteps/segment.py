@@ -157,7 +157,8 @@ def held_out_scores(
             X_test, lengths = _stack(sequences, test)
             total += model.score(X_test, lengths)
             count += len(X_test)
-        scores.append({"n_states": n_states, "mean_loglik": total / count})
+        # Rounded because the last digits of a float sum vary between runs, and a rerun should not change a committed file.
+        scores.append({"n_states": n_states, "mean_loglik": round(total / count, 6)})
     return scores
 
 
