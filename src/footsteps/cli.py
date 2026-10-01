@@ -4,7 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from footsteps import evaluate, export, ingest, runner, segment, tasks
+from footsteps import evaluate, export, ingest, label, runner, segment, tasks
 
 # Stage order follows the pipeline in docs/ARCHITECTURE.md.
 STAGES = {
@@ -43,6 +43,12 @@ def build_parser() -> argparse.ArgumentParser:
                 metavar="N",
                 help="run only the first N tasks in run order, to stop for the interim rule",
             )
+        if name == "label":
+            stage_parser.add_argument(
+                "--sheet",
+                action="store_true",
+                help="write the blind sheet for the human sample and make no model call",
+            )
         if name == "ingest":
             stage_parser.add_argument(
                 "--pilot",
@@ -61,6 +67,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.stage == "runner":
         runner.run(args.tasks)
+        return 0
+    if args.stage == "label":
+        if args.sheet:
+            label.write_sheet()
+        else:
+            label.run()
         return 0
     if args.stage in IMPLEMENTED:
         IMPLEMENTED[args.stage]()

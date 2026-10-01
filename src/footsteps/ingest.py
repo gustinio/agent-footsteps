@@ -182,6 +182,47 @@ def run_steps(steps_json: str | None, where: str) -> list[dict]:
     return facts
 
 
+def raw_agent_steps(raw_dir: Path, wanted: set[str]) -> dict[str, list[dict]]:
+    """The agent steps of the wanted public runs with their text, in the order the step table indexes them.
+
+    Only the labeler reads this, for the few steps it shows a model or a person, and the text goes to
+    nothing that is committed.
+    """
+    found = {}
+    for path in sorted(raw_dir.glob("data/*.parquet")):
+        for batch in pq.ParquetFile(path).iter_batches(batch_size=500):
+            for row in batch.to_pylist():
+                trial = run_id(row)
+                if trial in wanted and row["steps"]:
+                    found[trial] = [
+                        step
+                        for step in json.loads(row["steps"])
+                        if step["src"] == "agent"
+                    ]
+    return found
+
+
+def step_text(step: dict) -> dict:
+    """What a reader needs to judge one step: the first tool call, its output and the agent's own message.
+
+    A value the dataset replaced with a placeholder is blank, and long text is cut to keep a batch small.
+    """
+    tools = step["tools"]
+    first = tools[0] if tools else None
+
+    def readable(value, limit: int) -> str:
+        if value is None or _is_placeholder(value):
+            return ""
+        return value[:limit]
+
+    return {
+        "tool": first["fn"] if first else "",
+        "command": readable(first and _normalized_command(first["cmd"]), 600),
+        "output": readable(step["obs"], 800),
+        "message": readable(step["msg"], 600),
+    }
+
+
 def _pilot_command(tool_input: dict) -> str:
     """The text a Claude Code tool call acts on, as the public data's command field."""
     for key in ("command", "file_path", "pattern", "url", "query"):

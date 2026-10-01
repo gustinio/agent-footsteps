@@ -53,6 +53,8 @@ States are numbered by how many natural steps they hold.
 It must not cluster in a 2D projection, and the projection exists only for display.
 
 **Labeler** (`src/footsteps/label.py`) produces rule-based facts, LLM intent labels, and the shuffled sheet for the human sample.
+It draws the sample from the natural arm, dealing across HMM state, rule fact and a held-out flag (tasks in task fold 0), and writes the sheet and its key to the gitignored `data/`, because the sheet holds step text.
+For that it reads the raw step text through `ingest.raw_agent_steps` and `ingest.step_text`, which cut each step to its tool, command, output and message.
 It owns the agreement check against the human sample.
 The LLM never sees the steering prompt or the condition, and labels never flow back into features or the segmenter.
 
@@ -66,8 +68,10 @@ It must never write raw command or output text or any steering text into the JSO
 **Site** (`web/`) reads the JSON and draws the linked views.
 It must not compute statistics or call a model, and every number it shows comes from the JSON.
 
-**LLM wrapper** (in `src/footsteps/`) is the only code that calls a model for labeling.
+**LLM wrapper** (`src/footsteps/llm.py`) is the only code that calls a model for labeling.
 It pins the prompt, caches results by input, logs tokens, and refuses a call that would exceed the labeler reserve or the cap.
+The cache is `data/label_cache.jsonl`, keyed by the prompt version, the model and the batch, and the intent labels of a run are written to `results/llm_labels.parquet` as run and step identifiers with no text.
+It logs under the stage `labeler` and passes each call the budget left to it, as the runner does.
 
 ## Data Model
 
