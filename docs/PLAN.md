@@ -83,6 +83,8 @@ Guardrails for the site:
 
 **Done:** the planted runs are complete or stopped by the rule, their step table is committed, the site shows them as ribbons, and the cost log shows the spend against the cap.
 
+**Status:** built and run on 2026-10-01. All 40 runs were made in the pre-registered order (`footsteps runner --tasks 1`, then `--tasks 3`, then the rest), and the interim rule said continue, with the repeat share higher with the instruction on 3 of the first 3 tasks. The manipulation check rose on 10 of 10 tasks, and the spend was $4.00 of the $12 planted budget. Steps per run ranged from 4 to 23 and the medians were 7 without the instruction and 15 with it, which the PRD said to report. 19 of 20 runs passed their checker in each condition. The runs carried the author's user-level Claude Code instructions and the claude.ai connector tools were present but not allowed, as in the pilots. The planted tables are `results/planted_runs.parquet` and `results/planted_steps.parquet`, and the cost log is `results/cost_log.jsonl`.
+
 ## 5. Segmentation and Point Cloud
 
 - Implement the behavioural features as summaries of the step facts only, and the shared schema for public and planted runs.

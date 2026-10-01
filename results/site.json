@@ -1,12 +1,2290 @@
 {
  "meta": {
   "dataset": "yoonholee/terminalbench-trajectories",
+  "planted_runs": 40,
   "revision": "04e8940f5b6736a7ce8d22224fe2f2af74163ed2",
   "runs_in_dataset": 34397
  },
  "runs": [
   {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 7,
+   "outcome": "pass",
+   "run_id": "access-log-report-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "access-log-report"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 13,
+   "outcome": "pass",
+   "run_id": "access-log-report-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "access-log-report"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 10,
+   "outcome": "pass",
+   "run_id": "access-log-report-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "access-log-report"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 17,
+   "outcome": "pass",
+   "run_id": "access-log-report-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "access-log-report"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 12,
+   "outcome": "pass",
+   "run_id": "archive-dig-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "archive-dig"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 21,
+   "outcome": "pass",
+   "run_id": "archive-dig-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "archive-dig"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 7,
+   "outcome": "pass",
+   "run_id": "archive-dig-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "archive-dig"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 16,
+   "outcome": "pass",
+   "run_id": "archive-dig-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "archive-dig"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 6,
+   "outcome": "pass",
+   "run_id": "backup-script-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "backup-script"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 13,
+   "outcome": "pass",
+   "run_id": "backup-script-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "error",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "error",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "error",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "error",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "backup-script"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 6,
+   "outcome": "pass",
+   "run_id": "backup-script-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "backup-script"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 8,
+   "outcome": "pass",
+   "run_id": "backup-script-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "backup-script"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 13,
+   "outcome": "pass",
+   "run_id": "config-fix-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "config-fix"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 14,
+   "outcome": "pass",
+   "run_id": "config-fix-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "config-fix"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 14,
+   "outcome": "pass",
+   "run_id": "config-fix-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "config-fix"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 16,
+   "outcome": "pass",
+   "run_id": "config-fix-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "config-fix"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 4,
+   "outcome": "fail",
+   "run_id": "csv-merge-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "csv-merge"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 12,
+   "outcome": "fail",
+   "run_id": "csv-merge-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "csv-merge"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 4,
+   "outcome": "pass",
+   "run_id": "csv-merge-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "csv-merge"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 7,
+   "outcome": "pass",
+   "run_id": "csv-merge-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "csv-merge"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 9,
+   "outcome": "pass",
+   "run_id": "git-detective-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "git-detective"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 15,
+   "outcome": "pass",
+   "run_id": "git-detective-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "git-detective"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 10,
+   "outcome": "pass",
+   "run_id": "git-detective-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "git-detective"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 21,
+   "outcome": "pass",
+   "run_id": "git-detective-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "error",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "git-detective"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 5,
+   "outcome": "pass",
+   "run_id": "permission-audit-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "permission-audit"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 8,
+   "outcome": "pass",
+   "run_id": "permission-audit-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "permission-audit"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 6,
+   "outcome": "pass",
+   "run_id": "permission-audit-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "permission-audit"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 8,
+   "outcome": "pass",
+   "run_id": "permission-audit-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "permission-audit"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 6,
+   "outcome": "pass",
+   "run_id": "photo-rename-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "photo-rename"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 17,
+   "outcome": "pass",
+   "run_id": "photo-rename-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "photo-rename"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 6,
+   "outcome": "pass",
+   "run_id": "photo-rename-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "photo-rename"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 7,
+   "outcome": "pass",
+   "run_id": "photo-rename-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "photo-rename"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 6,
+   "outcome": "pass",
+   "run_id": "template-render-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "template-render"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 16,
+   "outcome": "pass",
+   "run_id": "template-render-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "template-render"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 7,
+   "outcome": "pass",
+   "run_id": "template-render-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "template-render"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 17,
+   "outcome": "pass",
+   "run_id": "template-render-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "template-render"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 11,
+   "outcome": "pass",
+   "run_id": "word-pipeline-s1-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "word-pipeline"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 23,
+   "outcome": "pass",
+   "run_id": "word-pipeline-s1-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "word-pipeline"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "none",
+   "model": "claude-sonnet-5",
+   "n_steps": 16,
+   "outcome": "pass",
+   "run_id": "word-pipeline-s2-none",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "word-pipeline"
+  },
+  {
+   "agent": "claude-code",
+   "condition": "strong",
+   "model": "claude-sonnet-5",
+   "n_steps": 15,
+   "outcome": "pass",
+   "run_id": "word-pipeline-s2-strong",
+   "source": "planted",
+   "steps": [
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "read"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "edit"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "ok",
+     "tool_category": "shell"
+    },
+    {
+     "result_status": "empty",
+     "tool_category": "none"
+    }
+   ],
+   "task_id": "word-pipeline"
+  },
+  {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 13,
    "outcome": "fail",
@@ -70,6 +2348,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 83,
    "outcome": "fail",
@@ -413,6 +2692,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -436,6 +2716,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 51,
    "outcome": "fail",
@@ -651,6 +2932,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 95,
    "outcome": "fail",
@@ -1042,6 +3324,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 12,
    "outcome": "fail",
@@ -1101,6 +3384,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Thinking@together_ai",
    "n_steps": 7,
    "outcome": "pass",
@@ -1140,6 +3424,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 5,
    "outcome": "fail",
@@ -1171,6 +3456,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 43,
    "outcome": "pass",
@@ -1354,6 +3640,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 97,
    "outcome": "fail",
@@ -1753,6 +4040,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 4,
    "outcome": "fail",
@@ -1780,6 +4068,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -1803,6 +4092,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 14,
    "outcome": "fail",
@@ -1870,6 +4160,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 61,
    "outcome": "fail",
@@ -2125,6 +4416,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 44,
    "outcome": "fail",
@@ -2312,6 +4604,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 23,
    "outcome": "pass",
@@ -2415,6 +4708,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 29,
    "outcome": "fail",
@@ -2542,6 +4836,7 @@
   },
   {
    "agent": "openhands",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 51,
    "outcome": "pass",
@@ -2757,6 +5052,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -2780,6 +5076,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 146,
    "outcome": "fail",
@@ -3375,6 +5672,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 22,
    "outcome": "fail",
@@ -3474,6 +5772,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 14,
    "outcome": "fail",
@@ -3541,6 +5840,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 2,
    "outcome": "fail",
@@ -3560,6 +5860,7 @@
   },
   {
    "agent": "openhands",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 41,
    "outcome": "fail",
@@ -3735,6 +6036,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 13,
    "outcome": "fail",
@@ -3798,6 +6100,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 96,
    "outcome": "fail",
@@ -4193,6 +6496,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 36,
    "outcome": "fail",
@@ -4348,6 +6652,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 160,
    "outcome": "fail",
@@ -4999,6 +7304,7 @@
   },
   {
    "agent": "openhands",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 113,
    "outcome": "fail",
@@ -5462,6 +7768,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 21,
    "outcome": "pass",
@@ -5557,6 +7864,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 28,
    "outcome": "fail",
@@ -5680,6 +7988,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 24,
    "outcome": "fail",
@@ -5787,6 +8096,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 36,
    "outcome": "fail",
@@ -5942,6 +8252,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Instruct-0905@together_ai",
    "n_steps": 78,
    "outcome": "fail",
@@ -6265,6 +8576,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 5,
    "outcome": "fail",
@@ -6296,6 +8608,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -6319,6 +8632,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 6,
    "outcome": "fail",
@@ -6354,6 +8668,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 4,
    "outcome": "fail",
@@ -6381,6 +8696,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -6404,6 +8720,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 9,
    "outcome": "pass",
@@ -6451,6 +8768,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 43,
    "outcome": "fail",
@@ -6634,6 +8952,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 12,
    "outcome": "pass",
@@ -6693,6 +9012,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 17,
    "outcome": "pass",
@@ -6772,6 +9092,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 86,
    "outcome": "fail",
@@ -7127,6 +9448,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 5,
    "outcome": "fail",
@@ -7158,6 +9480,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/minimax-m2@fireworks_ai",
    "n_steps": 12,
    "outcome": "pass",
@@ -7217,6 +9540,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 38,
    "outcome": "fail",
@@ -7380,6 +9704,7 @@
   },
   {
    "agent": "openhands",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 512,
    "outcome": "fail",
@@ -9439,6 +11764,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -9462,6 +11788,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 5,
    "outcome": "fail",
@@ -9493,6 +11820,7 @@
   },
   {
    "agent": "openhands",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 69,
    "outcome": "fail",
@@ -9780,6 +12108,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Thinking@together_ai",
    "n_steps": 15,
    "outcome": "fail",
@@ -9851,6 +12180,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 38,
    "outcome": "pass",
@@ -10014,6 +12344,7 @@
   },
   {
    "agent": "openhands",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 47,
    "outcome": "pass",
@@ -10213,6 +12544,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8@together_ai",
    "n_steps": 117,
    "outcome": "fail",
@@ -10692,6 +13024,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 2,
    "outcome": "fail",
@@ -10711,6 +13044,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "accounts/fireworks/models/glm-4p6@fireworks_ai",
    "n_steps": 30,
    "outcome": "pass",
@@ -10842,6 +13176,7 @@
   },
   {
    "agent": "mini-swe-agent",
+   "condition": null,
    "model": "openai/gpt-oss-120b@together_ai",
    "n_steps": 5,
    "outcome": "fail",
@@ -10873,6 +13208,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "openai/gpt-oss-20b@together_ai",
    "n_steps": 3,
    "outcome": "fail",
@@ -10896,6 +13232,7 @@
   },
   {
    "agent": "terminus-2",
+   "condition": null,
    "model": "moonshotai/Kimi-K2-Thinking@together_ai",
    "n_steps": 48,
    "outcome": "pass",
