@@ -4,11 +4,12 @@ import argparse
 import sys
 from pathlib import Path
 
-from footsteps import export, ingest
+from footsteps import export, ingest, tasks
 
 # Stage order follows the pipeline in docs/ARCHITECTURE.md.
 STAGES = {
     "ingest": "normalize runs and compute step facts",
+    "tasks": "self-test the custom demo tasks",
     "runner": "run planted behaviours through Claude Code",
     "features": "compute sequence features from step facts",
     "segment": "cluster steps into behaviours",
@@ -19,7 +20,7 @@ STAGES = {
 
 
 # Stages that are built; the rest report that they are not implemented yet.
-IMPLEMENTED = {"ingest": ingest.run, "export": export.run}
+IMPLEMENTED = {"ingest": ingest.run, "export": export.run, "tasks": tasks.run}
 
 
 def build_parser() -> argparse.ArgumentParser:

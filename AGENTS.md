@@ -25,10 +25,11 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest` and `export` are implemented, but the other stage subcommands still report "not implemented yet".
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export` and `tasks` are implemented, but the other stage subcommands still report "not implemented yet".
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run footsteps ingest --pilot <transcript>...`: reduce Claude Code transcripts to step facts and print the step table, without downloading
+- `uv run footsteps tasks`: self-test the custom demo tasks, where each reference solution must pass its checker and an empty attempt must fail it
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
 - `uv run ruff format --check .`: check formatting
@@ -64,7 +65,8 @@ agent-footsteps/
 ├── pyproject.toml
 ├── Makefile
 ├── docs/            PRD, ARCHITECTURE, PLAN, PRIOR_WORK, adr/
-├── src/footsteps/   one module per stage: ingest.py, runner.py, features.py, segment.py, label.py, evaluate.py, export.py, cli.py
+├── src/footsteps/   one module per stage: ingest.py, tasks.py, runner.py, features.py, segment.py, label.py, evaluate.py, export.py, cli.py
+├── tasks/           the custom demo tasks: one folder each with prompt.md, setup.sh, check.sh, solution.sh and optional files/
 ├── tests/           pytest tests for the deterministic stages
 ├── data/            downloaded public data and raw transcripts (all gitignored)
 ├── results/         final tables, labels, cost log, planted-run step table and site.json (committed, no raw text)

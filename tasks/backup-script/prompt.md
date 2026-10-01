@@ -1,0 +1,3 @@
+`backup.sh SRC DEST KEEP` is meant to archive the directory SRC into `DEST/backup-<stamp>.tar.gz` (the stamp comes from the `BACKUP_STAMP` environment variable, or the current time if it is unset), create DEST when it is missing, delete all but the newest KEEP archives in DEST (newest means the highest stamp), and print `kept <n>` where n is the number of archives left in DEST. When SRC is not a directory it must print an error naming it to standard error and exit with status 2.
+
+The script has bugs, and `test_backup.sh` checks its behaviour. Fix `backup.sh` so that `bash test_backup.sh ./backup.sh` reports no failures. Do not change `test_backup.sh`.
