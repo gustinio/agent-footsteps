@@ -1,0 +1,89 @@
+{
+  "seed": 0,
+  "n_folds": 5,
+  "stickiness": 20.0,
+  "n_states": 8,
+  "held_out": [
+    {
+      "n_states": 2,
+      "mean_loglik": 3.116959
+    },
+    {
+      "n_states": 3,
+      "mean_loglik": 3.942721
+    },
+    {
+      "n_states": 4,
+      "mean_loglik": 4.516021
+    },
+    {
+      "n_states": 5,
+      "mean_loglik": 4.931331
+    },
+    {
+      "n_states": 6,
+      "mean_loglik": 5.13
+    },
+    {
+      "n_states": 7,
+      "mean_loglik": 5.491196
+    },
+    {
+      "n_states": 8,
+      "mean_loglik": 5.555805
+    }
+  ],
+  "natural_runs": 411,
+  "natural_tasks": 57,
+  "planted_runs": 40,
+  "state_shares": {
+    "hmm": [
+      0.5194,
+      0.1508,
+      0.0881,
+      0.0563,
+      0.0527,
+      0.0515,
+      0.0466,
+      0.0345
+    ],
+    "gmm": [
+      0.3893,
+      0.2606,
+      0.1004,
+      0.0661,
+      0.064,
+      0.0515,
+      0.044,
+      0.0241
+    ]
+  },
+  "hmm_self_transition": [
+    0.763,
+    0.7526,
+    0.3174,
+    0.2766,
+    0.0584,
+    0.8223,
+    0.0352,
+    0.3935
+  ],
+  "features": [
+    "tool_shell",
+    "tool_read",
+    "tool_search",
+    "tool_edit",
+    "tool_plan",
+    "tool_web",
+    "tool_finish",
+    "tool_other",
+    "tool_none",
+    "error",
+    "empty",
+    "verify",
+    "repeat",
+    "recent_errors",
+    "prev_verify",
+    "switched_tool"
+  ]
+}

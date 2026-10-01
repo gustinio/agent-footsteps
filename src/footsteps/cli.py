@@ -4,7 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from footsteps import evaluate, export, ingest, runner, tasks
+from footsteps import evaluate, export, ingest, runner, segment, tasks
 
 # Stage order follows the pipeline in docs/ARCHITECTURE.md.
 STAGES = {
@@ -24,6 +24,7 @@ IMPLEMENTED = {
     "ingest": ingest.run,
     "export": export.run,
     "tasks": tasks.run,
+    "segment": segment.run,
     "evaluate": evaluate.run,
 }
 

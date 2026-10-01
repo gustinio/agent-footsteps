@@ -41,12 +41,15 @@ It skips runs already in the planted tables, so an interrupted or staged invocat
 It must not read results or decide when to stop based on them, and it runs in a throwaway working directory on the personal login only, which it checks before the first run.
 The interim stop rule is therefore applied between invocations: `footsteps runner --tasks 3` stops after the first three tasks, and a person reads the evaluator's table before running the rest.
 
-**Features** (`src/footsteps/features.py`) turns the step facts into behavioural features, such as a repeat flag from command hashes seen earlier in the run (the only one built so far), the recent error history, and the tool category and verification flag of a step and its neighbours.
-It reads the step facts only.
+**Features** (`src/footsteps/features.py`) turns the step facts into behavioural features, such as a repeat flag from command hashes seen earlier in the run, the recent error history, and the tool category and verification flag of a step and the step before it.
+Only earlier steps are neighbours, so a prefix of a run has the same features as the same steps inside the whole run.
+It reads the step facts only, and it has no stage of its own: the segmenter and the exporter call it.
 It must never read raw text, the system prompt, the steering text, or a label, and it must produce the same schema for public and planted runs.
 
 **Segmenter** (`src/footsteps/segment.py`) fits the HMM and the GMM in the original feature space and outputs one state per step.
-It owns the state-count rule.
+It owns the natural arm (the selected combinations on tasks where that combination has both outcomes), the state-count rule, and the one fixed-seed task-fold assignment and run-level split that Q1, Q3 and Q4 share.
+The models are fit on the natural runs only, the GMM uses the HMM's state count, and planted runs are decoded with the natural models.
+States are numbered by how many natural steps they hold.
 It must not cluster in a 2D projection, and the projection exists only for display.
 
 **Labeler** (`src/footsteps/label.py`) produces rule-based facts, LLM intent labels, and the shuffled sheet for the human sample.
@@ -57,7 +60,7 @@ The LLM never sees the steering prompt or the condition, and labels never flow b
 It owns every threshold in the PRD and reads them from one place. So far it holds the manipulation check and the interim stop rule, which `footsteps evaluate` prints.
 It must not change a threshold, and it must not use the LLM.
 
-**Exporter** (`src/footsteps/export.py`) samples public runs, adds every planted run from the committed planted tables, computes the display projection, and writes the JSON contract.
+**Exporter** (`src/footsteps/export.py`) samples natural-arm runs from the segmentation, adds every planted run from the committed planted tables, computes the display projection, and writes the JSON contract.
 It must never write raw command or output text or any steering text into the JSON, and it includes the outcome only when the `prereg` tag exists.
 
 **Site** (`web/`) reads the JSON and draws the linked views.
@@ -88,18 +91,19 @@ Prediction belongs to a Run, and for early checks to a prefix length k
   `command_hash` is empty when the step has no tool call, no command text, or a placeholder in place of the command.
   `verification_flag` is true when the first tool call is a shell command that contains a test or check word (test, pytest, diff, cmp, assert, verify, validate, check, lint and similar) or runs an inline `python -c`, `node -e` or `python -` heredoc script, and false for every other step. It is a match on the command text, so a command that only mentions such a word also counts.
 - `StepFeatures`: `run_id`, `step_idx`, plus behavioural features derived from the step facts only. Never contains raw text, the system prompt or the steering text.
-- `Segmentation`: `run_id`, `step_idx`, `method` (HMM or GMM), `state_id`.
+- `Segmentation`: `run_id`, `step_idx`, `method` (`hmm` or `gmm`), `state_id`. It covers the natural-arm runs and the planted runs, and is written to `results/segmentation.parquet` with `results/segmentation_summary.json` (the held-out score per state count, the learned self-transition rates and the state shares).
 - `Label`: `run_id`, `step_idx`, `label`, `labeler` (rule, LLM or human).
 - `StateName`: `method`, `state_id`, `name`, `evidence`.
 - `Prediction`: `run_id`, `k` (empty for whole-run predictions), `model` (baseline, behaviour view or supervised predictor), `score`, `fold`.
 
 The public trace format was verified on the pinned revision: 52,104 trials, of which 34,462 have steps and 34,397 have at least one agent step, and the rest are dropped from the run and step tables but counted in `results/dataset_summary.json`.
 A tool's command is a string, a list or a placeholder, and ingest normalizes all three.
+The dataset leaves the trial id empty on most rows, so `run_id` is the trial id when there is one and otherwise a hash of agent, model, trial name and start time, which is unique across the pinned revision.
 Ingest writes `data/runs.parquet` and `data/steps.parquet` (gitignored), where the run table keeps the outcome for the feasibility counts, and the exporter writes it only when the `prereg` tag exists, because hiding outcomes before the tag is its default.
 The runner appends each finished planted run to `results/planted_runs.parquet` (the run fields above, with `seed`) and `results/planted_steps.parquet` (the step facts), which are committed because they hold no text, and keeps the raw transcripts in `data/planted/`.
 `results/cost_log.jsonl` has one line per call with its token counts, `cost_usd` as Claude Code reports it, the stage, and `spent_usd` for that stage against `budget_usd` and `cap_usd`.
 The planted budget is $12 of the $40 cap, and the runner passes the smaller of what is left of the budget and of the cap to each call, so a run stops at the cap.
-The exporter writes `results/site.json` from a fixed sample of 60 public runs chosen by the hash of the run id plus every planted run, listed first and carrying its `condition`, and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts, and the model and scaffold combinations with their counts of tasks with mixed outcomes and the combinations the PRD selection rule chooses.
+The exporter writes `results/site.json` from a fixed sample of 60 natural-arm runs chosen by the hash of the run id plus every planted run, listed first and carrying its `condition`, and gives every step its HMM and GMM state and its display position (the first two principal components of the step features, scaled to 0 to 1 with a small repeatable offset so identical steps do not stack), and `results/dataset_summary.json` records the pinned revision, file checksums, trial counts, and the model and scaffold combinations with their counts of tasks with mixed outcomes and the combinations the PRD selection rule chooses.
 
 ## AI/Agent Boundary
 

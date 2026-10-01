@@ -287,6 +287,20 @@ def _spread(counts: list[int]) -> dict:
     }
 
 
+def run_id(row: dict) -> str:
+    """The dataset's trial id, or a stable stand-in when it is blank.
+
+    The pinned revision leaves the trial id empty on most rows, and every such row would then share one run.
+    The agent, model, trial name and start time are unique across the pinned revision's rows.
+    """
+    if row["trial_id"]:
+        return row["trial_id"]
+    key = "|".join(
+        str(row.get(field)) for field in ("agent", "model", "trial_name", "started_at")
+    )
+    return hashlib.sha256(key.encode()).hexdigest()[:36]
+
+
 def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
     """Write the run and step tables from the raw files and return counts for the summary."""
     run_rows, step_rows = [], []
@@ -300,14 +314,15 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
                 combo = (row["agent"], row["model"])
                 trials_per_cell[(row["task_name"], *combo)] += 1
                 combo_trials[combo] += 1
-                facts = run_steps(row["steps"], row["trial_id"])
+                trial = run_id(row)
+                facts = run_steps(row["steps"], trial)
                 if not facts:
                     continue
                 combo_with_steps[combo] += 1
                 outcomes_per_cell[(row["task_name"], *combo)].add(row["reward"] == 1)
                 run_rows.append(
                     {
-                        "run_id": row["trial_id"],
+                        "run_id": trial,
                         "task_id": row["task_name"],
                         "source": "public",
                         "agent": row["agent"],
@@ -319,7 +334,7 @@ def normalize(raw_dir: Path, runs_path: Path, steps_path: Path) -> dict:
                     }
                 )
                 step_rows.extend(
-                    {"run_id": row["trial_id"], "step_idx": idx, **fact}
+                    {"run_id": trial, "step_idx": idx, **fact}
                     for idx, fact in enumerate(facts)
                 )
     runs_path.parent.mkdir(parents=True, exist_ok=True)

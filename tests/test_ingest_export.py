@@ -2,6 +2,7 @@ import json
 import subprocess
 
 import pyarrow as pa
+import pyarrow.compute as pc
 import pyarrow.parquet as pq
 import pytest
 
@@ -165,6 +166,17 @@ def raw_row(trial_id, task, reward, steps, agent="claude-code", model="m"):
     }
 
 
+def test_blank_trial_ids_get_distinct_stable_run_ids():
+    rows = [
+        {**raw_row("", "t", 1, None), "trial_name": name, "started_at": "2025-01-01"}
+        for name in ("t__a", "t__b")
+    ]
+    first, second = (ingest.run_id(row) for row in rows)
+    assert first != second
+    assert first == ingest.run_id(rows[0])
+    assert ingest.run_id(raw_row("kept", "t", 1, None)) == "kept"
+
+
 def write_raw(raw_dir, rows):
     (raw_dir / "data").mkdir(parents=True)
     pq.write_table(pa.Table.from_pylist(rows), raw_dir / "data" / "train-00000.parquet")
@@ -220,11 +232,16 @@ def test_sample_is_stable_and_ignores_input_order():
     assert export.sample_run_ids(list(reversed(ids)), 20) == first
 
 
-def test_site_json_has_step_facts_and_no_outcome_or_text(normalized):
+def test_site_json_has_step_facts_and_no_outcome_or_text(
+    normalized, write_segmentation
+):
     tmp_path, _ = normalized
     summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
     site = export.build_site(
-        tmp_path / "runs.parquet", tmp_path / "steps.parquet", summary
+        tmp_path / "runs.parquet",
+        tmp_path / "steps.parquet",
+        summary,
+        write_segmentation(tmp_path / "steps.parquet"),
     )
     rendered = json.dumps(site)
     assert len(site["runs"]) == 10
@@ -232,18 +249,32 @@ def test_site_json_has_step_facts_and_no_outcome_or_text(normalized):
     assert first["steps"] and set(first["steps"][0]) == {
         "tool_category",
         "result_status",
+        "hmm_state",
+        "gmm_state",
+        "x",
+        "y",
     }
+    assert all(
+        0 <= step[axis] <= 1
+        for run in site["runs"]
+        for step in run["steps"]
+        for axis in "xy"
+    )
     assert first["n_steps"] == len(first["steps"])
     assert "outcome" not in rendered
     for text in (COMMAND_TEXT, OUTPUT_TEXT, MESSAGE_TEXT, "command_hash"):
         assert text not in rendered
 
 
-def test_site_json_carries_the_outcome_when_asked(normalized):
+def test_site_json_carries_the_outcome_when_asked(normalized, write_segmentation):
     tmp_path, _ = normalized
     summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
     site = export.build_site(
-        tmp_path / "runs.parquet", tmp_path / "steps.parquet", summary, True
+        tmp_path / "runs.parquet",
+        tmp_path / "steps.parquet",
+        summary,
+        write_segmentation(tmp_path / "steps.parquet"),
+        True,
     )
     assert {run["outcome"] for run in site["runs"]} == {"pass", "fail"}
 
@@ -434,3 +465,23 @@ def test_pilot_steps_split_parallel_calls_so_a_repeated_command_stays_visible():
     assert [s["obs"] for s in steps] == ["a", "a"]
     hashes = [ingest.step_facts(s)["command_hash"] for s in steps]
     assert hashes[0] == hashes[1] is not None
+
+
+def test_site_json_leaves_out_runs_without_a_segmentation(
+    normalized, write_segmentation
+):
+    tmp_path, _ = normalized
+    summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
+    only_some = tmp_path / "some.parquet"
+    pq.write_table(
+        pq.read_table(tmp_path / "steps.parquet").filter(pc.field("run_id") != "run-3"),
+        only_some,
+    )
+    site = export.build_site(
+        tmp_path / "runs.parquet",
+        tmp_path / "steps.parquet",
+        summary,
+        write_segmentation(only_some),
+    )
+    assert len(site["runs"]) == 9
+    assert "run-3" not in {run["run_id"] for run in site["runs"]}

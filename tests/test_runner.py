@@ -314,7 +314,9 @@ def test_interim_rule_stops_when_fewer_than_two_of_three_tasks_rose(rises, verdi
     assert evaluate.interim_verdict(table, order) == verdict
 
 
-def test_exporter_adds_every_planted_run_first_with_its_condition(demo):
+def test_exporter_adds_every_planted_run_first_with_its_condition(
+    demo, write_segmentation
+):
     runner.run(1)
     summary = {"dataset": "d", "revision": "r", "trials_with_steps": 0}
     public_runs = demo[0] / "runs.parquet"
@@ -351,7 +353,10 @@ def test_exporter_adds_every_planted_run_first_with_its_condition(demo):
         public_steps,
     )
     paths = (runner.PLANTED_RUNS_PATH, runner.PLANTED_STEPS_PATH)
-    site = export.build_site(public_runs, public_steps, summary, False, paths)
+    segmentation = write_segmentation(public_steps, runner.PLANTED_STEPS_PATH)
+    site = export.build_site(
+        public_runs, public_steps, summary, segmentation, False, paths
+    )
     assert [r["source"] for r in site["runs"]] == ["planted"] * 4 + ["public"]
     assert [r["condition"] for r in site["runs"]] == [
         "none",
