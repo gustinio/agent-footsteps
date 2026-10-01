@@ -4,7 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from footsteps import export, ingest, tasks
+from footsteps import evaluate, export, ingest, runner, tasks
 
 # Stage order follows the pipeline in docs/ARCHITECTURE.md.
 STAGES = {
@@ -20,7 +20,12 @@ STAGES = {
 
 
 # Stages that are built; the rest report that they are not implemented yet.
-IMPLEMENTED = {"ingest": ingest.run, "export": export.run, "tasks": tasks.run}
+IMPLEMENTED = {
+    "ingest": ingest.run,
+    "export": export.run,
+    "tasks": tasks.run,
+    "evaluate": evaluate.run,
+}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,6 +35,13 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="stage", metavar="<stage>", required=True)
     for name, summary in STAGES.items():
         stage_parser = subparsers.add_parser(name, help=summary, description=summary)
+        if name == "runner":
+            stage_parser.add_argument(
+                "--tasks",
+                type=int,
+                metavar="N",
+                help="run only the first N tasks in run order, to stop for the interim rule",
+            )
         if name == "ingest":
             stage_parser.add_argument(
                 "--pilot",
@@ -45,6 +57,9 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.stage == "ingest" and args.pilot:
         ingest.run_pilot(args.pilot)
+        return 0
+    if args.stage == "runner":
+        runner.run(args.tasks)
         return 0
     if args.stage in IMPLEMENTED:
         IMPLEMENTED[args.stage]()

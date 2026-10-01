@@ -62,8 +62,9 @@ export default function App() {
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold">Agent footsteps</h1>
         <p className="text-sm text-muted-foreground">
-          One row per run, one cell per step. Dataset {site.meta.dataset} at revision{' '}
-          {site.meta.revision.slice(0, 8)}, a sample of its {site.meta.runs_in_dataset} runs.
+          One row per run, one cell per step. The {site.meta.planted_runs} planted runs come first, then a
+          sample of the {site.meta.runs_in_dataset} runs of {site.meta.dataset} at revision{' '}
+          {site.meta.revision.slice(0, 8)}.
         </p>
       </header>
       <Legend />
@@ -85,7 +86,10 @@ export default function App() {
           {site.runs.map((run) => (
             <div key={run.run_id} className="flex items-center gap-3">
               <div className="sticky left-0 z-10 flex w-56 shrink-0 items-center gap-2 bg-card text-xs">
-                <span className="font-mono">{run.run_id.slice(0, 8)}</span>
+                <span className="font-mono" title={run.run_id}>
+                  {run.source === 'planted' ? run.task_id : run.run_id.slice(0, 8)}
+                </span>
+                {run.condition && <Badge variant="outline">{run.condition}</Badge>}
                 <Badge variant="secondary">{run.n_steps} steps</Badge>
                 {showOutcome && run.outcome && (
                   <Badge variant={run.outcome === 'pass' ? 'default' : 'destructive'}>
