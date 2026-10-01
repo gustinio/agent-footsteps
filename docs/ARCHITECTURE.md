@@ -6,7 +6,7 @@ See [PRD.md](PRD.md) for product scope, [PLAN.md](PLAN.md) for build order, and 
 
 A batch pipeline turns agent trajectories into named behaviours, evaluates them, and exports one JSON file that a static website displays.
 There is no server and no database, and stages exchange files.
-Natural runs come from the public Terminal-Bench trajectories, and a small set of planted runs comes from Claude Code on a personal plan.
+Natural runs come from the public Terminal-Bench trajectories, and a small set of planted runs comes from Claude Code on a personal plan, working on custom shell tasks.
 A language model is used in two places only: the agent under test in the planted runs, and a labeler that checks the discovered behaviours.
 
 ```text
@@ -28,6 +28,12 @@ It owns the mapping from the source format to the step schema and the record of 
 It also reduces Claude Code stream-json transcripts to the same step facts for the pilot, one tool call per step, into `data/pilot_steps.parquet`, which no analysis reads.
 It also compares the downloaded files with the recorded checksum and, on a mismatch, prints a warning and continues.
 It must not compute sequence-level features or labels, and it must not write raw text to anything that is committed.
+
+**Tasks** (`src/footsteps/tasks.py` and `tasks/`) hold the 10 custom shell tasks of the planted demo.
+Each task folder has the prompt the agent receives, a setup script that builds the starting files in an empty directory, a scripted checker that exits 0 only when the work is right, and a reference solution.
+The `footsteps tasks` self-test runs every checker against its reference solution, which must pass, and against an empty attempt, which must fail.
+A task is plain shell, needs no container and no network, and the checker lives outside the working directory, so the agent never sees it.
+Tasks contain no model call, and the runner reads them without changing them.
 
 **Runner** (`src/footsteps/runner.py`) executes the planted demo through the Claude Code command line, one task and condition at a time, and writes each transcript as the same step facts as ingest, keeping the raw transcript only in the gitignored `data/` folder.
 It owns the steering prompts, the run order, and the token log that enforces the cost cap.

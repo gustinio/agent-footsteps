@@ -19,6 +19,8 @@ The hard cap is the plan's monthly credit, which is quoted at $20 from an unveri
 The runs use the personal login and never the work account.
 A first spike verifies that Claude Code can drive the benchmark tasks, and otherwise 10 custom shell tasks with scripted checkers replace them.
 
+Update 2026-10-01: the spike showed that Claude Code drives the longer benchmark tasks, but scoring them with their own tests needs a real `/app` that the host does not provide, and only three of them were shown to run. The demo therefore uses 10 custom tasks, and the public benchmark tasks stay in the natural arm only.
+
 ## Consequences
 
 - Planting a known behaviour is the only way to test whether a behaviour name is correct, and it is the part not found in prior work.

@@ -44,7 +44,7 @@ Guardrails for the site:
 - Try two Claude Code non-interactive runs on Terminal-Bench tasks, and measure tokens and cost for a 10-run pilot.
 - Map the tool names in the pilot transcripts onto the same tool categories as the public data, and record any tool that does not fit.
 - Define the rule-based verification flag, add it to ingest as a step fact, and run the pilot as 2 tasks with no instruction and with the strong instruction to check that the flag rises. The pilot runs are excluded from all analysis.
-- If Claude Code cannot drive the benchmark tasks, take the custom task set in phase 2A.
+- If Claude Code cannot drive the benchmark tasks, take the custom task set in phase 2A. The spike took it, because too few benchmark tasks run on the host.
 
 **Done:** `docs/spike.md` is committed with the counts, the chosen combinations, the recorded cap, the labeler route, the measured cost per run, the tool mapping, the pilot manipulation result, and a go or fallback decision for the planted demo.
 
@@ -52,12 +52,14 @@ Guardrails for the site:
 
 2026-10-01: the spike recorded in [spike.md](spike.md) found that a planted verification instruction did not raise the verification flag in four pilots, but a planted repeating instruction did, in two pilots (29% and 31% of steps against 0%). The planted demo continues with repeating as its behaviour, and the freeze rewrites the Q2 wording in the PRD and settles the doses and the ten tasks.
 
-## 2A. Custom Task Set (Only if the Spike Fails)
+## 2A. Custom Task Set
 
 - Write 10 shell tasks that an agent needs at least about 10 steps to finish, each with a scripted checker.
 - Test each checker with a reference solution that must pass and an empty attempt that must fail.
 
 **Done:** the 10 tasks and checkers are committed and pass their self-test, and the planted demo uses them, while Q1, Q3 and Q4 stay on public data.
+
+**Status:** built on 2026-10-01, with the self-test run as `uv run footsteps tasks`. The spike found only 3 benchmark tasks that run on the host, so all 10 demo tasks are custom and none comes from Terminal-Bench. The tasks are designed to need about 10 steps, but their step counts are not yet measured, and the freeze checks them in the pilot before fixing the run order.
 
 ## 3. Freeze the Pre-Registration
 
