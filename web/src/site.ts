@@ -38,8 +38,43 @@ export interface Run {
   steps: Step[]
 }
 
+export interface Difference {
+  estimate: number
+  low: number
+  high: number
+}
+
+export interface StateName {
+  state: number
+  name: string
+  labeled_steps: number
+  intents: Record<string, number>
+  facts: Record<string, number>
+}
+
+export interface Q1 {
+  labeler: {
+    kappa: number | null
+    compared_steps: number
+    bar: number
+    passes: boolean
+    labels_used: string
+  }
+  q1: {
+    criterion: string
+    held_out_steps: number
+    held_out_runs: number
+    nmi: Record<'hmm' | 'gmm' | 'majority', number>
+    differences: Record<'hmm_minus_gmm' | 'hmm_minus_majority', Difference>
+    passes: boolean
+  }
+  states: StateName[]
+}
+
 export interface Site {
   meta: {
+    // Absent until the human sample is labeled.
+    q1?: Q1
     dataset: string
     revision: string
     runs_in_dataset: number

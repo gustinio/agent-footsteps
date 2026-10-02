@@ -49,6 +49,11 @@ def build_parser() -> argparse.ArgumentParser:
                 action="store_true",
                 help="write the blind sheet for the human sample and make no model call",
             )
+            stage_parser.add_argument(
+                "--collect",
+                action="store_true",
+                help="read the filled sheet into results/human_labels.csv and make no model call",
+            )
         if name == "ingest":
             stage_parser.add_argument(
                 "--pilot",
@@ -71,6 +76,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.stage == "label":
         if args.sheet:
             label.write_sheet()
+        elif args.collect:
+            label.collect_human()
         else:
             label.run()
         return 0

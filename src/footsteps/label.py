@@ -14,6 +14,7 @@ from footsteps import features, ingest, llm, runner, segment
 SHEET_PATH = Path("data/label_sheet.csv")
 KEY_PATH = Path("data/label_key.json")
 LLM_LABELS_PATH = Path("results/llm_labels.parquet")
+HUMAN_LABELS_PATH = Path("results/human_labels.csv")
 
 # The PRD sets 100 to 200 steps for the human sample, and the ADR sets about 2,000 for the LLM.
 HUMAN_SAMPLE = 150
@@ -163,6 +164,35 @@ def write_sheet() -> None:
     print(
         f"{len(sheet)} steps written to {SHEET_PATH}, with the run, task and condition left out"
     )
+
+
+def collect_human() -> None:
+    """Turn the filled sheet into run and step identifiers with a label, so the committed file holds no raw text."""
+    key = {row["id"]: row for row in json.loads(KEY_PATH.read_text())}
+    collected = []
+    with SHEET_PATH.open(newline="") as handle:
+        for row in csv.DictReader(handle):
+            label = row["label"].strip().lower()
+            if label not in llm.INTENTS:
+                raise SystemExit(
+                    f"sheet row {row['id']} has label {row['label']!r}, expected one of {', '.join(llm.INTENTS)}"
+                )
+            entry = key[int(row["id"])]
+            collected.append(
+                {
+                    "run_id": entry["run_id"],
+                    "step_idx": entry["step_idx"],
+                    "label": label,
+                }
+            )
+    if len(collected) != len(key):
+        raise SystemExit(f"the sheet has {len(collected)} rows, the key has {len(key)}")
+    HUMAN_LABELS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with HUMAN_LABELS_PATH.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["run_id", "step_idx", "label"])
+        writer.writeheader()
+        writer.writerows(collected)
+    print(f"{len(collected)} human labels written to {HUMAN_LABELS_PATH}")
 
 
 def label_steps(sample: list[dict], texts: dict[str, list[dict]]) -> list[dict]:

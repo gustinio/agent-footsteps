@@ -10,6 +10,7 @@ import pyarrow.parquet as pq
 from sklearn.decomposition import PCA
 
 from footsteps import features
+from footsteps.evaluate import Q1_PATH
 from footsteps.ingest import RUNS_PATH, STEPS_PATH, SUMMARY_PATH
 from footsteps.runner import PLANTED_RUNS_PATH, PLANTED_STEPS_PATH
 from footsteps.segment import METHODS, SEGMENT_SUMMARY_PATH, SEGMENTATION_PATH
@@ -99,6 +100,7 @@ def build_site(
     segmentation: tuple[Path, Path],
     include_outcome: bool = False,
     planted_paths: tuple[Path, Path] | None = None,
+    q1_path: Path | None = None,
 ) -> dict:
     """The public runs are a hashed sample of the segmented natural runs, and the planted runs are all included because there are few."""
     states_path, segment_summary_path = segmentation
@@ -151,8 +153,11 @@ def build_site(
                 ],
             }
         )
+    # The agreement table and state names hold counts and shares only, never step text.
+    q1 = json.loads(q1_path.read_text()) if q1_path and q1_path.exists() else None
     return {
         "meta": {
+            **({"q1": q1} if q1 else {}),
             "dataset": summary["dataset"],
             "revision": summary["revision"],
             "runs_in_dataset": summary["trials_with_steps"],
@@ -179,6 +184,7 @@ def run() -> None:
         (SEGMENTATION_PATH, SEGMENT_SUMMARY_PATH),
         prereg_tag_exists(),
         planted_paths,
+        Q1_PATH,
     )
     SITE_PATH.parent.mkdir(parents=True, exist_ok=True)
     SITE_PATH.write_text(json.dumps(site, indent=1, sort_keys=True) + "\n")

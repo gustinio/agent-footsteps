@@ -109,6 +109,8 @@ Guardrails for the site:
 
 **Status:** the first part is built on 2026-10-02: the rule facts, the LLM wrapper and the blind sheet, with the model not yet run and the sheet not yet labeled. The rule facts are repeats an earlier command, follows an error, has no tool call, and is the last step. The sample is dealt across HMM state, rule fact and a held-out flag (tasks in task fold 0), taken from the natural arm only, so the steering prompt and condition are out of reach of the labeler. The first 150 steps of the deal of 2,000 are the human sheet, so the model labels them first. The wrapper uses `claude-haiku-4-5-20251001`, 40 steps per call, and stops with what is labeled when the reserve (the cap less the planted budget) is used up.
 
+**Second part:** built on 2026-10-02: kappa against the 0.6 bar, Q1 as NMI on held-out tasks with a paired bootstrap over runs against the GMM and a majority label (whose NMI is zero by definition), state names from rule facts first and then the dominant intent, `label --collect`, the `q1` block in `site.json`, and a site panel. The numbers wait for the hand labels and `make label`.
+
 **Done:** the Q1 table and the labeler agreement value are written to `results/`, the LLM stage runs only through `make label`, `make reproduce` regenerates the Q1 table from the committed labels, and the site shows the behaviour names.
 
 ## 7. Failure Patterns and Filters
