@@ -25,13 +25,15 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner` and `evaluate` are implemented, `segment` is implemented too, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds only the Q2 manipulation check and the interim stop rule.
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner`, `evaluate`, `segment` and `label` are implemented, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds only the Q2 manipulation check and the interim stop rule.
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run footsteps ingest --pilot <transcript>...`: reduce Claude Code transcripts to step facts and print the step table, without downloading
 - `uv run footsteps tasks`: self-test the custom demo tasks, where each reference solution must pass its checker and an empty attempt must fail it
 - `uv run footsteps runner [--tasks N]`: make the planned planted runs that are not yet recorded (uses model credit), or only those of the first N tasks
 - `uv run footsteps segment`: fit the HMM and GMM on the natural runs and write the state of every step to `results/segmentation.parquet`, with no model calls
+- `uv run footsteps label --sheet`: write the blind sheet of 150 steps to `data/label_sheet.csv` for hand labeling, with no model call
+- `uv run footsteps label`: label the sampled steps with the LLM wrapper (uses model credit, so run it only through `make label`)
 - `uv run footsteps evaluate`: print the repeat share per task and condition, the interim stop rule and the manipulation check
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
@@ -68,7 +70,7 @@ agent-footsteps/
 ├── pyproject.toml
 ├── Makefile
 ├── docs/            PRD, ARCHITECTURE, PLAN, PRIOR_WORK, adr/
-├── src/footsteps/   one module per stage: ingest.py, tasks.py, runner.py, features.py, segment.py, label.py, evaluate.py, export.py, cli.py
+├── src/footsteps/   one module per stage: ingest.py, tasks.py, runner.py, features.py, segment.py, label.py, llm.py, evaluate.py, export.py, cli.py
 ├── tasks/           the custom demo tasks: one folder each with prompt.md, setup.sh, check.sh, solution.sh and optional files/
 ├── tests/           pytest tests for the deterministic stages
 ├── data/            downloaded public data and raw transcripts (all gitignored)
