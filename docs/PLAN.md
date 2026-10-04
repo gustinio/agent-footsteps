@@ -136,6 +136,8 @@ Q3b, Q4 and the filters are built on 2026-10-04: `footsteps evaluate` also write
 - Extend `make reproduce` to read the committed step table of the planted runs and produce the Q2 results with no model calls.
 - Show the Q2 results with every task plotted as its own point, and add the condition filter, in the site.
 
+**Status:** built on 2026-10-04: `footsteps evaluate` writes `results/q2.json` from the committed planted step table, and the site shows both checks with every task as its own point and a condition filter. All 10 tasks have both conditions. The repeat share rose on 10 of 10 tasks (0% without the instruction, 25% to 58% with it), so the manipulation check passes, and the natural-fit state 4, where 91% of natural steps repeat, took a higher share of steps on 10 of 10 tasks, so Q2 is met. Each task rests on two runs per condition.
+
 **Done:** the Q2 table and the per-task differences are written to `results/`, `make reproduce` regenerates them from the committed step table, and the site shows them.
 
 ## 9. Pages Deployment and Write-Up
