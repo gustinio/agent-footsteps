@@ -25,7 +25,7 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner`, `evaluate`, `segment` and `label` are implemented, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds the Q2 manipulation check, the interim stop rule and Q1.
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner`, `evaluate`, `segment` and `label` are implemented, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds the Q2 manipulation check, the interim stop rule, Q1 and Q3a.
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run footsteps ingest --pilot <transcript>...`: reduce Claude Code transcripts to step facts and print the step table, without downloading
@@ -35,7 +35,7 @@ The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `expo
 - `uv run footsteps label --sheet`: write the blind sheet of 150 steps to `data/label_sheet.csv` for hand labeling, with no model call
 - `uv run footsteps label --collect`: read the hand-labeled `data/label_sheet.csv` into `results/human_labels.csv` (ids and labels only), with no model call
 - `uv run footsteps label`: label the sampled steps with the LLM wrapper (uses model credit, so run it only through `make label`)
-- `uv run footsteps evaluate`: write `results/q1.json` (labeler kappa, Q1 table, state names) when the human labels exist, then print the repeat share per task and condition, the interim stop rule and the manipulation check
+- `uv run footsteps evaluate`: write `results/q1.json` (labeler kappa, Q1 table, state names) when the human labels exist, then write `results/q3a.json` (the Q3a table) and print its AUROCs, the repeat share per task and condition, the interim stop rule and the manipulation check
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
 - `uv run ruff format --check .`: check formatting
