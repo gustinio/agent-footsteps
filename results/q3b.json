@@ -1,0 +1,139 @@
+{
+  "criterion": "From only the first k steps of a run, for k in 5, 10 and 15 and on runs with at least k steps, the behaviour view separates failing from passing runs better than the counts-so-far baseline (errors and different tools used), with the difference larger than the bootstrap range, and within 0.05 AUROC of the supervised predictor, at every k. Folds are grouped by task.",
+  "natural_runs": 411,
+  "per_k": [
+    {
+      "k": 5,
+      "runs": 361,
+      "runs_dropped": 50,
+      "tasks": 56,
+      "failing_share": 0.4598,
+      "auroc": {
+        "length": {
+          "estimate": 0.5204,
+          "low": 0.448,
+          "high": 0.5955
+        },
+        "baseline": {
+          "estimate": 0.4867,
+          "low": 0.4312,
+          "high": 0.5498
+        },
+        "behaviour": {
+          "estimate": 0.5391,
+          "low": 0.4819,
+          "high": 0.6057
+        },
+        "supervised": {
+          "estimate": 0.5054,
+          "low": 0.4489,
+          "high": 0.5663
+        }
+      },
+      "differences": {
+        "behaviour_minus_baseline": {
+          "estimate": 0.0524,
+          "low": -0.0031,
+          "high": 0.1171
+        },
+        "supervised_minus_behaviour": {
+          "estimate": -0.0337,
+          "low": -0.1076,
+          "high": 0.0333
+        }
+      },
+      "beats_baseline": false,
+      "near_supervised": true,
+      "passes": false
+    },
+    {
+      "k": 10,
+      "runs": 274,
+      "runs_dropped": 137,
+      "tasks": 51,
+      "failing_share": 0.4672,
+      "auroc": {
+        "length": {
+          "estimate": 0.5664,
+          "low": 0.4888,
+          "high": 0.6382
+        },
+        "baseline": {
+          "estimate": 0.5317,
+          "low": 0.4594,
+          "high": 0.6036
+        },
+        "behaviour": {
+          "estimate": 0.542,
+          "low": 0.4763,
+          "high": 0.6057
+        },
+        "supervised": {
+          "estimate": 0.483,
+          "low": 0.4043,
+          "high": 0.5595
+        }
+      },
+      "differences": {
+        "behaviour_minus_baseline": {
+          "estimate": 0.0103,
+          "low": -0.0727,
+          "high": 0.0855
+        },
+        "supervised_minus_behaviour": {
+          "estimate": -0.0589,
+          "low": -0.1664,
+          "high": 0.0539
+        }
+      },
+      "beats_baseline": false,
+      "near_supervised": true,
+      "passes": false
+    },
+    {
+      "k": 15,
+      "runs": 206,
+      "runs_dropped": 205,
+      "tasks": 46,
+      "failing_share": 0.4757,
+      "auroc": {
+        "length": {
+          "estimate": 0.6127,
+          "low": 0.537,
+          "high": 0.6763
+        },
+        "baseline": {
+          "estimate": 0.4572,
+          "low": 0.3862,
+          "high": 0.5311
+        },
+        "behaviour": {
+          "estimate": 0.51,
+          "low": 0.4405,
+          "high": 0.5845
+        },
+        "supervised": {
+          "estimate": 0.5659,
+          "low": 0.4951,
+          "high": 0.6352
+        }
+      },
+      "differences": {
+        "behaviour_minus_baseline": {
+          "estimate": 0.0528,
+          "low": -0.0268,
+          "high": 0.1407
+        },
+        "supervised_minus_behaviour": {
+          "estimate": 0.0559,
+          "low": -0.0691,
+          "high": 0.1676
+        }
+      },
+      "beats_baseline": false,
+      "near_supervised": false,
+      "passes": false
+    }
+  ],
+  "passes": false
+}
