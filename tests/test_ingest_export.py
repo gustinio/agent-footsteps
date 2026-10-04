@@ -527,12 +527,16 @@ def test_site_json_carries_q3a_only_when_the_file_exists(
     assert build()["meta"]["q3a"] == {"passes": True}
 
 
-def test_site_json_carries_q3b_and_q4_only_when_the_files_exist(
+def test_site_json_carries_q2_q3b_and_q4_only_when_the_files_exist(
     normalized, write_segmentation
 ):
     tmp_path, _ = normalized
     summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
-    paths = {"q3b_path": tmp_path / "q3b.json", "q4_path": tmp_path / "q4.json"}
+    paths = {
+        "q2_path": tmp_path / "q2.json",
+        "q3b_path": tmp_path / "q3b.json",
+        "q4_path": tmp_path / "q4.json",
+    }
 
     def build():
         return export.build_site(
@@ -543,8 +547,10 @@ def test_site_json_carries_q3b_and_q4_only_when_the_files_exist(
             **paths,
         )
 
-    assert "q3b" not in build()["meta"] and "q4" not in build()["meta"]
+    assert not {"q2", "q3b", "q4"} & build()["meta"].keys()
+    paths["q2_path"].write_text(json.dumps({"passes": True}))
     paths["q3b_path"].write_text(json.dumps({"passes": False}))
     paths["q4_path"].write_text(json.dumps({"passes": None}))
     meta = build()["meta"]
+    assert meta["q2"] == {"passes": True}
     assert meta["q3b"] == {"passes": False} and meta["q4"] == {"passes": None}
