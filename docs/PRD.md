@@ -47,7 +47,7 @@ A **bootstrap range** shows how much a number would wobble on different data.
 - Behavioural step features, an HMM segmenter, and a GMM comparator, both fit in the original feature space.
 - Two-layer labeling used only to check the discovered behaviours, with a blind human sample of 100 to 200 steps.
 - Failure analysis on whole runs (Q3a) and on the first k steps (Q3b), compared with run length, counts so far, and a trained supervised predictor.
-- A static React site fed by one JSON file, deployed on GitHub Pages.
+- A static React site fed by one JSON file, run locally with `make start` and not deployed.
 - A hard spending cap on the list-price cost that Claude Code reports, as frozen below.
 
 ## Acceptance Criteria
@@ -126,4 +126,4 @@ The exporter therefore leaves the outcome out unless the tag exists, and does no
 - Hard cost cap: $40 of list-price cost as reported by Claude Code, because the personal Claude Pro plan has rolling allowances and no dollar credit.
 - Planted-demo runs use the personal login.
 - The public benchmark data keeps its own license, so it is downloaded at run time and never committed.
-- By default the site shows no pass or fail outcome until the `prereg` tag exists, and it is published to GitHub Pages only after the dataset license has been checked.
+- By default the site shows no pass or fail outcome until the `prereg` tag exists, and the site is not published to GitHub Pages: readers clone the repo and run `make start`, a decision dated 2026-10-04.

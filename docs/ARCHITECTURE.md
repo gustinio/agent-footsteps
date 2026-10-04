@@ -151,7 +151,7 @@ The evaluator writes the counts that the PRD requires: tasks used, mixed-outcome
 
 Locally, `make` targets call `uv run` for Python stages and `npm` for the site.
 `make` alone prints help, `make reproduce` downloads the public data at a pinned revision and regenerates results with no model calls, `make start` runs the site's dev server in the foreground, `make build` produces the production site, and `make clean` removes build output.
-In production the site is a static build published on GitHub Pages, and there is no other runtime.
+The site is not published anywhere: a reader clones the repo and runs `make start`, and there is no other runtime.
 
 ## Stack
 
@@ -164,4 +164,4 @@ In production the site is a static build published on GitHub Pages, and there is
 - Vite, React and TypeScript
 - Tailwind CSS and shadcn/ui
 - ESLint and Prettier
-- GitHub Actions and GitHub Pages
+- GitHub Actions

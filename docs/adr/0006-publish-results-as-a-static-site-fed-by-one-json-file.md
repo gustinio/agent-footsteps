@@ -1,5 +1,7 @@
 # ADR-0006: Publish Results as a Static Site Fed by One JSON File
 
+> Amended 2026-10-04: the site is not deployed to GitHub Pages. Readers clone the repo and run `make start`. The static design, the one JSON file and the rest of this decision stand, and the Pages references below record the original plan.
+
 ## Status
 
 Accepted

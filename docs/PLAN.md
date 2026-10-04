@@ -140,14 +140,14 @@ Q3b, Q4 and the filters are built on 2026-10-04: `footsteps evaluate` also write
 
 **Done:** the Q2 table and the per-task differences are written to `results/`, `make reproduce` regenerates them from the committed step table, and the site shows them.
 
-## 9. Pages Deployment and Write-Up
+## 9. Write-Up and Reproduction
 
 - Confirm that the license finding in [PRIOR_WORK.md](PRIOR_WORK.md) still holds for the pinned revision.
-- Add the GitHub Pages workflow.
+- Do not deploy the site. A reader clones the repo and runs `make start` (decided 2026-10-04, replacing the GitHub Pages workflow).
 - Write the README results section with the honest limits, and finalize [PRIOR_WORK.md](PRIOR_WORK.md) after checking the load-bearing entries against the papers.
 - Run `make reproduce` on a fresh clone and confirm it regenerates every table and `results/site.json` with no model calls.
 
-**Done:** the README states every result against its pre-registered criterion, `make reproduce` works on a fresh clone, and the Pages build publishes the site.
+**Done:** the README states every result against its pre-registered criterion, `make reproduce` works on a fresh clone, and `make start` on that clone shows the site.
 
 ## Cut Order
 
