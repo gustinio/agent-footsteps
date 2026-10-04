@@ -25,17 +25,17 @@ Keep the system runnable after every change.
 
 ## Commands
 
-The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner`, `evaluate`, `segment` and `label` are implemented, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds the Q2 manipulation check, the interim stop rule, Q1 and Q3a.
+The Makefile targets and `footsteps` CLI exist from phase 0, and `ingest`, `export`, `tasks`, `runner`, `evaluate`, `segment` and `label` are implemented, but the other stage subcommands still report "not implemented yet". `evaluate` so far holds the Q2 manipulation check, the interim stop rule, Q1, Q3a, Q3b and Q4.
 
 - `uv run footsteps <stage>`: run one pipeline stage
 - `uv run footsteps ingest --pilot <transcript>...`: reduce Claude Code transcripts to step facts and print the step table, without downloading
 - `uv run footsteps tasks`: self-test the custom demo tasks, where each reference solution must pass its checker and an empty attempt must fail it
 - `uv run footsteps runner [--tasks N]`: make the planned planted runs that are not yet recorded (uses model credit), or only those of the first N tasks
-- `uv run footsteps segment`: fit the HMM and GMM on the natural runs and write the state of every step to `results/segmentation.parquet`, with no model calls
+- `uv run footsteps segment`: fit the HMM and GMM on the natural runs and write the state of every step to `results/segmentation.parquet` and the states of the first 5, 10 and 15 steps to `results/prefix_states.parquet`, with no model calls
 - `uv run footsteps label --sheet`: write the blind sheet of 150 steps to `data/label_sheet.csv` for hand labeling, with no model call
 - `uv run footsteps label --collect`: read the hand-labeled `data/label_sheet.csv` into `results/human_labels.csv` (ids and labels only), with no model call
 - `uv run footsteps label`: label the sampled steps with the LLM wrapper (uses model credit, so run it only through `make label`)
-- `uv run footsteps evaluate`: write `results/q1.json` (labeler kappa, Q1 table, state names) when the human labels exist, then write `results/q3a.json` (the Q3a table) and print its AUROCs, the repeat share per task and condition, the interim stop rule and the manipulation check
+- `uv run footsteps evaluate`: write `results/q1.json` (labeler kappa, Q1 table, state names) when the human labels exist, then write `results/q3a.json`, `results/q3b.json` and `results/q4.json` (the Q3a, Q3b and Q4 tables) and print their AUROCs, the repeat share per task and condition, the interim stop rule and the manipulation check
 - `uv run ruff check .`: lint
 - `uv run pytest`: run tests
 - `uv run ruff format --check .`: check formatting
