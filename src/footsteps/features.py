@@ -99,6 +99,17 @@ def window_counts(steps: list[dict]) -> list[float]:
     ]
 
 
+def prefix_counts(steps: list[dict]) -> list[float]:
+    """The early check's baseline view: errors so far and different tools used so far, in the given steps.
+
+    A step without a tool call does not count as a tool.
+    """
+    return [
+        float(sum(s["result_status"] == "error" for s in steps)),
+        float(len({s["tool_category"] for s in steps} - {"none"})),
+    ]
+
+
 # A run is read in this many equal parts for its trajectory.
 PROFILE_PARTS = 3
 
