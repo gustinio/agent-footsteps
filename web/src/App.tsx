@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CATEGORY_FILL, STATE_FILL, STATUS_LABEL } from '@/palette'
 import { PointCloud } from '@/PointCloud'
 import { Q1Panel } from '@/Q1Panel'
+import { Q3aPanel } from '@/Q3aPanel'
 import { Ribbon } from '@/Ribbon'
 import type { StepRef } from '@/selection'
 import { loadSite, type Method, type Site, type ToolCategory } from '@/site'
@@ -181,6 +182,7 @@ export default function App() {
         </Card>
       </div>
       {site.meta.q1 && <Q1Panel q1={site.meta.q1} />}
+      {site.meta.q3a && <Q3aPanel q3a={site.meta.q3a} names={site.meta.q1?.states} />}
       <Card>
         <CardHeader>
           <CardTitle>Run ribbons</CardTitle>

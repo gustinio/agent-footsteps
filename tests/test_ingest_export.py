@@ -504,3 +504,24 @@ def test_site_json_carries_q1_only_when_the_file_exists(normalized, write_segmen
     assert "q1" not in build()["meta"]
     q1_path.write_text(json.dumps({"states": [], "q1": {"passes": False}}))
     assert build()["meta"]["q1"]["q1"] == {"passes": False}
+
+
+def test_site_json_carries_q3a_only_when_the_file_exists(
+    normalized, write_segmentation
+):
+    tmp_path, _ = normalized
+    summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
+    q3a_path = tmp_path / "q3a.json"
+
+    def build():
+        return export.build_site(
+            tmp_path / "runs.parquet",
+            tmp_path / "steps.parquet",
+            summary,
+            write_segmentation(tmp_path / "steps.parquet"),
+            q3a_path=q3a_path,
+        )
+
+    assert "q3a" not in build()["meta"]
+    q3a_path.write_text(json.dumps({"passes": True}))
+    assert build()["meta"]["q3a"] == {"passes": True}

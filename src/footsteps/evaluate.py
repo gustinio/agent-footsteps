@@ -7,11 +7,20 @@ from pathlib import Path
 
 import numpy as np
 import pyarrow.parquet as pq
-from sklearn.metrics import cohen_kappa_score, normalized_mutual_info_score
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    cohen_kappa_score,
+    normalized_mutual_info_score,
+    roc_auc_score,
+)
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
-from footsteps import features, label, runner, segment, tasks
+from footsteps import features, ingest, label, runner, segment, tasks
 
 Q1_PATH = Path("results/q1.json")
+Q3A_PATH = Path("results/q3a.json")
 
 # From the PRD's Q2 manipulation check: the repeat share must be higher with the
 # instruction than without it on this many of the ten tasks, and the interim rule
@@ -30,6 +39,18 @@ Q1_CRITERION = (
 )
 BOOTSTRAP_RESAMPLES = 1000
 BOOTSTRAP_RANGE = (2.5, 97.5)
+
+# From the PRD's Q3a: the behaviour profile must beat run length by more than the bootstrap range,
+# and come within this much AUROC of the supervised predictor.
+Q3A_SUPERVISED_MARGIN = 0.05
+Q3A_CRITERION = (
+    "From the behaviour profile of a finished run (the share of steps in each state in each third, "
+    "and the number of switches), a classifier separates failing from passing runs better than run "
+    "length alone, with the difference larger than the bootstrap range, and within 0.05 AUROC of the "
+    "supervised predictor. Folds are grouped by task."
+)
+# How many profile entries and state-to-state moves the report names. Not a pre-registered test.
+SIGNAL_SHOWN = 6
 
 # Naming is not a pre-registered test. A state gets a name only when this share of its labeled
 # steps agrees, and only when at least this many of its steps were labeled.
@@ -279,8 +300,222 @@ def run_q1() -> None:
         )
 
 
+def q3a_runs(
+    steps: list[dict],
+    outcomes: dict[str, str],
+    task_of_run: dict[str, str],
+    states: dict[str, list[int]],
+    n_states: int,
+) -> list[dict]:
+    """One row per natural run with the three views of it: length, behaviour profile and fact counts."""
+    by_run = collections.defaultdict(list)
+    for step in sorted(steps, key=lambda s: (s["run_id"], s["step_idx"])):
+        by_run[step["run_id"]].append(step)
+    rows = []
+    for run_id in sorted(by_run):
+        profile, moves = features.run_profile(states[run_id], n_states)
+        rows.append(
+            {
+                "run_id": run_id,
+                "task_id": task_of_run[run_id],
+                "failed": outcomes[run_id] == "fail",
+                "length": [float(len(by_run[run_id]))],
+                "profile": profile,
+                "moves": moves,
+                "counts": features.window_counts(by_run[run_id]),
+            }
+        )
+    return rows
+
+
+def _logistic():
+    return make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
+
+
+# Each view is paired with the model that reads it. Only the supervised predictor is a tree model.
+Q3A_MODELS = {
+    "length": ("length", _logistic),
+    "behaviour": ("profile", _logistic),
+    "supervised": (
+        "counts",
+        lambda: GradientBoostingClassifier(random_state=segment.SEED),
+    ),
+}
+
+
+def _out_of_fold(rows: list[dict], view: str, make_model) -> np.ndarray:
+    """Each run is scored by a model fit on the other folds, so no task is in both training and testing."""
+    X = np.array([row[view] for row in rows])
+    y = np.array([row["failed"] for row in rows])
+    folds = segment.task_folds(row["task_id"] for row in rows)
+    fold_of = np.array([folds[row["task_id"]] for row in rows])
+    scores = np.zeros(len(rows))
+    for fold in sorted(set(fold_of)):
+        test = fold_of == fold
+        model = make_model().fit(X[~test], y[~test])
+        scores[test] = model.predict_proba(X[test])[:, 1]
+    return scores
+
+
+def _task_resamples(rows: list[dict], rng) -> list[np.ndarray]:
+    """Row indices of each bootstrap sample, drawn by task because the runs of a task are not independent."""
+    by_task = collections.defaultdict(list)
+    for idx, row in enumerate(rows):
+        by_task[row["task_id"]].append(idx)
+    task_ids = sorted(by_task)
+    return [
+        np.concatenate(
+            [
+                by_task[task_ids[t]]
+                for t in rng.integers(len(task_ids), size=len(task_ids))
+            ]
+        )
+        for _ in range(BOOTSTRAP_RESAMPLES)
+    ]
+
+
+def _with_range(estimate: float, values: list[float]) -> dict:
+    return {"estimate": round(float(estimate), 4), **_interval(values)}
+
+
+def _signal(rows: list[dict], samples: list[np.ndarray], n_states: int) -> dict:
+    """The profile entries and state-to-state moves most tied to failure, each with a bootstrap range.
+
+    An entry's coefficient is from the profile model refit on every resample, and a move's effect is
+    its AUROC alone, because the profile holds switch counts and not which switch was made.
+    """
+    y = np.array([row["failed"] for row in rows])
+    profile = np.array([row["profile"] for row in rows])
+    moves = np.array([row["moves"] for row in rows])
+
+    def coefficients(index):
+        return _logistic().fit(profile[index], y[index])[-1].coef_[0]
+
+    def move_aurocs(index):
+        # One AUROC per column, so the failing flag is repeated once for each.
+        labels = np.repeat(y[index][:, None], moves.shape[1], axis=1)
+        return roc_auc_score(labels, moves[index], average=None)
+
+    everything = np.arange(len(rows))
+    coef_samples = np.array([coefficients(i) for i in samples])
+    auc_samples = np.array([move_aurocs(i) for i in samples])
+    coef, aucs = coefficients(everything), move_aurocs(everything)
+
+    def pick(names, estimates, resampled, centre, key):
+        entries = []
+        for idx in np.argsort(-np.abs(estimates - centre), kind="stable")[
+            :SIGNAL_SHOWN
+        ]:
+            effect = _with_range(estimates[idx], resampled[:, idx])
+            entries.append(
+                {
+                    "name": names[idx],
+                    key: effect["estimate"],
+                    "low": effect["low"],
+                    "high": effect["high"],
+                    "clear": effect["low"] > centre or effect["high"] < centre,
+                    "more_in": "failing" if estimates[idx] > centre else "passing",
+                }
+            )
+        return entries
+
+    return {
+        "profile": pick(
+            features.profile_names(n_states), coef, coef_samples, 0.0, "coefficient"
+        ),
+        "moves": pick(features.move_names(n_states), aucs, auc_samples, 0.5, "auroc"),
+        "moves_tested": int(moves.shape[1]),
+    }
+
+
+def q3a_table(rows: list[dict], n_states: int) -> dict:
+    """Out-of-fold AUROC of the three views for failing runs, with task-bootstrap ranges and the pre-registered verdict."""
+    y = np.array([row["failed"] for row in rows])
+    scores = {
+        name: _out_of_fold(rows, view, make_model)
+        for name, (view, make_model) in Q3A_MODELS.items()
+    }
+    rng = np.random.default_rng(segment.SEED)
+    samples = _task_resamples(rows, rng)
+    estimate = {name: roc_auc_score(y, score) for name, score in scores.items()}
+    resampled = {
+        name: [roc_auc_score(y[i], score[i]) for i in samples]
+        for name, score in scores.items()
+    }
+    gaps = {
+        "behaviour_minus_length": ("behaviour", "length"),
+        "supervised_minus_behaviour": ("supervised", "behaviour"),
+    }
+    differences = {
+        name: _with_range(
+            estimate[a] - estimate[b],
+            [x - z for x, z in zip(resampled[a], resampled[b])],
+        )
+        for name, (a, b) in gaps.items()
+    }
+    beats_length = differences["behaviour_minus_length"]["low"] > 0
+    near_supervised = (
+        differences["supervised_minus_behaviour"]["estimate"] <= Q3A_SUPERVISED_MARGIN
+    )
+    return {
+        "criterion": Q3A_CRITERION,
+        "runs": len(rows),
+        "tasks": len({row["task_id"] for row in rows}),
+        "failing_share": round(float(y.mean()), 4),
+        "auroc": {
+            name: _with_range(estimate[name], resampled[name]) for name in Q3A_MODELS
+        },
+        "differences": differences,
+        "beats_length": bool(beats_length),
+        "near_supervised": bool(near_supervised),
+        "passes": bool(beats_length and near_supervised),
+        "signal": _signal(rows, samples, n_states),
+    }
+
+
+def q3a_inputs() -> tuple[list[dict], int]:
+    """The natural runs with their views, and how many states the segmentation chose."""
+    steps, task_of_run = label.load_natural()
+    outcomes = {
+        row["run_id"]: row["outcome"]
+        for row in pq.read_table(
+            ingest.RUNS_PATH,
+            columns=["run_id", "outcome"],
+            filters=[("run_id", "in", list(task_of_run))],
+        ).to_pylist()
+    }
+    ordered: dict[str, dict[int, int]] = collections.defaultdict(dict)
+    for row in pq.read_table(
+        segment.SEGMENTATION_PATH, filters=[("method", "=", "hmm")]
+    ).to_pylist():
+        if row["run_id"] in task_of_run:
+            ordered[row["run_id"]][row["step_idx"]] = row["state_id"]
+    states = {
+        run_id: [by_step[idx] for idx in sorted(by_step)]
+        for run_id, by_step in ordered.items()
+    }
+    n_states = json.loads(segment.SEGMENT_SUMMARY_PATH.read_text())["n_states"]
+    return q3a_runs(steps, outcomes, task_of_run, states, n_states), n_states
+
+
+def run_q3a() -> None:
+    rows, n_states = q3a_inputs()
+    result = q3a_table(rows, n_states)
+    Q3A_PATH.write_text(json.dumps(result, indent=2) + "\n")
+    auroc = result["auroc"]
+    print(
+        f"q3a on {result['runs']} runs from {result['tasks']} tasks: AUROC "
+        + ", ".join(
+            f"{name} {value['estimate']:.2f} ({value['low']:.2f} to {value['high']:.2f})"
+            for name, value in auroc.items()
+        )
+        + f", {'passes' if result['passes'] else 'fails'}"
+    )
+
+
 def run() -> None:
     run_q1()
+    run_q3a()
     task_order = [task.task_id for task in tasks.load_tasks()]
     table = manipulation_table(
         runner.read_table(runner.PLANTED_RUNS_PATH),

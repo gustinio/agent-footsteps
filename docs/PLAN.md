@@ -123,6 +123,8 @@ Guardrails for the site:
 - Extend `make reproduce` to produce the Q3a, Q3b and Q4 tables.
 - Show the Q3a, Q3b and Q4 results next to their criteria in the site, and add the filters for data source and outcome.
 
+**Status:** Q3a is built on 2026-10-04: `results/q3a.json` from `footsteps evaluate`, with task-bootstrap ranges, the signal tables and a site panel. On 411 natural runs from 57 tasks the profile has AUROC 0.62 against 0.50 for run length and 0.64 for the supervised predictor, so the criterion is met. Q3b, Q4 and the filters are not built.
+
 **Done:** the Q3a, Q3b and Q4 tables are written to `results/` by `make reproduce` with the number of runs dropped at each k, and the site shows them with working filters.
 
 ## 8. Planted Behaviour Analysis and Q2

@@ -71,10 +71,47 @@ export interface Q1 {
   states: StateName[]
 }
 
+export interface Interval {
+  estimate: number
+  low: number
+  high: number
+}
+
+export interface SignalEntry {
+  name: string
+  low: number
+  high: number
+  // Whether the range leaves the no-effect value.
+  clear: boolean
+  // Which kind of run has more of it.
+  more_in: 'failing' | 'passing'
+  // A profile entry has a coefficient and a move has an AUROC.
+  coefficient?: number
+  auroc?: number
+}
+
+export interface Q3a {
+  criterion: string
+  runs: number
+  tasks: number
+  failing_share: number
+  auroc: Record<'length' | 'behaviour' | 'supervised', Interval>
+  differences: Record<'behaviour_minus_length' | 'supervised_minus_behaviour', Interval>
+  beats_length: boolean
+  near_supervised: boolean
+  passes: boolean
+  signal: {
+    profile: SignalEntry[]
+    moves: SignalEntry[]
+    moves_tested: number
+  }
+}
+
 export interface Site {
   meta: {
     // Absent until the human sample is labeled.
     q1?: Q1
+    q3a?: Q3a
     dataset: string
     revision: string
     runs_in_dataset: number

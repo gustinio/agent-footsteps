@@ -54,3 +54,39 @@ def test_neighbour_features_look_back_and_never_ahead():
     assert named(whole[1])["prev_verify"] == 1
     assert named(whole[1])["switched_tool"] == 1
     assert named(whole[2])["switched_tool"] == 0
+
+
+def test_profile_shares_each_third_and_counts_switches():
+    states = [0, 0, 1, 1, 2, 2]
+    profile, moves = features.run_profile(states, 3)
+    shares, switches = profile[:-1], profile[-1]
+    assert shares == [1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0]
+    assert switches == 2
+    assert dict(zip(features.move_names(3), moves)) == {
+        "1 to 2": 0.2,
+        "2 to 3": 0.2,
+        "1 to 3": 0,
+        "2 to 1": 0,
+        "3 to 1": 0,
+        "3 to 2": 0,
+    }
+    assert len(features.profile_names(3)) == len(profile)
+
+
+def test_profile_of_a_short_run_leaves_empty_thirds_at_zero():
+    profile, moves = features.run_profile([1], 2)
+    assert profile == [0, 1.0, 0, 0, 0, 0, 0]
+    assert all(value == 0 for value in moves)
+
+
+def test_window_counts_cover_tools_results_and_facts():
+    steps = [
+        step("shell", "ok", "a", True),
+        step("shell", "error", "a"),
+        step("read", "empty"),
+    ]
+    counts = dict(zip(features.WINDOW_COUNT_NAMES, features.window_counts(steps)))
+    assert counts["count_shell"] == 2 and counts["count_read"] == 1
+    assert counts["count_error"] == 1 and counts["count_empty"] == 1
+    assert counts["count_verify"] == 1 and counts["count_repeat"] == 1
+    assert len(features.window_counts(steps)) == len(features.WINDOW_COUNT_NAMES)
