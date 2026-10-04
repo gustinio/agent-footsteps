@@ -1,0 +1,141 @@
+{
+  "criterion": "From the behaviour profile of a finished run (the share of steps in each state in each third, and the number of switches), a classifier separates failing from passing runs better than run length alone, with the difference larger than the bootstrap range, and within 0.05 AUROC of the supervised predictor. Folds are grouped by task.",
+  "runs": 411,
+  "tasks": 57,
+  "failing_share": 0.4745,
+  "auroc": {
+    "length": {
+      "estimate": 0.5013,
+      "low": 0.4343,
+      "high": 0.5606
+    },
+    "behaviour": {
+      "estimate": 0.6187,
+      "low": 0.5596,
+      "high": 0.6806
+    },
+    "supervised": {
+      "estimate": 0.6441,
+      "low": 0.5861,
+      "high": 0.7025
+    }
+  },
+  "differences": {
+    "behaviour_minus_length": {
+      "estimate": 0.1174,
+      "low": 0.0579,
+      "high": 0.1763
+    },
+    "supervised_minus_behaviour": {
+      "estimate": 0.0254,
+      "low": -0.0361,
+      "high": 0.0832
+    }
+  },
+  "beats_length": true,
+  "near_supervised": true,
+  "passes": true,
+  "signal": {
+    "profile": [
+      {
+        "name": "state 3 share, last third",
+        "coefficient": 0.4884,
+        "low": 0.0004,
+        "high": 0.9493,
+        "clear": true,
+        "more_in": "failing"
+      },
+      {
+        "name": "state 1 share, middle third",
+        "coefficient": -0.4641,
+        "low": -0.9331,
+        "high": 0.1098,
+        "clear": false,
+        "more_in": "passing"
+      },
+      {
+        "name": "state 2 share, last third",
+        "coefficient": 0.452,
+        "low": -0.281,
+        "high": 1.0157,
+        "clear": false,
+        "more_in": "failing"
+      },
+      {
+        "name": "state 1 share, last third",
+        "coefficient": 0.4418,
+        "low": -0.4658,
+        "high": 1.0631,
+        "clear": false,
+        "more_in": "failing"
+      },
+      {
+        "name": "state 7 share, middle third",
+        "coefficient": -0.4061,
+        "low": -0.8426,
+        "high": -0.029,
+        "clear": true,
+        "more_in": "passing"
+      },
+      {
+        "name": "state 2 share, middle third",
+        "coefficient": -0.4027,
+        "low": -0.8164,
+        "high": 0.1532,
+        "clear": false,
+        "more_in": "passing"
+      }
+    ],
+    "moves": [
+      {
+        "name": "1 to 6",
+        "auroc": 0.3842,
+        "low": 0.338,
+        "high": 0.4334,
+        "clear": true,
+        "more_in": "passing"
+      },
+      {
+        "name": "2 to 6",
+        "auroc": 0.4594,
+        "low": 0.4321,
+        "high": 0.4879,
+        "clear": true,
+        "more_in": "passing"
+      },
+      {
+        "name": "4 to 7",
+        "auroc": 0.5382,
+        "low": 0.5004,
+        "high": 0.5789,
+        "clear": true,
+        "more_in": "failing"
+      },
+      {
+        "name": "1 to 4",
+        "auroc": 0.5363,
+        "low": 0.4927,
+        "high": 0.5773,
+        "clear": false,
+        "more_in": "failing"
+      },
+      {
+        "name": "5 to 6",
+        "auroc": 0.4645,
+        "low": 0.4421,
+        "high": 0.4854,
+        "clear": true,
+        "more_in": "passing"
+      },
+      {
+        "name": "1 to 2",
+        "auroc": 0.5295,
+        "low": 0.4852,
+        "high": 0.578,
+        "clear": false,
+        "more_in": "failing"
+      }
+    ],
+    "moves_tested": 56
+  }
+}
