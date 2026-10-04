@@ -81,7 +81,7 @@ def test_hmm_recovers_the_two_stretches_and_numbers_states_by_size(monkeypatch):
     # With the true count of two, each stretch is one state, which a larger count would split.
     monkeypatch.setattr(segment, "STATE_COUNTS", range(2, 3))
     steps, task_of_run = synthetic_steps()
-    states, summary = segment.segment(steps, task_of_run, [])
+    states, summary, _ = segment.segment(steps, task_of_run, [])
     assert summary["n_states"] == 2
     for method in segment.METHODS:
         by_position = np.array([states[method][r] for r in sorted(states[method])])
@@ -99,7 +99,7 @@ def test_hmm_recovers_the_two_stretches_and_numbers_states_by_size(monkeypatch):
 
 def test_hmm_states_stay_put_more_than_they_leave():
     steps, task_of_run = synthetic_steps()
-    _, summary = segment.segment(steps, task_of_run, [])
+    _, summary, _ = segment.segment(steps, task_of_run, [])
     assert max(summary["hmm_self_transition"]) > 0.8
 
 
@@ -109,7 +109,7 @@ def test_planted_runs_are_placed_on_the_natural_model():
         {"run_id": "planted-1", "step_idx": idx, **fact("read", "ok")}
         for idx in range(6)
     ]
-    states, summary = segment.segment(steps, task_of_run, planted)
+    states, summary, _ = segment.segment(steps, task_of_run, planted)
     assert len(states["hmm"]["planted-1"]) == 6
     assert len(states["gmm"]["planted-1"]) == 6
     assert summary["planted_runs"] == 1 and summary["natural_runs"] == 30
@@ -158,8 +158,27 @@ def test_held_out_scores_come_from_runs_of_other_tasks(monkeypatch):
 
 def test_tables_hold_only_ids_and_states(tmp_path):
     steps, task_of_run = synthetic_steps(task_count=6)
-    states, summary = segment.segment(steps, task_of_run, [])
+    states, summary, _ = segment.segment(steps, task_of_run, [])
     table = segment.states_table(states)
     assert set(table.column_names) == {"run_id", "step_idx", "method", "state_id"}
     assert table.num_rows == 2 * len(steps)
     json.dumps(summary)
+
+
+def test_prefix_states_are_decoded_from_the_prefix_alone_for_long_enough_runs(
+    monkeypatch,
+):
+    monkeypatch.setattr(segment, "PREFIX_LENGTHS", (5, 15))
+    steps, task_of_run = synthetic_steps(task_count=6)
+    short = [s for s in steps if s["run_id"] == "t0-r0" and s["step_idx"] < 8]
+    steps = [s for s in steps if s["run_id"] != "t0-r0"] + short
+    states, _, prefixes = segment.segment(steps, task_of_run, [])
+    assert set(prefixes) == {5, 15}
+    assert len(prefixes[5]) == 18 and len(prefixes[15]) == 17
+    assert all(len(v) == 5 for v in prefixes[5].values())
+    assert "t0-r0" in prefixes[5] and "t0-r0" not in prefixes[15]
+    # A run that is read only for its first five steps is the first stretch's state, numbered as in the whole run.
+    assert prefixes[5]["t1-r0"] == states["hmm"]["t1-r0"][:5]
+    table = segment.prefix_table(prefixes)
+    assert set(table.column_names) == {"run_id", "k", "step_idx", "state_id"}
+    assert table.num_rows == 18 * 5 + 17 * 15

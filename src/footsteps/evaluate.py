@@ -21,6 +21,8 @@ from footsteps import features, ingest, label, runner, segment, tasks
 
 Q1_PATH = Path("results/q1.json")
 Q3A_PATH = Path("results/q3a.json")
+Q3B_PATH = Path("results/q3b.json")
+Q4_PATH = Path("results/q4.json")
 
 # From the PRD's Q2 manipulation check: the repeat share must be higher with the
 # instruction than without it on this many of the ten tasks, and the interim rule
@@ -49,6 +51,26 @@ Q3A_CRITERION = (
     "length alone, with the difference larger than the bootstrap range, and within 0.05 AUROC of the "
     "supervised predictor. Folds are grouped by task."
 )
+# From the PRD's Q3b: the same two bars as Q3a, judged at every prefix length k, on the runs with at
+# least k steps. The lengths themselves are the segmenter's, which decodes the prefix states.
+Q3B_SUPERVISED_MARGIN = 0.05
+PREFIX_LENGTHS = segment.PREFIX_LENGTHS
+Q3B_CRITERION = (
+    "From only the first k steps of a run, for k in 5, 10 and 15 and on runs with at least k steps, "
+    "the behaviour view separates failing from passing runs better than the counts-so-far baseline "
+    "(errors and different tools used), with the difference larger than the bootstrap range, and "
+    "within 0.05 AUROC of the supervised predictor, at every k. Folds are grouped by task."
+)
+
+# From the PRD's Q4: AUROC and agreement on tasks unseen in training may be at most this much below
+# the same measures on seen tasks.
+Q4_MAX_DROP = 0.05
+Q4_CRITERION = (
+    "AUROC of the behaviour view and agreement of the states with the step labels drop by no more "
+    "than 0.05 on unseen tasks relative to seen tasks. Seen means a run-level split in which a task "
+    "can be in both training and testing, and unseen means folds grouped by task."
+)
+
 # How many profile entries and state-to-state moves the report names. Not a pre-registered test.
 SIGNAL_SHOWN = 6
 
@@ -231,15 +253,22 @@ def name_states(rows: list[dict], n_states: int) -> list[dict]:
     return named
 
 
-def q1_result(rows: list[dict], human: dict, llm_labels: dict, n_states: int) -> dict:
-    """rows hold every natural step with its states, rule fact and held-out flag; labels come in separately."""
+def labeled_steps(
+    rows: list[dict], human: dict, llm_labels: dict
+) -> tuple[dict, list[dict]]:
+    """The labeler agreement, and the steps that have a label the labeler's agreement allows."""
     agreement = labeler_agreement(human, llm_labels)
     labels = label_set(human, llm_labels, agreement["passes"])
-    labeled = [
+    return agreement, [
         {**row, "label": labels[(row["run_id"], row["step_idx"])]}
         for row in rows
         if (row["run_id"], row["step_idx"]) in labels
     ]
+
+
+def q1_result(rows: list[dict], human: dict, llm_labels: dict, n_states: int) -> dict:
+    """rows hold every natural step with its states, rule fact and held-out flag; labels come in separately."""
+    agreement, labeled = labeled_steps(rows, human, llm_labels)
     return {
         "labeler": agreement,
         "q1": q1_table(labeled),
@@ -300,6 +329,13 @@ def run_q1() -> None:
         )
 
 
+def _ordered_by_run(steps: list[dict]) -> dict[str, list[dict]]:
+    by_run = collections.defaultdict(list)
+    for step in sorted(steps, key=lambda s: (s["run_id"], s["step_idx"])):
+        by_run[step["run_id"]].append(step)
+    return by_run
+
+
 def q3a_runs(
     steps: list[dict],
     outcomes: dict[str, str],
@@ -308,9 +344,7 @@ def q3a_runs(
     n_states: int,
 ) -> list[dict]:
     """One row per natural run with the three views of it: length, behaviour profile and fact counts."""
-    by_run = collections.defaultdict(list)
-    for step in sorted(steps, key=lambda s: (s["run_id"], s["step_idx"])):
-        by_run[step["run_id"]].append(step)
+    by_run = _ordered_by_run(steps)
     rows = []
     for run_id in sorted(by_run):
         profile, moves = features.run_profile(states[run_id], n_states)
@@ -343,12 +377,19 @@ Q3A_MODELS = {
 }
 
 
-def _out_of_fold(rows: list[dict], view: str, make_model) -> np.ndarray:
-    """Each run is scored by a model fit on the other folds, so no task is in both training and testing."""
+def _out_of_fold(
+    rows: list[dict], view: str, make_model, by: str = "task_id"
+) -> np.ndarray:
+    """Each run is scored by a model fit on the other folds.
+
+    Folds are grouped by task, so no task is in both training and testing, unless by is "run_id",
+    which is the seen-task split where the runs of one task can sit on both sides.
+    """
     X = np.array([row[view] for row in rows])
     y = np.array([row["failed"] for row in rows])
-    folds = segment.task_folds(row["task_id"] for row in rows)
-    fold_of = np.array([folds[row["task_id"]] for row in rows])
+    assign = segment.task_folds if by == "task_id" else segment.run_folds
+    folds = assign(row[by] for row in rows)
+    fold_of = np.array([folds[row[by]] for row in rows])
     scores = np.zeros(len(rows))
     for fold in sorted(set(fold_of)):
         test = fold_of == fold
@@ -428,31 +469,43 @@ def _signal(rows: list[dict], samples: list[np.ndarray], n_states: int) -> dict:
     }
 
 
-def q3a_table(rows: list[dict], n_states: int) -> dict:
-    """Out-of-fold AUROC of the three views for failing runs, with task-bootstrap ranges and the pre-registered verdict."""
+def _aurocs(
+    rows: list[dict], models: dict, samples: list[np.ndarray]
+) -> tuple[dict, dict]:
+    """Out-of-fold AUROC of each model for failing runs, and its value on every task resample."""
     y = np.array([row["failed"] for row in rows])
     scores = {
         name: _out_of_fold(rows, view, make_model)
-        for name, (view, make_model) in Q3A_MODELS.items()
+        for name, (view, make_model) in models.items()
     }
-    rng = np.random.default_rng(segment.SEED)
-    samples = _task_resamples(rows, rng)
     estimate = {name: roc_auc_score(y, score) for name, score in scores.items()}
     resampled = {
         name: [roc_auc_score(y[i], score[i]) for i in samples]
         for name, score in scores.items()
     }
-    gaps = {
-        "behaviour_minus_length": ("behaviour", "length"),
-        "supervised_minus_behaviour": ("supervised", "behaviour"),
-    }
-    differences = {
+    return estimate, resampled
+
+
+def _gaps(estimate: dict, resampled: dict, pairs: dict) -> dict:
+    return {
         name: _with_range(
             estimate[a] - estimate[b],
             [x - z for x, z in zip(resampled[a], resampled[b])],
         )
-        for name, (a, b) in gaps.items()
+        for name, (a, b) in pairs.items()
     }
+
+
+def q3a_table(rows: list[dict], n_states: int) -> dict:
+    """Out-of-fold AUROC of the three views for failing runs, with task-bootstrap ranges and the pre-registered verdict."""
+    y = np.array([row["failed"] for row in rows])
+    samples = _task_resamples(rows, np.random.default_rng(segment.SEED))
+    estimate, resampled = _aurocs(rows, Q3A_MODELS, samples)
+    gaps = {
+        "behaviour_minus_length": ("behaviour", "length"),
+        "supervised_minus_behaviour": ("supervised", "behaviour"),
+    }
+    differences = _gaps(estimate, resampled, gaps)
     beats_length = differences["behaviour_minus_length"]["low"] > 0
     near_supervised = (
         differences["supervised_minus_behaviour"]["estimate"] <= Q3A_SUPERVISED_MARGIN
@@ -473,10 +526,8 @@ def q3a_table(rows: list[dict], n_states: int) -> dict:
     }
 
 
-def q3a_inputs() -> tuple[list[dict], int]:
-    """The natural runs with their views, and how many states the segmentation chose."""
-    steps, task_of_run = label.load_natural()
-    outcomes = {
+def _natural_outcomes(task_of_run: dict[str, str]) -> dict[str, str]:
+    return {
         row["run_id"]: row["outcome"]
         for row in pq.read_table(
             ingest.RUNS_PATH,
@@ -484,6 +535,12 @@ def q3a_inputs() -> tuple[list[dict], int]:
             filters=[("run_id", "in", list(task_of_run))],
         ).to_pylist()
     }
+
+
+def q3a_inputs() -> tuple[list[dict], int]:
+    """The natural runs with their views, and how many states the segmentation chose."""
+    steps, task_of_run = label.load_natural()
+    outcomes = _natural_outcomes(task_of_run)
     ordered: dict[str, dict[int, int]] = collections.defaultdict(dict)
     for row in pq.read_table(
         segment.SEGMENTATION_PATH, filters=[("method", "=", "hmm")]
@@ -513,9 +570,239 @@ def run_q3a() -> None:
     )
 
 
+# Each view of the first k steps is paired with the model that reads it. The length reference reads
+# the whole run's length, which an early check would not have, so it only bounds what is possible.
+Q3B_MODELS = {
+    "length": ("length", _logistic),
+    "baseline": ("baseline", _logistic),
+    "behaviour": ("profile", _logistic),
+    "supervised": (
+        "counts",
+        lambda: GradientBoostingClassifier(random_state=segment.SEED),
+    ),
+}
+
+
+def q3b_runs(
+    steps: list[dict],
+    outcomes: dict[str, str],
+    task_of_run: dict[str, str],
+    prefix_states: dict[int, dict[str, list[int]]],
+    n_states: int,
+) -> dict[int, list[dict]]:
+    """For each k, one row per natural run with at least k steps, holding the views of its first k steps."""
+    by_run = _ordered_by_run(steps)
+    rows = {}
+    for k, states in prefix_states.items():
+        rows[k] = [
+            {
+                "run_id": run_id,
+                "task_id": task_of_run[run_id],
+                "failed": outcomes[run_id] == "fail",
+                "length": [float(len(by_run[run_id]))],
+                "baseline": features.prefix_counts(by_run[run_id][:k]),
+                "profile": features.run_profile(states[run_id], n_states)[0],
+                "counts": features.window_counts(by_run[run_id][:k]),
+            }
+            for run_id in sorted(by_run)
+            if run_id in states
+        ]
+    return rows
+
+
+def q3b_table(rows_by_k: dict[int, list[dict]], total_runs: int) -> dict:
+    """Out-of-fold AUROC of the views of the first k steps, with task-bootstrap ranges and the runs dropped at each k."""
+    per_k = []
+    for k, rows in sorted(rows_by_k.items()):
+        y = np.array([row["failed"] for row in rows])
+        samples = _task_resamples(rows, np.random.default_rng(segment.SEED))
+        estimate, resampled = _aurocs(rows, Q3B_MODELS, samples)
+        differences = _gaps(
+            estimate,
+            resampled,
+            {
+                "behaviour_minus_baseline": ("behaviour", "baseline"),
+                "supervised_minus_behaviour": ("supervised", "behaviour"),
+            },
+        )
+        beats_baseline = differences["behaviour_minus_baseline"]["low"] > 0
+        near_supervised = (
+            differences["supervised_minus_behaviour"]["estimate"]
+            <= Q3B_SUPERVISED_MARGIN
+        )
+        per_k.append(
+            {
+                "k": k,
+                "runs": len(rows),
+                "runs_dropped": total_runs - len(rows),
+                "tasks": len({row["task_id"] for row in rows}),
+                "failing_share": round(float(y.mean()), 4),
+                "auroc": {
+                    name: _with_range(estimate[name], resampled[name])
+                    for name in Q3B_MODELS
+                },
+                "differences": differences,
+                "beats_baseline": bool(beats_baseline),
+                "near_supervised": bool(near_supervised),
+                "passes": bool(beats_baseline and near_supervised),
+            }
+        )
+    return {
+        "criterion": Q3B_CRITERION,
+        "natural_runs": total_runs,
+        "per_k": per_k,
+        "passes": all(entry["passes"] for entry in per_k),
+    }
+
+
+def _drop_in_auroc(rows: list[dict]) -> dict:
+    """AUROC of the behaviour view with run-level folds (seen tasks) minus task-grouped folds (unseen)."""
+    view, make_model = Q3B_MODELS["behaviour"]
+    y = np.array([row["failed"] for row in rows])
+    seen = _out_of_fold(rows, view, make_model, by="run_id")
+    unseen = _out_of_fold(rows, view, make_model)
+    samples = _task_resamples(rows, np.random.default_rng(segment.SEED))
+    seen_auroc, unseen_auroc = roc_auc_score(y, seen), roc_auc_score(y, unseen)
+    drop = _with_range(
+        seen_auroc - unseen_auroc,
+        [
+            roc_auc_score(y[i], seen[i]) - roc_auc_score(y[i], unseen[i])
+            for i in samples
+        ],
+    )
+    return {
+        "runs": len(rows),
+        "seen": round(float(seen_auroc), 4),
+        "unseen": round(float(unseen_auroc), 4),
+        "drop": drop,
+        "passes": bool(drop["estimate"] <= Q4_MAX_DROP),
+    }
+
+
+def _nmi_by_run(rows: list[dict]) -> float:
+    return normalized_mutual_info_score(
+        [r["label"] for r in rows], [r["hmm_state"] for r in rows]
+    )
+
+
+def agreement_drop(labeled: list[dict]) -> dict:
+    """NMI of the HMM states with the labels on steps of training tasks minus steps of held-out tasks.
+
+    Each side is resampled by run, as in Q1, because the steps of one run move together.
+    """
+    sides = {}
+    for name, held in (("seen", False), ("unseen", True)):
+        by_run = collections.defaultdict(list)
+        for row in labeled:
+            if row["held_out"] == held:
+                by_run[row["run_id"]].append(row)
+        sides[name] = by_run
+    rng = np.random.default_rng(segment.SEED)
+
+    def nmi(by_run, picked=None):
+        ids = sorted(by_run)
+        chosen = ids if picked is None else [ids[i] for i in picked]
+        return _nmi_by_run([row for run_id in chosen for row in by_run[run_id]])
+
+    estimate = {name: nmi(by_run) for name, by_run in sides.items()}
+    gaps = []
+    for _ in range(BOOTSTRAP_RESAMPLES):
+        draws = {
+            name: nmi(by_run, rng.integers(len(by_run), size=len(by_run)))
+            for name, by_run in sides.items()
+        }
+        gaps.append(draws["seen"] - draws["unseen"])
+    drop = _with_range(estimate["seen"] - estimate["unseen"], gaps)
+    return {
+        "seen_steps": sum(len(v) for v in sides["seen"].values()),
+        "unseen_steps": sum(len(v) for v in sides["unseen"].values()),
+        "seen": round(float(estimate["seen"]), 4),
+        "unseen": round(float(estimate["unseen"]), 4),
+        "drop": drop,
+        "passes": bool(drop["estimate"] <= Q4_MAX_DROP),
+    }
+
+
+def q4_table(
+    whole_rows: list[dict],
+    rows_by_k: dict[int, list[dict]],
+    labeled: list[dict] | None,
+) -> dict:
+    """Seen against unseen tasks for the behaviour view on whole runs and on each prefix, and for label agreement.
+
+    Without labels the agreement part is not judged, and so neither is the whole question.
+    """
+    stages = [{"stage": "whole run", **_drop_in_auroc(whole_rows)}] + [
+        {"stage": f"first {k} steps", "k": k, **_drop_in_auroc(rows)}
+        for k, rows in sorted(rows_by_k.items())
+    ]
+    agreement = agreement_drop(labeled) if labeled else None
+    auroc_passes = all(stage["passes"] for stage in stages)
+    return {
+        "criterion": Q4_CRITERION,
+        "auroc": stages,
+        "auroc_passes": auroc_passes,
+        "agreement": agreement,
+        "passes": None
+        if agreement is None
+        else bool(auroc_passes and agreement["passes"]),
+    }
+
+
+def q3b_inputs() -> tuple[dict[int, list[dict]], int]:
+    """The prefix views for each k, and how many natural runs there are before any are dropped."""
+    steps, task_of_run = label.load_natural()
+    outcomes = _natural_outcomes(task_of_run)
+    prefix_states: dict[int, dict[str, dict[int, int]]] = collections.defaultdict(
+        lambda: collections.defaultdict(dict)
+    )
+    for row in pq.read_table(segment.PREFIX_STATES_PATH).to_pylist():
+        prefix_states[row["k"]][row["run_id"]][row["step_idx"]] = row["state_id"]
+    ordered = {
+        k: {r: [by_step[i] for i in sorted(by_step)] for r, by_step in by_run.items()}
+        for k, by_run in prefix_states.items()
+    }
+    n_states = json.loads(segment.SEGMENT_SUMMARY_PATH.read_text())["n_states"]
+    return q3b_runs(steps, outcomes, task_of_run, ordered, n_states), len(task_of_run)
+
+
+def run_q3b_q4() -> None:
+    rows_by_k, total = q3b_inputs()
+    q3b = q3b_table(rows_by_k, total)
+    Q3B_PATH.write_text(json.dumps(q3b, indent=2) + "\n")
+    for entry in q3b["per_k"]:
+        auroc = entry["auroc"]
+        print(
+            f"q3b first {entry['k']} steps, {entry['runs']} runs ({entry['runs_dropped']} dropped): AUROC "
+            + ", ".join(
+                f"{name} {value['estimate']:.2f}" for name, value in auroc.items()
+            )
+            + f", {'passes' if entry['passes'] else 'fails'}"
+        )
+    labeled = None
+    if label.HUMAN_LABELS_PATH.exists():
+        _, labeled = labeled_steps(q1_inputs(), read_human(), read_llm())
+    whole_rows, _ = q3a_inputs()
+    q4 = q4_table(whole_rows, rows_by_k, labeled)
+    Q4_PATH.write_text(json.dumps(q4, indent=2) + "\n")
+    for stage in q4["auroc"]:
+        print(
+            f"q4 {stage['stage']}: AUROC seen {stage['seen']:.2f}, unseen {stage['unseen']:.2f}, "
+            f"drop {stage['drop']['estimate']:.2f}, {'passes' if stage['passes'] else 'fails'}"
+        )
+    agreement = q4["agreement"]
+    print(
+        "q4 agreement: no human labels yet"
+        if agreement is None
+        else f"q4 agreement: NMI seen {agreement['seen']:.2f}, unseen {agreement['unseen']:.2f}, "
+        f"drop {agreement['drop']['estimate']:.2f}, {'passes' if agreement['passes'] else 'fails'}"
+    )
+
+
 def run() -> None:
     run_q1()
     run_q3a()
+    run_q3b_q4()
     task_order = [task.task_id for task in tasks.load_tasks()]
     table = manipulation_table(
         runner.read_table(runner.PLANTED_RUNS_PATH),

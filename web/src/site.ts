@@ -107,11 +107,61 @@ export interface Q3a {
   }
 }
 
+export interface Q3bEntry {
+  k: number
+  runs: number
+  runs_dropped: number
+  tasks: number
+  failing_share: number
+  // Run length is a reference line and not a competitor, because it uses information from the future.
+  auroc: Record<'length' | 'baseline' | 'behaviour' | 'supervised', Interval>
+  differences: Record<'behaviour_minus_baseline' | 'supervised_minus_behaviour', Interval>
+  beats_baseline: boolean
+  near_supervised: boolean
+  passes: boolean
+}
+
+export interface Q3b {
+  criterion: string
+  natural_runs: number
+  per_k: Q3bEntry[]
+  passes: boolean
+}
+
+export interface Q4Stage {
+  stage: string
+  k?: number
+  runs: number
+  seen: number
+  unseen: number
+  drop: Interval
+  passes: boolean
+}
+
+export interface Q4 {
+  criterion: string
+  auroc: Q4Stage[]
+  auroc_passes: boolean
+  // Null until the human sample is labeled.
+  agreement: {
+    seen_steps: number
+    unseen_steps: number
+    seen: number
+    unseen: number
+    drop: Interval
+    passes: boolean
+  } | null
+  // Null while the agreement part cannot be judged.
+  passes: boolean | null
+}
+
 export interface Site {
   meta: {
     // Absent until the human sample is labeled.
     q1?: Q1
     q3a?: Q3a
+    q3b?: Q3b
+    q4?: Q4
     dataset: string
     revision: string
     runs_in_dataset: number

@@ -123,7 +123,9 @@ Guardrails for the site:
 - Extend `make reproduce` to produce the Q3a, Q3b and Q4 tables.
 - Show the Q3a, Q3b and Q4 results next to their criteria in the site, and add the filters for data source and outcome.
 
-**Status:** Q3a is built on 2026-10-04: `results/q3a.json` from `footsteps evaluate`, with task-bootstrap ranges, the signal tables and a site panel. On 411 natural runs from 57 tasks the profile has AUROC 0.62 against 0.50 for run length and 0.64 for the supervised predictor, so the criterion is met. Q3b, Q4 and the filters are not built.
+**Status:** Q3a is built on 2026-10-04: `results/q3a.json` from `footsteps evaluate`, with task-bootstrap ranges, the signal tables and a site panel. On 411 natural runs from 57 tasks the profile has AUROC 0.62 against 0.50 for run length and 0.64 for the supervised predictor, so the criterion is met.
+
+Q3b, Q4 and the filters are built on 2026-10-04: `footsteps evaluate` also writes `results/q3b.json` and `results/q4.json`, from prefix states that `footsteps segment` decodes from the prefix alone, and the site has Q3b and Q4 panels and source and outcome filters. Q3b is not met: the behaviour view's AUROC is 0.54, 0.54 and 0.51 at k = 5, 10 and 15 against 0.49, 0.53 and 0.46 for counts so far, with the difference's range including zero, and 137 and 205 of the 411 runs have fewer than 10 and 15 steps. Q4's drops are at most 0.05 but the early scores are near 0.5 on both sides, so that pass shows nothing was lost and not that anything was learned.
 
 **Done:** the Q3a, Q3b and Q4 tables are written to `results/` by `make reproduce` with the number of runs dropped at each k, and the site shows them with working filters.
 

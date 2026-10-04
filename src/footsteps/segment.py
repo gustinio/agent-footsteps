@@ -17,6 +17,7 @@ from footsteps.ingest import RUNS_PATH, STEPS_PATH, SUMMARY_PATH
 from footsteps.runner import PLANTED_STEPS_PATH
 
 SEGMENTATION_PATH = Path("results/segmentation.parquet")
+PREFIX_STATES_PATH = Path("results/prefix_states.parquet")
 SEGMENT_SUMMARY_PATH = Path("results/segmentation_summary.json")
 
 # The fit adds a prior that the reported score leaves out, so the score can dip by a rounding error
@@ -28,6 +29,10 @@ METHODS = ("hmm", "gmm")
 # One seed for every fold assignment and fit, so Q1, Q3 and Q4 share the same folds.
 SEED = 0
 N_FOLDS = 5
+
+# From the PRD's Q3b: the early check reads the first k steps. The states of each prefix are decoded
+# from the prefix alone, because decoding the whole run would let later steps shape the earlier states.
+PREFIX_LENGTHS = (5, 10, 15)
 
 # From the PRD's size rule: the HMM state count is chosen from 2 to 8 by held-out likelihood.
 STATE_COUNTS = range(2, 9)
@@ -170,10 +175,12 @@ def segment(
     natural_steps: list[dict],
     task_of_run: dict[str, str],
     planted_steps: list[dict],
-) -> tuple[dict[str, dict[str, list[int]]], dict]:
+) -> tuple[dict[str, dict[str, list[int]]], dict, dict[int, dict[str, list[int]]]]:
     """States per run and method, for the natural runs and for the planted runs projected onto the natural model.
 
     Models are fit on the natural runs only, and states are numbered by how many natural steps they hold.
+    The third result holds, for each prefix length, the HMM states of the first steps of the natural runs
+    that have at least that many, decoded from those steps alone and numbered like the whole-run states.
     """
     sequences = feature_sequences(natural_steps)
     scores = held_out_scores(sequences, task_of_run)
@@ -206,6 +213,16 @@ def segment(
         for source in (raw[method], planted_raw[method]):
             states[method].update({r: rank[s].tolist() for r, s in source.items()})
         shares[method] = (counts[orders[method]] / counts.sum()).round(4).tolist()
+    hmm_rank = np.empty(n_states, dtype=int)
+    hmm_rank[orders["hmm"]] = np.arange(n_states)
+    prefixes = {
+        k: {
+            r: hmm_rank[hmm.predict(sequences[r][:k])].tolist()
+            for r in run_ids
+            if len(sequences[r]) >= k
+        }
+        for k in PREFIX_LENGTHS
+    }
     stay = np.diag(hmm.transmat_)[orders["hmm"]]
     summary = {
         "seed": SEED,
@@ -220,7 +237,7 @@ def segment(
         "hmm_self_transition": stay.round(4).tolist(),
         "features": list(features.FEATURE_NAMES),
     }
-    return states, summary
+    return states, summary, prefixes
 
 
 def states_table(states: dict[str, dict[str, list[int]]]) -> pa.Table:
@@ -233,6 +250,17 @@ def states_table(states: dict[str, dict[str, list[int]]]) -> pa.Table:
     return pa.Table.from_pylist(rows)
 
 
+def prefix_table(prefixes: dict[int, dict[str, list[int]]]) -> pa.Table:
+    return pa.Table.from_pylist(
+        [
+            {"run_id": run_id, "k": k, "step_idx": idx, "state_id": state}
+            for k, by_run in prefixes.items()
+            for run_id, run_states in sorted(by_run.items())
+            for idx, state in enumerate(run_states)
+        ]
+    )
+
+
 def run() -> None:
     summary_in = json.loads(SUMMARY_PATH.read_text())
     arm = natural_arm(pq.read_table(RUNS_PATH).to_pylist(), summary_in["selected"])
@@ -241,11 +269,12 @@ def run() -> None:
         STEPS_PATH, filters=[("run_id", "in", arm_ids)]
     ).to_pylist()
     planted_steps = pq.read_table(PLANTED_STEPS_PATH).to_pylist()
-    states, summary = segment(
+    states, summary, prefixes = segment(
         natural_steps, {run["run_id"]: run["task_id"] for run in arm}, planted_steps
     )
     SEGMENTATION_PATH.parent.mkdir(parents=True, exist_ok=True)
     pq.write_table(states_table(states), SEGMENTATION_PATH)
+    pq.write_table(prefix_table(prefixes), PREFIX_STATES_PATH)
     SEGMENT_SUMMARY_PATH.write_text(json.dumps(summary, indent=2) + "\n")
     print(
         f"{summary['natural_runs']} natural runs on {summary['natural_tasks']} tasks, "

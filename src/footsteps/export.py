@@ -10,7 +10,7 @@ import pyarrow.parquet as pq
 from sklearn.decomposition import PCA
 
 from footsteps import features
-from footsteps.evaluate import Q1_PATH, Q3A_PATH
+from footsteps.evaluate import Q1_PATH, Q3A_PATH, Q3B_PATH, Q4_PATH
 from footsteps.ingest import RUNS_PATH, STEPS_PATH, SUMMARY_PATH
 from footsteps.runner import PLANTED_RUNS_PATH, PLANTED_STEPS_PATH
 from footsteps.segment import METHODS, SEGMENT_SUMMARY_PATH, SEGMENTATION_PATH
@@ -102,6 +102,8 @@ def build_site(
     planted_paths: tuple[Path, Path] | None = None,
     q1_path: Path | None = None,
     q3a_path: Path | None = None,
+    q3b_path: Path | None = None,
+    q4_path: Path | None = None,
 ) -> dict:
     """The public runs are a hashed sample of the segmented natural runs, and the planted runs are all included because there are few."""
     states_path, segment_summary_path = segmentation
@@ -157,10 +159,14 @@ def build_site(
     # The agreement tables and state names hold counts and shares only, never step text.
     q1 = json.loads(q1_path.read_text()) if q1_path and q1_path.exists() else None
     q3a = json.loads(q3a_path.read_text()) if q3a_path and q3a_path.exists() else None
+    q3b = json.loads(q3b_path.read_text()) if q3b_path and q3b_path.exists() else None
+    q4 = json.loads(q4_path.read_text()) if q4_path and q4_path.exists() else None
     return {
         "meta": {
             **({"q1": q1} if q1 else {}),
             **({"q3a": q3a} if q3a else {}),
+            **({"q3b": q3b} if q3b else {}),
+            **({"q4": q4} if q4 else {}),
             "dataset": summary["dataset"],
             "revision": summary["revision"],
             "runs_in_dataset": summary["trials_with_steps"],
@@ -189,6 +195,8 @@ def run() -> None:
         planted_paths,
         Q1_PATH,
         Q3A_PATH,
+        Q3B_PATH,
+        Q4_PATH,
     )
     SITE_PATH.parent.mkdir(parents=True, exist_ok=True)
     SITE_PATH.write_text(json.dumps(site, indent=1, sort_keys=True) + "\n")

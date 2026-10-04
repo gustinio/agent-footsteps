@@ -1,0 +1,70 @@
+{
+  "criterion": "AUROC of the behaviour view and agreement of the states with the step labels drop by no more than 0.05 on unseen tasks relative to seen tasks. Seen means a run-level split in which a task can be in both training and testing, and unseen means folds grouped by task.",
+  "auroc": [
+    {
+      "stage": "whole run",
+      "runs": 411,
+      "seen": 0.6131,
+      "unseen": 0.6187,
+      "drop": {
+        "estimate": -0.0055,
+        "low": -0.028,
+        "high": 0.0168
+      },
+      "passes": true
+    },
+    {
+      "stage": "first 5 steps",
+      "k": 5,
+      "runs": 361,
+      "seen": 0.5231,
+      "unseen": 0.5391,
+      "drop": {
+        "estimate": -0.016,
+        "low": -0.0581,
+        "high": 0.0258
+      },
+      "passes": true
+    },
+    {
+      "stage": "first 10 steps",
+      "k": 10,
+      "runs": 274,
+      "seen": 0.4702,
+      "unseen": 0.542,
+      "drop": {
+        "estimate": -0.0718,
+        "low": -0.1213,
+        "high": -0.0239
+      },
+      "passes": true
+    },
+    {
+      "stage": "first 15 steps",
+      "k": 15,
+      "runs": 206,
+      "seen": 0.4431,
+      "unseen": 0.51,
+      "drop": {
+        "estimate": -0.0669,
+        "low": -0.1205,
+        "high": -0.018
+      },
+      "passes": true
+    }
+  ],
+  "auroc_passes": true,
+  "agreement": {
+    "seen_steps": 1208,
+    "unseen_steps": 792,
+    "seen": 0.1496,
+    "unseen": 0.2111,
+    "drop": {
+      "estimate": -0.0615,
+      "low": -0.1682,
+      "high": 0.0546
+    },
+    "passes": true
+  },
+  "passes": true
+}

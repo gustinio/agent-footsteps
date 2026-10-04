@@ -7,6 +7,8 @@ import { CATEGORY_FILL, STATE_FILL, STATUS_LABEL } from '@/palette'
 import { PointCloud } from '@/PointCloud'
 import { Q1Panel } from '@/Q1Panel'
 import { Q3aPanel } from '@/Q3aPanel'
+import { Q3bPanel } from '@/Q3bPanel'
+import { Q4Panel } from '@/Q4Panel'
 import { Ribbon } from '@/Ribbon'
 import type { StepRef } from '@/selection'
 import { loadSite, type Method, type Site, type ToolCategory } from '@/site'
@@ -41,6 +43,20 @@ function Legend() {
   )
 }
 
+type SourceFilter = 'all' | 'public' | 'planted'
+type OutcomeFilter = 'all' | 'pass' | 'fail'
+
+const SOURCE_FILTERS: [SourceFilter, string][] = [
+  ['all', 'All runs'],
+  ['public', 'Public runs'],
+  ['planted', 'Planted runs'],
+]
+const OUTCOME_FILTERS: [OutcomeFilter, string][] = [
+  ['all', 'Any outcome'],
+  ['pass', 'Passing'],
+  ['fail', 'Failing'],
+]
+
 const METHOD_NAME: Record<Method, string> = { hmm: 'Sticky HMM', gmm: 'GMM' }
 
 function StateLegend({ site, method }: { site: Site; method: Method }) {
@@ -64,6 +80,8 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [showOutcome, setShowOutcome] = useState(false)
   const [method, setMethod] = useState<Method>('hmm')
+  const [source, setSource] = useState<SourceFilter>('all')
+  const [outcome, setOutcome] = useState<OutcomeFilter>('all')
   const [colorByState, setColorByState] = useState(true)
   const [selected, setSelected] = useState<StepRef | null>(null)
   const [hovered, setHovered] = useState<StepRef | null>(null)
@@ -82,7 +100,10 @@ export default function App() {
   }
 
   const hasOutcome = site.runs.some((run) => run.outcome !== undefined)
-  const selectedRun = site.runs.find((run) => run.run_id === selected?.runId)
+  const runs = site.runs.filter(
+    (run) => (source === 'all' || run.source === source) && (outcome === 'all' || run.outcome === outcome),
+  )
+  const selectedRun = runs.find((run) => run.run_id === selected?.runId)
   const selectedStep = selectedRun && selected ? selectedRun.steps[selected.step] : undefined
 
   return (
@@ -127,6 +148,34 @@ export default function App() {
           </Button>
         )}
       </div>
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Run filters">
+        {SOURCE_FILTERS.map(([value, title]) => (
+          <Button
+            key={value}
+            variant={source === value ? 'default' : 'outline'}
+            size="sm"
+            aria-pressed={source === value}
+            onClick={() => setSource(value)}
+          >
+            {title}
+          </Button>
+        ))}
+        {hasOutcome &&
+          OUTCOME_FILTERS.map(([value, title]) => (
+            <Button
+              key={value}
+              variant={outcome === value ? 'default' : 'outline'}
+              size="sm"
+              aria-pressed={outcome === value}
+              onClick={() => setOutcome(value)}
+            >
+              {title}
+            </Button>
+          ))}
+        <span className="text-sm text-muted-foreground">
+          Showing {runs.length} of {site.runs.length} runs in the point cloud and ribbons.
+        </span>
+      </div>
       <div className="grid gap-4 md:grid-cols-[minmax(0,460px)_1fr]">
         <Card>
           <CardHeader>
@@ -134,7 +183,7 @@ export default function App() {
           </CardHeader>
           <CardContent className="space-y-2">
             <PointCloud
-              runs={site.runs}
+              runs={runs}
               method={method}
               selected={selected}
               hovered={hovered}
@@ -183,12 +232,14 @@ export default function App() {
       </div>
       {site.meta.q1 && <Q1Panel q1={site.meta.q1} />}
       {site.meta.q3a && <Q3aPanel q3a={site.meta.q3a} names={site.meta.q1?.states} />}
+      {site.meta.q3b && <Q3bPanel q3b={site.meta.q3b} />}
+      {site.meta.q4 && <Q4Panel q4={site.meta.q4} />}
       <Card>
         <CardHeader>
           <CardTitle>Run ribbons</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 overflow-x-auto">
-          {site.runs.map((run) => (
+          {runs.map((run) => (
             <div key={run.run_id} className="flex items-center gap-3">
               <div className="sticky left-0 z-10 flex w-56 shrink-0 items-center gap-2 bg-card text-xs">
                 <span className="font-mono" title={run.run_id}>
