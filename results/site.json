@@ -305,6 +305,215 @@
    },
    "tasks": 57
   },
+  "q3b": {
+   "criterion": "From only the first k steps of a run, for k in 5, 10 and 15 and on runs with at least k steps, the behaviour view separates failing from passing runs better than the counts-so-far baseline (errors and different tools used), with the difference larger than the bootstrap range, and within 0.05 AUROC of the supervised predictor, at every k. Folds are grouped by task.",
+   "natural_runs": 411,
+   "passes": false,
+   "per_k": [
+    {
+     "auroc": {
+      "baseline": {
+       "estimate": 0.4867,
+       "high": 0.5498,
+       "low": 0.4312
+      },
+      "behaviour": {
+       "estimate": 0.5391,
+       "high": 0.6057,
+       "low": 0.4819
+      },
+      "length": {
+       "estimate": 0.5204,
+       "high": 0.5955,
+       "low": 0.448
+      },
+      "supervised": {
+       "estimate": 0.5054,
+       "high": 0.5663,
+       "low": 0.4489
+      }
+     },
+     "beats_baseline": false,
+     "differences": {
+      "behaviour_minus_baseline": {
+       "estimate": 0.0524,
+       "high": 0.1171,
+       "low": -0.0031
+      },
+      "supervised_minus_behaviour": {
+       "estimate": -0.0337,
+       "high": 0.0333,
+       "low": -0.1076
+      }
+     },
+     "failing_share": 0.4598,
+     "k": 5,
+     "near_supervised": true,
+     "passes": false,
+     "runs": 361,
+     "runs_dropped": 50,
+     "tasks": 56
+    },
+    {
+     "auroc": {
+      "baseline": {
+       "estimate": 0.5317,
+       "high": 0.6036,
+       "low": 0.4594
+      },
+      "behaviour": {
+       "estimate": 0.542,
+       "high": 0.6057,
+       "low": 0.4763
+      },
+      "length": {
+       "estimate": 0.5664,
+       "high": 0.6382,
+       "low": 0.4888
+      },
+      "supervised": {
+       "estimate": 0.483,
+       "high": 0.5595,
+       "low": 0.4043
+      }
+     },
+     "beats_baseline": false,
+     "differences": {
+      "behaviour_minus_baseline": {
+       "estimate": 0.0103,
+       "high": 0.0855,
+       "low": -0.0727
+      },
+      "supervised_minus_behaviour": {
+       "estimate": -0.0589,
+       "high": 0.0539,
+       "low": -0.1664
+      }
+     },
+     "failing_share": 0.4672,
+     "k": 10,
+     "near_supervised": true,
+     "passes": false,
+     "runs": 274,
+     "runs_dropped": 137,
+     "tasks": 51
+    },
+    {
+     "auroc": {
+      "baseline": {
+       "estimate": 0.4572,
+       "high": 0.5311,
+       "low": 0.3862
+      },
+      "behaviour": {
+       "estimate": 0.51,
+       "high": 0.5845,
+       "low": 0.4405
+      },
+      "length": {
+       "estimate": 0.6127,
+       "high": 0.6763,
+       "low": 0.537
+      },
+      "supervised": {
+       "estimate": 0.5659,
+       "high": 0.6352,
+       "low": 0.4951
+      }
+     },
+     "beats_baseline": false,
+     "differences": {
+      "behaviour_minus_baseline": {
+       "estimate": 0.0528,
+       "high": 0.1407,
+       "low": -0.0268
+      },
+      "supervised_minus_behaviour": {
+       "estimate": 0.0559,
+       "high": 0.1676,
+       "low": -0.0691
+      }
+     },
+     "failing_share": 0.4757,
+     "k": 15,
+     "near_supervised": false,
+     "passes": false,
+     "runs": 206,
+     "runs_dropped": 205,
+     "tasks": 46
+    }
+   ]
+  },
+  "q4": {
+   "agreement": {
+    "drop": {
+     "estimate": -0.0615,
+     "high": 0.0546,
+     "low": -0.1682
+    },
+    "passes": true,
+    "seen": 0.1496,
+    "seen_steps": 1208,
+    "unseen": 0.2111,
+    "unseen_steps": 792
+   },
+   "auroc": [
+    {
+     "drop": {
+      "estimate": -0.0055,
+      "high": 0.0168,
+      "low": -0.028
+     },
+     "passes": true,
+     "runs": 411,
+     "seen": 0.6131,
+     "stage": "whole run",
+     "unseen": 0.6187
+    },
+    {
+     "drop": {
+      "estimate": -0.016,
+      "high": 0.0258,
+      "low": -0.0581
+     },
+     "k": 5,
+     "passes": true,
+     "runs": 361,
+     "seen": 0.5231,
+     "stage": "first 5 steps",
+     "unseen": 0.5391
+    },
+    {
+     "drop": {
+      "estimate": -0.0718,
+      "high": -0.0239,
+      "low": -0.1213
+     },
+     "k": 10,
+     "passes": true,
+     "runs": 274,
+     "seen": 0.4702,
+     "stage": "first 10 steps",
+     "unseen": 0.542
+    },
+    {
+     "drop": {
+      "estimate": -0.0669,
+      "high": -0.018,
+      "low": -0.1205
+     },
+     "k": 15,
+     "passes": true,
+     "runs": 206,
+     "seen": 0.4431,
+     "stage": "first 15 steps",
+     "unseen": 0.51
+    }
+   ],
+   "auroc_passes": true,
+   "criterion": "AUROC of the behaviour view and agreement of the states with the step labels drop by no more than 0.05 on unseen tasks relative to seen tasks. Seen means a run-level split in which a task can be in both training and testing, and unseen means folds grouped by task.",
+   "passes": true
+  },
   "revision": "04e8940f5b6736a7ce8d22224fe2f2af74163ed2",
   "runs_in_dataset": 34397,
   "segmentation": {
