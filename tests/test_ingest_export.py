@@ -485,3 +485,22 @@ def test_site_json_leaves_out_runs_without_a_segmentation(
     )
     assert len(site["runs"]) == 9
     assert "run-3" not in {run["run_id"] for run in site["runs"]}
+
+
+def test_site_json_carries_q1_only_when_the_file_exists(normalized, write_segmentation):
+    tmp_path, _ = normalized
+    summary = {"dataset": "d", "revision": "r", "trials_with_steps": 10}
+    q1_path = tmp_path / "q1.json"
+
+    def build():
+        return export.build_site(
+            tmp_path / "runs.parquet",
+            tmp_path / "steps.parquet",
+            summary,
+            write_segmentation(tmp_path / "steps.parquet"),
+            q1_path=q1_path,
+        )
+
+    assert "q1" not in build()["meta"]
+    q1_path.write_text(json.dumps({"states": [], "q1": {"passes": False}}))
+    assert build()["meta"]["q1"]["q1"] == {"passes": False}

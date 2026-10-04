@@ -19,6 +19,7 @@ test: ## Run the Python tests
 reproduce: ## Download public data at its pinned revision, then regenerate results with no model calls
 	uv run footsteps ingest
 	uv run footsteps segment
+	uv run footsteps evaluate
 	uv run footsteps export
 
 start: ## Run the site's dev server in the foreground (Ctrl-C to stop)

@@ -59,7 +59,7 @@ It owns the agreement check against the human sample.
 The LLM never sees the steering prompt or the condition, and labels never flow back into features or the segmenter.
 
 **Evaluator** (`src/footsteps/evaluate.py`) computes agreement, the manipulation check, and the whole-run and prefix prediction comparisons with task-grouped folds and bootstrap ranges.
-It owns every threshold in the PRD and reads them from one place. So far it holds the manipulation check and the interim stop rule, which `footsteps evaluate` prints.
+It owns every threshold in the PRD and reads them from one place. So far it holds the manipulation check, the interim stop rule and Q1, which `footsteps evaluate` prints; Q1 also writes `results/q1.json` (labeler kappa against the bar, NMI of the HMM, GMM and a majority label on held-out tasks with bootstrap ranges over runs, and a name with evidence for each HMM state), which the exporter copies into `site.json`.
 It must not change a threshold, and it must not use the LLM.
 
 **Exporter** (`src/footsteps/export.py`) samples natural-arm runs from the segmentation, adds every planted run from the committed planted tables, computes the display projection, and writes the JSON contract.
@@ -96,7 +96,7 @@ Prediction belongs to a Run, and for early checks to a prefix length k
   `verification_flag` is true when the first tool call is a shell command that contains a test or check word (test, pytest, diff, cmp, assert, verify, validate, check, lint and similar) or runs an inline `python -c`, `node -e` or `python -` heredoc script, and false for every other step. It is a match on the command text, so a command that only mentions such a word also counts.
 - `StepFeatures`: `run_id`, `step_idx`, plus behavioural features derived from the step facts only. Never contains raw text, the system prompt or the steering text.
 - `Segmentation`: `run_id`, `step_idx`, `method` (`hmm` or `gmm`), `state_id`. It covers the natural-arm runs and the planted runs, and is written to `results/segmentation.parquet` with `results/segmentation_summary.json` (the held-out score per state count, the learned self-transition rates and the state shares).
-- `Label`: `run_id`, `step_idx`, `label`, `labeler` (rule, LLM or human). So far only the LLM rows exist, in `results/llm_labels.parquet`: the rule facts are computed in memory when the sample is drawn and the human labels are not yet recorded. The blind sheet and its key are local files, `data/label_sheet.csv` and `data/label_key.json`.
+- `Label`: `run_id`, `step_idx`, `label`, `labeler` (rule, LLM or human). The LLM rows are in `results/llm_labels.parquet` and the human rows in `results/human_labels.csv`, both identifiers and labels with no text: the rule facts are computed in memory when the sample is drawn. The blind sheet and its key are local files, `data/label_sheet.csv` and `data/label_key.json`.
 - `StateName`: `method`, `state_id`, `name`, `evidence`.
 - `Prediction`: `run_id`, `k` (empty for whole-run predictions), `model` (baseline, behaviour view or supervised predictor), `score`, `fold`.
 
