@@ -2,6 +2,168 @@
  "meta": {
   "dataset": "yoonholee/terminalbench-trajectories",
   "planted_runs": 40,
+  "q1": {
+   "labeler": {
+    "bar": 0.6,
+    "compared_steps": 150,
+    "kappa": 0.7062,
+    "labels_used": "llm with human overrides",
+    "passes": true
+   },
+   "q1": {
+    "criterion": "On tasks unseen in training, the HMM's states agree with the step labels better than the GMM's and better than a majority-label baseline, with the difference larger than the bootstrap range (normalized mutual information).",
+    "differences": {
+     "hmm_minus_gmm": {
+      "estimate": -0.0191,
+      "high": -0.0055,
+      "low": -0.0322
+     },
+     "hmm_minus_majority": {
+      "estimate": 0.2111,
+      "high": 0.3052,
+      "low": 0.1209
+     }
+    },
+    "held_out_runs": 100,
+    "held_out_steps": 792,
+    "nmi": {
+     "gmm": 0.2302,
+     "hmm": 0.2111,
+     "majority": 0.0
+    },
+    "passes": false
+   },
+   "states": [
+    {
+     "facts": {
+      "after_error": 0.3594,
+      "no_tool": 0.0,
+      "repeat": 0.0203
+     },
+     "intents": {
+      "explore": 0.4232,
+      "modify": 0.3101,
+      "other": 0.1913,
+      "verify": 0.0754
+     },
+     "labeled_steps": 345,
+     "name": "mixed",
+     "state": 0
+    },
+    {
+     "facts": {
+      "after_error": 0.354,
+      "no_tool": 0.0,
+      "repeat": 0.1947
+     },
+     "intents": {
+      "explore": 0.4602,
+      "modify": 0.2773,
+      "other": 0.0531,
+      "verify": 0.2094
+     },
+     "labeled_steps": 339,
+     "name": "mixed",
+     "state": 1
+    },
+    {
+     "facts": {
+      "after_error": 0.3445,
+      "no_tool": 0.6316,
+      "repeat": 0.0
+     },
+     "intents": {
+      "explore": 0.0,
+      "modify": 0.0,
+      "other": 1.0,
+      "verify": 0.0
+     },
+     "labeled_steps": 209,
+     "name": "thinking without a tool",
+     "state": 2
+    },
+    {
+     "facts": {
+      "after_error": 0.0309,
+      "no_tool": 0.0,
+      "repeat": 0.6907
+     },
+     "intents": {
+      "explore": 0.3711,
+      "modify": 0.3814,
+      "other": 0.1753,
+      "verify": 0.0722
+     },
+     "labeled_steps": 194,
+     "name": "repeating",
+     "state": 3
+    },
+    {
+     "facts": {
+      "after_error": 0.1724,
+      "no_tool": 0.0,
+      "repeat": 0.0057
+     },
+     "intents": {
+      "explore": 0.4885,
+      "modify": 0.3448,
+      "other": 0.069,
+      "verify": 0.0977
+     },
+     "labeled_steps": 174,
+     "name": "mixed",
+     "state": 4
+    },
+    {
+     "facts": {
+      "after_error": 0.0327,
+      "no_tool": 0.0,
+      "repeat": 0.0
+     },
+     "intents": {
+      "explore": 0.0,
+      "modify": 0.4204,
+      "other": 0.4653,
+      "verify": 0.1143
+     },
+     "labeled_steps": 245,
+     "name": "mixed",
+     "state": 5
+    },
+    {
+     "facts": {
+      "after_error": 0.3766,
+      "no_tool": 0.0,
+      "repeat": 0.0837
+     },
+     "intents": {
+      "explore": 0.5272,
+      "modify": 0.2176,
+      "other": 0.1967,
+      "verify": 0.0586
+     },
+     "labeled_steps": 239,
+     "name": "exploring",
+     "state": 6
+    },
+    {
+     "facts": {
+      "after_error": 0.3451,
+      "no_tool": 0.0,
+      "repeat": 0.2431
+     },
+     "intents": {
+      "explore": 0.3882,
+      "modify": 0.3804,
+      "other": 0.0353,
+      "verify": 0.1961
+     },
+     "labeled_steps": 255,
+     "name": "mixed",
+     "state": 7
+    }
+   ]
+  },
   "revision": "04e8940f5b6736a7ce8d22224fe2f2af74163ed2",
   "runs_in_dataset": 34397,
   "segmentation": {
