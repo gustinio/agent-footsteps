@@ -155,10 +155,46 @@ export interface Q4 {
   passes: boolean | null
 }
 
+export type Condition = 'none' | 'strong'
+
+// One task's share in each condition, and whether the instruction raised it.
+export interface TaskShare {
+  task_id: string
+  none: number
+  strong: number
+  rose: boolean
+}
+
+export interface Q2 {
+  criterion: string
+  tasks: number
+  tasks_run: number
+  interim: 'continue' | 'stop' | 'pending'
+  manipulation: {
+    table: TaskShare[]
+    rises: number
+    needs: number
+    // Null until every task has run.
+    passes: boolean | null
+  }
+  // Null when no discovered state is mostly repeats, which is reported as not detected.
+  state: {
+    // Zero-based, like the states on the ribbons.
+    state: number
+    repeat_share: number
+    table: TaskShare[]
+    rises: number
+    needs: number
+    passes: boolean
+  } | null
+  passes: boolean | null
+}
+
 export interface Site {
   meta: {
     // Absent until the human sample is labeled.
     q1?: Q1
+    q2?: Q2
     q3a?: Q3a
     q3b?: Q3b
     q4?: Q4

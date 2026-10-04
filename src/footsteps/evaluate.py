@@ -23,6 +23,7 @@ Q1_PATH = Path("results/q1.json")
 Q3A_PATH = Path("results/q3a.json")
 Q3B_PATH = Path("results/q3b.json")
 Q4_PATH = Path("results/q4.json")
+Q2_PATH = Path("results/q2.json")
 
 # From the PRD's Q2 manipulation check: the repeat share must be higher with the
 # instruction than without it on this many of the ten tasks, and the interim rule
@@ -30,6 +31,15 @@ Q4_PATH = Path("results/q4.json")
 INTERIM_TASKS = 3
 INTERIM_MIN_RISES = 2
 FINAL_MIN_RISES = 8
+# The repeating behaviour is the state where more than this share of natural steps carry the repeat
+# flag, and its share of steps must be higher with the instruction on at least this many tasks.
+REPEAT_STATE_SHARE = 0.5
+STATE_MIN_RISES = 7
+Q2_CRITERION = (
+    "The share of shell steps that repeat an earlier command is higher with the instruction than "
+    "without it on at least 8 of 10 tasks, and the share of steps in the discovered repeating "
+    "state is higher on at least 7 of 10 tasks."
+)
 
 # From the PRD's labeler bar: the LLM labels stand in for the full label set only at this agreement
 # with the human sample, and otherwise Q1 is reported on the human sample alone.
@@ -799,27 +809,145 @@ def run_q3b_q4() -> None:
     )
 
 
-def run() -> None:
-    run_q1()
-    run_q3a()
-    run_q3b_q4()
-    task_order = [task.task_id for task in tasks.load_tasks()]
-    table = manipulation_table(
+def repeating_state(
+    natural_steps: list[dict], states: dict[tuple[str, int], int], n_states: int
+) -> dict | None:
+    """The natural-fit state in which most steps carry the repeat flag, or None when no state does."""
+    counts = np.zeros((n_states, 2))
+    for run_id, run_steps in _ordered_by_run(natural_steps).items():
+        for idx, flag in enumerate(features.repeat_flags(run_steps)):
+            state = states[(run_id, idx)]
+            counts[state] += (flag, 1)
+    shares = counts[:, 0] / np.maximum(counts[:, 1], 1)
+    state = int(np.argmax(shares))
+    if shares[state] <= REPEAT_STATE_SHARE:
+        return None
+    return {"state": state, "repeat_share": round(float(shares[state]), 4)}
+
+
+def state_share_table(
+    runs: list[dict],
+    states: dict[tuple[str, int], int],
+    state: int,
+    task_order: list[str],
+) -> list[dict]:
+    """Per task and condition, the share of planted steps in the state, for tasks that have both conditions."""
+    cells: dict = collections.defaultdict(lambda: [0, 0])
+    for row in runs:
+        for idx in range(row["n_steps"]):
+            cell = cells[(row["task_id"], row["condition"])]
+            cell[0] += states[(row["run_id"], idx)] == state
+            cell[1] += 1
+    return [
+        {
+            "task_id": task_id,
+            **{
+                c: cells[(task_id, c)][0] / max(cells[(task_id, c)][1], 1)
+                for c in runner.CONDITIONS
+            },
+            "rose": cells[(task_id, "strong")][0]
+            / max(cells[(task_id, "strong")][1], 1)
+            > cells[(task_id, "none")][0] / max(cells[(task_id, "none")][1], 1),
+        }
+        for task_id in task_order
+        if (task_id, "none") in cells and (task_id, "strong") in cells
+    ]
+
+
+def q2_result(
+    runs: list[dict],
+    steps: list[dict],
+    natural_steps: list[dict],
+    states: dict[tuple[str, int], int],
+    n_states: int,
+    task_order: list[str],
+) -> dict:
+    """The manipulation check and the repeating-state check. Neither is judged until every task has run."""
+    judged = len(task_order)
+    manipulation = manipulation_table(runs, steps, task_order)
+    rises = sum(row["rose"] for row in manipulation)
+    found = repeating_state(natural_steps, states, n_states)
+    state = None
+    if found:
+        table = state_share_table(runs, states, found["state"], task_order)
+        state_rises = sum(row["rose"] for row in table)
+        state = {
+            **found,
+            "table": table,
+            "rises": state_rises,
+            "needs": STATE_MIN_RISES,
+            "passes": len(table) == judged and state_rises >= STATE_MIN_RISES,
+        }
+    complete = len(manipulation) == judged
+    manipulation_passes = complete and rises >= FINAL_MIN_RISES
+    return {
+        "criterion": Q2_CRITERION,
+        "tasks": judged,
+        "tasks_run": len(manipulation),
+        "interim": interim_verdict(manipulation, task_order),
+        "manipulation": {
+            "table": manipulation,
+            "rises": rises,
+            "needs": FINAL_MIN_RISES,
+            "passes": manipulation_passes if complete else None,
+        },
+        # None means no discovered state is mostly repeats, which the PRD reports as not detected.
+        "state": state,
+        "passes": None
+        if not complete
+        else bool(manipulation_passes and state and state["passes"]),
+    }
+
+
+def q2_inputs() -> tuple[list[dict], list[dict], list[dict], dict, int, list[str]]:
+    natural_steps, _ = label.load_natural()
+    states = {
+        (row["run_id"], row["step_idx"]): row["state_id"]
+        for row in pq.read_table(
+            segment.SEGMENTATION_PATH, filters=[("method", "=", "hmm")]
+        ).to_pylist()
+    }
+    n_states = json.loads(segment.SEGMENT_SUMMARY_PATH.read_text())["n_states"]
+    return (
         runner.read_table(runner.PLANTED_RUNS_PATH),
         runner.read_table(runner.PLANTED_STEPS_PATH),
-        task_order,
+        natural_steps,
+        states,
+        n_states,
+        [task.task_id for task in tasks.load_tasks()],
     )
-    print("task  share of shell steps that repeat an earlier command")
-    for row in table:
+
+
+def run_q2() -> None:
+    runs, steps, natural_steps, states, n_states, task_order = q2_inputs()
+    result = q2_result(runs, steps, natural_steps, states, n_states, task_order)
+    Q2_PATH.write_text(json.dumps(result, indent=2) + "\n")
+    print("q2 task  share of shell steps that repeat an earlier command")
+    for row in result["manipulation"]["table"]:
         print(
             f"{row['task_id']:<20} none {row['none']:.0%}  strong {row['strong']:.0%}"
             f"  {'rose' if row['rose'] else 'did not rise'}"
         )
-    verdict = interim_verdict(table, task_order)
-    print(f"interim rule after {INTERIM_TASKS} tasks: {verdict}")
-    if len(table) == len(task_order):
-        rises = sum(row["rose"] for row in table)
-        print(
-            f"manipulation check: rose on {rises} of {len(table)} tasks, needs {FINAL_MIN_RISES}"
-            f" ({'passes' if rises >= FINAL_MIN_RISES else 'fails'})"
-        )
+    print(f"interim rule after {INTERIM_TASKS} tasks: {result['interim']}")
+    check = result["manipulation"]
+    verdict = {None: "not judged", True: "passes", False: "fails"}[check["passes"]]
+    print(
+        f"manipulation check: rose on {check['rises']} of {result['tasks_run']} tasks, "
+        f"needs {FINAL_MIN_RISES} ({verdict})"
+    )
+    state = result["state"]
+    if state is None:
+        print("repeating state: none, so Q2 is reported as not detected")
+        return
+    print(
+        f"repeating state {state['state'] + 1} ({state['repeat_share']:.0%} of its natural steps repeat): "
+        f"share of steps rose on {state['rises']} of {len(state['table'])} tasks, "
+        f"needs {STATE_MIN_RISES} ({'passes' if state['passes'] else 'fails or not yet judged'})"
+    )
+
+
+def run() -> None:
+    run_q1()
+    run_q3a()
+    run_q3b_q4()
+    run_q2()

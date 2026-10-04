@@ -6,12 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CATEGORY_FILL, STATE_FILL, STATUS_LABEL } from '@/palette'
 import { PointCloud } from '@/PointCloud'
 import { Q1Panel } from '@/Q1Panel'
+import { Q2Panel } from '@/Q2Panel'
 import { Q3aPanel } from '@/Q3aPanel'
 import { Q3bPanel } from '@/Q3bPanel'
 import { Q4Panel } from '@/Q4Panel'
 import { Ribbon } from '@/Ribbon'
 import type { StepRef } from '@/selection'
-import { loadSite, type Method, type Site, type ToolCategory } from '@/site'
+import { loadSite, type Condition, type Method, type Site, type ToolCategory } from '@/site'
 
 const CATEGORIES = Object.keys(CATEGORY_FILL) as ToolCategory[]
 
@@ -45,6 +46,7 @@ function Legend() {
 
 type SourceFilter = 'all' | 'public' | 'planted'
 type OutcomeFilter = 'all' | 'pass' | 'fail'
+type ConditionFilter = 'all' | Condition
 
 const SOURCE_FILTERS: [SourceFilter, string][] = [
   ['all', 'All runs'],
@@ -55,6 +57,12 @@ const OUTCOME_FILTERS: [OutcomeFilter, string][] = [
   ['all', 'Any outcome'],
   ['pass', 'Passing'],
   ['fail', 'Failing'],
+]
+
+const CONDITION_FILTERS: [ConditionFilter, string][] = [
+  ['all', 'Any condition'],
+  ['none', 'No instruction'],
+  ['strong', 'Repeat instruction'],
 ]
 
 const METHOD_NAME: Record<Method, string> = { hmm: 'Sticky HMM', gmm: 'GMM' }
@@ -82,6 +90,7 @@ export default function App() {
   const [method, setMethod] = useState<Method>('hmm')
   const [source, setSource] = useState<SourceFilter>('all')
   const [outcome, setOutcome] = useState<OutcomeFilter>('all')
+  const [condition, setCondition] = useState<ConditionFilter>('all')
   const [colorByState, setColorByState] = useState(true)
   const [selected, setSelected] = useState<StepRef | null>(null)
   const [hovered, setHovered] = useState<StepRef | null>(null)
@@ -101,7 +110,9 @@ export default function App() {
 
   const hasOutcome = site.runs.some((run) => run.outcome !== undefined)
   const runs = site.runs.filter(
-    (run) => (source === 'all' || run.source === source) && (outcome === 'all' || run.outcome === outcome),
+    (run) => (source === 'all' || run.source === source) &&
+      (outcome === 'all' || run.outcome === outcome) &&
+      (condition === 'all' || run.condition === condition),
   )
   const selectedRun = runs.find((run) => run.run_id === selected?.runId)
   const selectedStep = selectedRun && selected ? selectedRun.steps[selected.step] : undefined
@@ -172,6 +183,17 @@ export default function App() {
               {title}
             </Button>
           ))}
+        {CONDITION_FILTERS.map(([value, title]) => (
+          <Button
+            key={value}
+            variant={condition === value ? 'default' : 'outline'}
+            size="sm"
+            aria-pressed={condition === value}
+            onClick={() => setCondition(value)}
+          >
+            {title}
+          </Button>
+        ))}
         <span className="text-sm text-muted-foreground">
           Showing {runs.length} of {site.runs.length} runs in the point cloud and ribbons.
         </span>
@@ -231,6 +253,7 @@ export default function App() {
         </Card>
       </div>
       {site.meta.q1 && <Q1Panel q1={site.meta.q1} />}
+      {site.meta.q2 && <Q2Panel q2={site.meta.q2} condition={condition} />}
       {site.meta.q3a && <Q3aPanel q3a={site.meta.q3a} names={site.meta.q1?.states} />}
       {site.meta.q3b && <Q3bPanel q3b={site.meta.q3b} />}
       {site.meta.q4 && <Q4Panel q4={site.meta.q4} />}

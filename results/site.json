@@ -164,6 +164,149 @@
     }
    ]
   },
+  "q2": {
+   "criterion": "The share of shell steps that repeat an earlier command is higher with the instruction than without it on at least 8 of 10 tasks, and the share of steps in the discovered repeating state is higher on at least 7 of 10 tasks.",
+   "interim": "continue",
+   "manipulation": {
+    "needs": 8,
+    "passes": true,
+    "rises": 10,
+    "table": [
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.36363636363636365,
+      "task_id": "access-log-report"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.25,
+      "task_id": "archive-dig"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.5833333333333334,
+      "task_id": "backup-script"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.5,
+      "task_id": "config-fix"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.5,
+      "task_id": "csv-merge"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.375,
+      "task_id": "git-detective"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.5,
+      "task_id": "permission-audit"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.42105263157894735,
+      "task_id": "photo-rename"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.4090909090909091,
+      "task_id": "template-render"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.47368421052631576,
+      "task_id": "word-pipeline"
+     }
+    ]
+   },
+   "passes": true,
+   "state": {
+    "needs": 7,
+    "passes": true,
+    "repeat_share": 0.9085,
+    "rises": 10,
+    "state": 3,
+    "table": [
+     {
+      "none": 0.058823529411764705,
+      "rose": true,
+      "strong": 0.3333333333333333,
+      "task_id": "access-log-report"
+     },
+     {
+      "none": 0.15789473684210525,
+      "rose": true,
+      "strong": 0.21621621621621623,
+      "task_id": "archive-dig"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.23809523809523808,
+      "task_id": "backup-script"
+     },
+     {
+      "none": 0.0,
+      "rose": true,
+      "strong": 0.16666666666666666,
+      "task_id": "config-fix"
+     },
+     {
+      "none": 0.125,
+      "rose": true,
+      "strong": 0.5263157894736842,
+      "task_id": "csv-merge"
+     },
+     {
+      "none": 0.21052631578947367,
+      "rose": true,
+      "strong": 0.5555555555555556,
+      "task_id": "git-detective"
+     },
+     {
+      "none": 0.18181818181818182,
+      "rose": true,
+      "strong": 0.5,
+      "task_id": "permission-audit"
+     },
+     {
+      "none": 0.25,
+      "rose": true,
+      "strong": 0.2916666666666667,
+      "task_id": "photo-rename"
+     },
+     {
+      "none": 0.23076923076923078,
+      "rose": true,
+      "strong": 0.30303030303030304,
+      "task_id": "template-render"
+     },
+     {
+      "none": 0.07407407407407407,
+      "rose": true,
+      "strong": 0.34210526315789475,
+      "task_id": "word-pipeline"
+     }
+    ]
+   },
+   "tasks": 10,
+   "tasks_run": 10
+  },
   "q3a": {
    "auroc": {
     "behaviour": {
